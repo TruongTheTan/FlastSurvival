@@ -13,5 +13,6 @@
 - Assignee will create a branch based on issue number. **Example below**.
   - We have #2 (Issue number 2) is **"Create character prefabs"**.
   - Assignee creates branch named is **"#2"** then start coding.
-  - After done at coding, create a **"Pull Request"** and wait for review.
+  - After done at coding, create a **"Pull Request"**.
+  - Write comment, post videos demo or images for evidence in **"Pull Request"** if needed and wait for review.
   - When review is OK => Merge branch into **"master"**.
