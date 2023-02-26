@@ -30,7 +30,7 @@
 
 
 ## Features, bugs status:
-- Feature has 3 status:
+- Has 3 status:
   - **to-do**: not yet or prepared to work.
   - **doing**: issue is on progress.
   - **done**: issue is already done.
