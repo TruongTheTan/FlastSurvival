@@ -8,6 +8,7 @@
 - Open project by double click on **.sln** file extension for coding.
 
 ## About working process:
+
 - Admin (Leader) will create issues.
 - Leader assigns each issue to a specific person.
 - Assignee will create a branch based on issue number. **Example below**.
@@ -16,6 +17,8 @@
   - After done at coding, create a **"Pull Request"**.
   - Write comment, post videos demo or images for evidence in **"Pull Request"** if needed and wait for review.
   - When review is OK => Merge branch into **"master"**.
+  
+
 
 ## About fixing bugs:
 - Team member report bug to Leader.
@@ -24,3 +27,12 @@
 - Member fix bugs then create **"Pull Request"** with title (Issue number + Fix bug).
 - Write comments, post videos or images for evidence and wait Leader reviews.
 - Review OK => Merge branch (Issue) to **"master"**.
+
+
+## Features, bugs status:
+- Feature has 3 status:
+  - **to-do**: not yet or prepared to work.
+  - **doing**: issue is on progress.
+  - **done**: issue is already done.
+
+- After issue is done, create **Pull Request**.
