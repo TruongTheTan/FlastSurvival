@@ -15,6 +15,12 @@ public class MainMenuEventHandler : MonoBehaviour
         _confirmationPanel.SetActive(false);
     }
 
+    public void NewGameButtonClick()
+    {
+        //Load choose character scene here
+        Debug.Log("new scene loading");
+    }
+
     public void QuitButtonClick()
     {
         if (_mainMenuPanel != null && _confirmationPanel != null)
