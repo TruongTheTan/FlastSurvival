@@ -5,22 +5,36 @@ using UnityEngine;
 
 public class MainMenuEventHandler : MonoBehaviour
 {
-    private GameObject mainMenuPanel;
-    private GameObject confirmationPanel;
+    private GameObject _mainMenuPanel;
+    private GameObject _confirmationPanel;
 
     private void Awake()
     {
-        mainMenuPanel = GameObject.Find("MainMenuPanel");
-        confirmationPanel = GameObject.Find("ConfirmationPanel");
-        confirmationPanel.SetActive(false);
+        _mainMenuPanel = GameObject.Find("MainMenuPanel");
+        _confirmationPanel = GameObject.Find("ConfirmationPanel");
+        _confirmationPanel.SetActive(false);
     }
 
     public void QuitButtonClick()
     {
-        if (mainMenuPanel != null && confirmationPanel != null)
+        if (_mainMenuPanel != null && _confirmationPanel != null)
         {
-            mainMenuPanel.SetActive(false);
-            confirmationPanel.SetActive(true);
+            _mainMenuPanel.SetActive(false);
+            _confirmationPanel.SetActive(true);
+        }
+    }
+
+    public void QuitConfirmButtonClick()
+    {
+        Application.Quit();
+    }
+
+    public void QuitDeclineButtonClick()
+    {
+        if (_mainMenuPanel != null && _confirmationPanel != null)
+        {
+            _mainMenuPanel.SetActive(true);
+            _confirmationPanel.SetActive(false);
         }
     }
 }
