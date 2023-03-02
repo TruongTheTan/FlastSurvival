@@ -27,6 +27,7 @@ public class move : MonoBehaviour
         horizontalMove = joystick.Horizontal;
         verticalMove = joystick.Vertical;
         #endif
+
         if (horizontalMove != 0)
         {
             moveX = horizontalMove < 0 ? -moverPerfame : moverPerfame;
