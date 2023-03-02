@@ -1,5 +1,7 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class MainMenuEventHandler : MonoBehaviour
 {
@@ -16,7 +18,7 @@ public class MainMenuEventHandler : MonoBehaviour
     public void NewGameButtonClick()
     {
         //Load choose character scene here
-        SceneManager.LoadScene("SceneChooseCharacter");
+        Debug.Log("new scene loading");
     }
 
     public void QuitButtonClick()
