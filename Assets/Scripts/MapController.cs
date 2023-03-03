@@ -286,13 +286,71 @@ public class MapController : MonoBehaviour
                 _blocks[8].GridPosition = 6;
                 break;
 
+            /*
+             * player move from 4 to 6
+             * [0][1][2] move blocks [0][3][4] update grid numbering [0][1][2]
+             * [3][4][5]             [1][6][7]                       [3][4][5]
+             * [6][7][8]             [2][5][8]                       [6][7][8]
+             */
             case 6:
+                PlaceBlock(_blocks[0], 6, 0);
+                PlaceBlock(_blocks[1], 6, 1);
+                PlaceBlock(_blocks[2], 6, 2);
+                PlaceBlock(_blocks[5], 6, 1);
+                PlaceBlock(_blocks[8], 6, 0);
+
+                _blocks[0].GridPosition = 0;
+                _blocks[1].GridPosition = 3;
+                _blocks[2].GridPosition = 6;
+                _blocks[3].GridPosition = 1;
+                _blocks[4].GridPosition = 2;
+                _blocks[5].GridPosition = 7;
+                _blocks[6].GridPosition = 4;
+                _blocks[7].GridPosition = 5;
                 break;
 
+            /*
+             * player move from 4 to 7
+             * [0][1][2] move blocks [3][4][5] update grid numbering [0][1][2]
+             * [3][4][5]             [6][7][8]                       [3][4][5]
+             * [6][7][8]             [0][1][2]                       [6][7][8]
+             */
             case 7:
+                PlaceBlock(_blocks[0], 7, 2);
+                PlaceBlock(_blocks[1], 7, 2);
+                PlaceBlock(_blocks[2], 7, 2);
+
+                _blocks[0].GridPosition = 6;
+                _blocks[1].GridPosition = 7;
+                _blocks[2].GridPosition = 8;
+                _blocks[3].GridPosition = 0;
+                _blocks[4].GridPosition = 1;
+                _blocks[5].GridPosition = 2;
+                _blocks[6].GridPosition = 3;
+                _blocks[7].GridPosition = 4;
+                _blocks[8].GridPosition = 5;
                 break;
 
+           /*
+            * player move from 4 to 8
+            * [0][1][2] move blocks [4][5][2] update grid numbering [0][1][2]
+            * [3][4][5]             [7][8][1]                       [3][4][5]
+            * [6][7][8]             [6][3][0]                       [6][7][8]
+            */
             case 8:
+                PlaceBlock(_blocks[0], 8, 2);
+                PlaceBlock(_blocks[1], 8, 1);
+                PlaceBlock(_blocks[2], 8, 0);
+                PlaceBlock(_blocks[3], 8, 1);
+                PlaceBlock(_blocks[6], 8, 0);
+
+                _blocks[0].GridPosition = 8;
+                _blocks[1].GridPosition = 5;
+                _blocks[3].GridPosition = 7;
+                _blocks[4].GridPosition = 0;
+                _blocks[5].GridPosition = 1;
+                _blocks[7].GridPosition = 3;
+                _blocks[8].GridPosition = 4;
                 break;
 
             default:
