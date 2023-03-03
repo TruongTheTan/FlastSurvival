@@ -15,7 +15,6 @@ public class MainMenuEventHandler : MonoBehaviour
 
     public void NewGameButtonClick()
     {
-        //Load choose character scene here
         SceneManager.LoadScene("SceneChooseCharacter");
     }
 
