@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class ChooseCharacterEventHandler : MonoBehaviour
@@ -14,24 +15,29 @@ public class ChooseCharacterEventHandler : MonoBehaviour
 
     private void Start()
     {
-        // John selected by default
+        // John is selected by default
         ChangeCharacterPanelColor("JohnPanel", "JohnStatPanel");
     }
 
 
     public void ChooseJohnButtonClick()
     {
+        DataPreserve.characterSelectedNumber = 1;
+
         string[] charaterPanelNames = new string[] { "AriahPanel", "StevePanel" };
         string[] charaterStatPanelNames = new string[] { "AriahStatPanel", "SteveStatPanel" };
 
         ChangeCharacterPanelColor("JohnPanel", "JohnStatPanel");
         ResetOtherPanelColorToDefault(charaterPanelNames, charaterStatPanelNames);
+
     }
 
 
 
     public void ChooseAriahButtonClick()
     {
+        DataPreserve.characterSelectedNumber = 2;
+
         string[] charaterPanelNames = new string[] { "StevePanel", "JohnPanel" };
         string[] charaterStatPanelNames = new string[] { "JohnStatPanel", "SteveStatPanel" };
 
@@ -43,6 +49,8 @@ public class ChooseCharacterEventHandler : MonoBehaviour
 
     public void ChooseSteveButtonClick()
     {
+        DataPreserve.characterSelectedNumber = 3;
+
         string[] charaterPanelNames = new string[] { "AriahPanel", "JohnPanel" };
         string[] charaterStatPanelNames = new string[] { "JohnStatPanel", "AriahStatPanel" };
 
@@ -53,7 +61,7 @@ public class ChooseCharacterEventHandler : MonoBehaviour
 
     public void PlayGame()
     {
-        Debug.Log("Loading scene");
+        SceneManager.LoadScene("ScenePlayGame");
     }
 
 
@@ -89,14 +97,12 @@ public class ChooseCharacterEventHandler : MonoBehaviour
     {
         foreach (string panelName in characterPanelName)
         {
-
             characterPanelImage = GameObject.Find(panelName).GetComponent<Image>();
             characterPanelImage.color = new Color(1, 1, 1, 0.3921569f);
         }
 
         foreach (string statPanelName in characterStatPanelName)
         {
-
             characterStatPanelImage = GameObject.Find(statPanelName).GetComponent<Image>();
             characterStatPanelImage.color = new Color(0.04579253f, 0.02264148f, 1, 0.3921569f);
         }
