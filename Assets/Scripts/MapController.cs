@@ -56,6 +56,15 @@ public class MapController : MonoBehaviour
     {
         if (_mapPrefabs.Length > 0 && _blocks != null)
         {
+
+            //Randomize initial map prefabs array
+            System.Random randomizer = new System.Random();
+            for (int i = 0; i < _mapPrefabs.Length -1; ++i)
+            {
+                int randomizeArrayIndex = randomizer.Next(i, _mapPrefabs.Length);
+                (_mapPrefabs[randomizeArrayIndex], _mapPrefabs[i]) = (_mapPrefabs[i], _mapPrefabs[randomizeArrayIndex]);
+            }
+
             for (int i = 0; i < _mapPrefabs.Length; i++)
             {
                 GameObject mapPrefab = Instantiate(_mapPrefabs[i]);
