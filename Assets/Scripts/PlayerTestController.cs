@@ -4,10 +4,9 @@ using UnityEngine;
 
 public class PlayerTestController : MonoBehaviour
 {
-
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        transform.Translate(Vector3.up * 10 * Time.deltaTime);
+        transform.Translate(Vector3.left * 10 * Time.deltaTime);
     }
 }

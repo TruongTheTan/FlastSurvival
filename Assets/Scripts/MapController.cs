@@ -171,7 +171,7 @@ public class MapController : MonoBehaviour
         switch (PlayerCurrentBlock)
         {
             /*
-             * player move form 4 to 0
+             * player move from 4 to 0
              * [0][1][2] move blocks [8][5][2] update grid numbering [0][1][2]
              * [3][4][5]             [7][0][1]                       [3][4][5]
              * [6][7][8]             [6][3][4]                       [6][7][8]
@@ -193,7 +193,7 @@ public class MapController : MonoBehaviour
                 break;
 
             /*
-             * player move form 4 to 1
+             * player move from 4 to 1
              * [0][1][2] move blocks [6][7][8] update grid numbering [0][1][2]
              * [3][4][5]             [0][1][2]                       [3][4][5]
              * [6][7][8]             [3][4][5]                       [6][7][8]
@@ -215,7 +215,7 @@ public class MapController : MonoBehaviour
                 break;
 
             /*
-             * player move form 4 to 2
+             * player move from 4 to 2
              * [0][1][2] move blocks [0][3][6] update grid numbering [0][1][2]
              * [3][4][5]             [1][2][7]                       [3][4][5]
              * [6][7][8]             [4][5][8]                       [6][7][8]
@@ -237,18 +237,53 @@ public class MapController : MonoBehaviour
                 break;
 
             /*
-             * player move form 4 to 3
-             * [0][1][2] move blocks [0][3][6] update grid numbering [0][1][2]
-             * [3][4][5]             [1][2][7]                       [3][4][5]
-             * [6][7][8]             [4][5][8]                       [6][7][8]
+             * player move from 4 to 3
+             * [0][1][2] move blocks [2][0][1] update grid numbering [0][1][2]
+             * [3][4][5]             [5][3][4]                       [3][4][5]
+             * [6][7][8]             [8][6][7]                       [6][7][8]
              */
             case 3:
+                PlaceBlock(_blocks[2], 3, 2);
+                PlaceBlock(_blocks[5], 3, 2);
+                PlaceBlock(_blocks[8], 3, 2);
+
+                _blocks[0].GridPosition = 1;
+                _blocks[1].GridPosition = 2;
+                _blocks[2].GridPosition = 0;
+                _blocks[3].GridPosition = 4;
+                _blocks[4].GridPosition = 5;
+                _blocks[5].GridPosition = 3;
+                _blocks[6].GridPosition = 7;
+                _blocks[7].GridPosition = 8;
+                _blocks[8].GridPosition = 6;
                 break;
 
+            /*
+             * player move from 4 to 4, no need to update map
+             */
             case 4:
                 break;
 
+            /*
+             * player move from 4 to 5
+             * [0][1][2] move blocks [1][2][0] update grid numbering [0][1][2]
+             * [3][4][5]             [4][5][3]                       [3][4][5]
+             * [6][7][8]             [7][8][6]                       [6][7][8]
+             */
             case 5:
+                PlaceBlock(_blocks[0], 5, 2);
+                PlaceBlock(_blocks[3], 5, 2);
+                PlaceBlock(_blocks[6], 5, 2);
+
+                _blocks[0].GridPosition = 2;
+                _blocks[1].GridPosition = 0;
+                _blocks[2].GridPosition = 1;
+                _blocks[3].GridPosition = 5;
+                _blocks[4].GridPosition = 3;
+                _blocks[5].GridPosition = 4;
+                _blocks[6].GridPosition = 8;
+                _blocks[7].GridPosition = 6;
+                _blocks[8].GridPosition = 6;
                 break;
 
             case 6:
@@ -264,7 +299,7 @@ public class MapController : MonoBehaviour
                 break;
         }
 
-        //Sort the list after update grid numbering
+        //Sort the list by new grid position after update grid numbering
         _blocks.Sort((x, y) => x.GridPosition.CompareTo(y.GridPosition));
     }
 
