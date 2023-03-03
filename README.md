@@ -37,3 +37,7 @@
 
 - Assignee change the **label** from **to-do** to **doing** when coding the new feature.
 - Change from **doing** to **done** when issue was merged into **master**.
+
+
+## Pull Request:
+- Create **Pull Reques**t with the title is **Issue number + description (if need)**. Example:  **"#30, Create infinite map"**.
