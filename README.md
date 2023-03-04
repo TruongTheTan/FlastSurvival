@@ -33,8 +33,11 @@
 - Has 3 status:
   - **to-do**: not yet or prepared to work.
   - **doing**: issue is on progress.
-  - **done**: issue is already done.
+  - **done**: issue was merged to **master** in **Pull Request**.
 
 - Assignee change the **label** from **to-do** to **doing** when coding the new feature.
-- Change from **doing** to **done** when done at coding.
-- After issue is done, create **Pull Request**.
+- Change from **doing** to **done** when issue was merged into **master**.
+
+
+## Pull Request:
+- Create **Pull Reques**t with the title is **Issue number + description (if need)**. Example:  **"#30, Create infinite map"**.
