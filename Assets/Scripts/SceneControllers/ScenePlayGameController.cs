@@ -26,6 +26,7 @@ public class ScenePlayGameController : MonoBehaviour
 
     private void SpawnCharacterBySelectionNumber()
     {
+
         GameObject playablePrefab = Resources.Load<GameObject>("Prefabs/PlayableCharacter/Player");
         GameObject playableCharacter = Instantiate(playablePrefab, new Vector3(0, 0, 1), Quaternion.identity);
 
