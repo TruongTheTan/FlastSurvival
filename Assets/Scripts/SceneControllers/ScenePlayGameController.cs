@@ -27,7 +27,7 @@ public class ScenePlayGameController : MonoBehaviour
     private void SpawnCharacterBySelectionNumber()
     {
         GameObject playablePrefab = Resources.Load<GameObject>("Prefabs/PlayableCharacter/Player");
-        GameObject playableCharacter = Instantiate(playablePrefab, transform.position, Quaternion.identity);
+        GameObject playableCharacter = Instantiate(playablePrefab, new Vector3(0, 0, 1), Quaternion.identity);
 
         SpriteRenderer playerSpriteRenderer = playableCharacter.GetComponent<SpriteRenderer>();
 
@@ -37,6 +37,5 @@ public class ScenePlayGameController : MonoBehaviour
             case 2: playerSpriteRenderer.sprite = AriahSprite; break;
             case 3: playerSpriteRenderer.sprite = SteveSprite; break;
         }
-        playableCharacter.transform.position = new Vector3(0, 0, 1);
     }
 }
