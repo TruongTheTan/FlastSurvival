@@ -1,10 +1,8 @@
-
-
 /// <summary>
 /// <para>
 /// This class use for store the global data. Such as total score, survival time, character selected number,...
 /// </para>
-/// 
+///
 /// <para>
 /// All field must be pulbic static for accessing directly from outside to read, change the properties
 /// </para>
@@ -12,5 +10,6 @@
 public class DataPreserve
 {
     public static int characterSelectedNumber = 1; // default is John
-
+    public static int totalScore = 0;
+    public static float survivedTime = 0;
 }
