@@ -79,26 +79,30 @@ public class PlayableCharacterController : MonoBehaviour
         GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
 
 
-        /* Find closet enemy */
-        foreach (GameObject currentEnemy in enemies)
+        if (enemies.Length > 0)
         {
-            float distanceToEnemy = (currentEnemy.transform.position - transform.position).sqrMagnitude;
-
-            // Find by distance between player and enemies
-            if (distanceToEnemy < distanceToClosetEnemy)
+            /* Find closet enemy */
+            foreach (GameObject currentEnemy in enemies)
             {
-                distanceToClosetEnemy = distanceToEnemy;
-                closetEnemy = currentEnemy;
+                float distanceToEnemy = (currentEnemy.transform.position - transform.position).sqrMagnitude;
+
+                // Find by distance between player and enemies
+                if (distanceToEnemy < distanceToClosetEnemy)
+                {
+                    distanceToClosetEnemy = distanceToEnemy;
+                    closetEnemy = currentEnemy;
+                }
             }
+
+            Debug.DrawLine(gun.transform.position, closetEnemy.transform.position);
+
+            /*Aim to the nearest Enemy*/
+            Vector3 aimDirection = (closetEnemy.transform.position - transform.position).normalized;
+            float angle = Mathf.Atan2(aimDirection.y, aimDirection.x) * Mathf.Rad2Deg;
+
+            gun.transform.eulerAngles = new Vector3(0, 0, angle);
         }
 
-        Debug.DrawLine(gun.transform.position, closetEnemy.transform.position);
 
-
-        /*Aim to the nearest Enemy*/
-        Vector3 aimDirection = (closetEnemy.transform.position - transform.position).normalized;
-        float angle = Mathf.Atan2(aimDirection.y, aimDirection.x) * Mathf.Rad2Deg;
-
-        gun.transform.eulerAngles = new Vector3(0, 0, angle);
     }
 }
