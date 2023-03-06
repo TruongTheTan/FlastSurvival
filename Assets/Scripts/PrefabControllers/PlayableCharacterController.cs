@@ -68,31 +68,24 @@ public class PlayableCharacterController : MonoBehaviour
             float distanceToClosetEnemy = Mathf.Infinity;
             Collider2D[] colliderDetectedWithinRadius = Physics2D.OverlapCircleAll(transform.position, 10, 1);
 
-
             // Find closet enemy
-            foreach (GameObject currentEnemy in enemiesOnMap)
+            foreach (Collider2D colliderComponent in colliderDetectedWithinRadius)
             {
-                // Find enemy within the player collider radius
-                foreach (Collider2D colliderComponent in colliderDetectedWithinRadius)
+                GameObject currentEnemy = colliderComponent.gameObject;
+
+                Vector3 currentEnemyPosition = currentEnemy.transform.position;
+                float distanceToEnemy = (currentEnemy.transform.position - transform.position).sqrMagnitude;
+
+                // Get the closet enemy and aim to it
+                if (distanceToEnemy < distanceToClosetEnemy)
                 {
-                    // Find by Collider component in radius
-                    if (currentEnemy.GetComponent<Collider2D>().Equals(colliderComponent))
-                    {
-                        Vector3 currentEnemyPosition = currentEnemy.transform.position;
-                        float distanceToEnemy = (currentEnemy.transform.position - transform.position).sqrMagnitude;
+                    distanceToClosetEnemy = distanceToEnemy;
 
-                        // Get the closet enemy and aim to it
-                        if (distanceToEnemy < distanceToClosetEnemy)
-                        {
-                            distanceToClosetEnemy = distanceToEnemy;
+                    /* Aim to rearest enemy */
+                    Vector3 aimDirection = (currentEnemy.transform.position - transform.position).normalized;
+                    float angle = Mathf.Atan2(aimDirection.y, aimDirection.x) * Mathf.Rad2Deg;
 
-                            /* Aim to rearest enemy */
-                            Vector3 aimDirection = (currentEnemy.transform.position - transform.position).normalized;
-                            float angle = Mathf.Atan2(aimDirection.y, aimDirection.x) * Mathf.Rad2Deg;
-
-                            gun.transform.eulerAngles = new Vector3(0, 0, angle);
-                        }
-                    }
+                    gun.transform.eulerAngles = new Vector3(0, 0, angle);
                 }
             }
         }
