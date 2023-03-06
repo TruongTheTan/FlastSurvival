@@ -18,6 +18,10 @@ public class CameraFollowController : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
+        if (_playerReference == null)
+        {
+            _playerReference = GameObject.FindGameObjectWithTag("Player");
+        }
         FollowPlayer();
     }
 

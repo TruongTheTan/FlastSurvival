@@ -10,6 +10,7 @@ public class MapController : MonoBehaviour
 
     //Half the width and height of the map block
     private float _blockHalfWidth = 60;
+
     private float _blockHalfHeight = 60;
 
     private int _playerCurrentBlock;
@@ -44,6 +45,10 @@ public class MapController : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
+        if (_playerReference == null)
+        {
+            _playerReference = GameObject.FindGameObjectWithTag("Player");
+        }
         PlayerCurrentBlock = GetTheNearestBlockPosition();
     }
 
@@ -56,10 +61,9 @@ public class MapController : MonoBehaviour
     {
         if (_mapPrefabs.Length > 0 && _blocks != null)
         {
-
             //Randomize initial map prefabs array
             System.Random randomizer = new System.Random();
-            for (int i = 0; i < _mapPrefabs.Length -1; ++i)
+            for (int i = 0; i < _mapPrefabs.Length - 1; ++i)
             {
                 int randomizeArrayIndex = randomizer.Next(i, _mapPrefabs.Length);
                 (_mapPrefabs[randomizeArrayIndex], _mapPrefabs[i]) = (_mapPrefabs[i], _mapPrefabs[randomizeArrayIndex]);
@@ -340,12 +344,12 @@ public class MapController : MonoBehaviour
                 _blocks[8].GridPosition = 5;
                 break;
 
-           /*
-            * player move from 4 to 8
-            * [0][1][2] move blocks [4][5][2] update grid numbering [0][1][2]
-            * [3][4][5]             [7][8][1]                       [3][4][5]
-            * [6][7][8]             [6][3][0]                       [6][7][8]
-            */
+            /*
+             * player move from 4 to 8
+             * [0][1][2] move blocks [4][5][2] update grid numbering [0][1][2]
+             * [3][4][5]             [7][8][1]                       [3][4][5]
+             * [6][7][8]             [6][3][0]                       [6][7][8]
+             */
             case 8:
                 PlaceBlock(_blocks[0], 8, 2);
                 PlaceBlock(_blocks[1], 8, 1);
@@ -373,6 +377,7 @@ public class MapController : MonoBehaviour
     #endregion Custom Methods
 
     #region MapBlock object
+
     [Serializable]
     public class MapBlock
     {
