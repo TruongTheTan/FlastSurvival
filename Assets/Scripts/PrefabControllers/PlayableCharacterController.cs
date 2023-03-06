@@ -7,7 +7,7 @@ public class PlayableCharacterController : MonoBehaviour
 
     private float horizontalMove = 0f;
     private float verticalMove = 0f;
-    private readonly float moverPerfame = 0.01f;
+    private readonly float moveAmount = 2.5f;
 
     private void Awake()
     {
@@ -32,7 +32,6 @@ public class PlayableCharacterController : MonoBehaviour
 
     private void CharacterMovement()
     {
-        float moveX = 0;
         horizontalMove = Input.GetAxis("Horizontal");
         verticalMove = Input.GetAxis("Vertical");
 
@@ -41,22 +40,25 @@ public class PlayableCharacterController : MonoBehaviour
         verticalMove = joystick.Vertical;
 #endif
 
-        if (horizontalMove != 0)
-        {
-            moveX = horizontalMove < 0 ? -moverPerfame : moverPerfame;
-        }
+        //if (horizontalMove != 0)
+        //{
+        //    moveX = horizontalMove < 0 ? -moveAmount : moveAmount;
+        //}
 
-        float moveY = 0;
+        //float moveY = 0;
 
-        if (verticalMove != 0)
-        {
-            moveY = verticalMove < 0 ? -moverPerfame : moverPerfame;
-        }
+        //if (verticalMove != 0)
+        //{
+        //    moveY = verticalMove < 0 ? -moveAmount : moveAmount;
+        //}
 
-        if (moveX != 0 || moveY != 0)
-        {
-            var pos = transform.position;
-            transform.position = new Vector3(pos.x + moveX, pos.y + moveY, pos.z);
-        }
+        //if (moveX != 0 || moveY != 0)
+        //{
+        //    var pos = transform.position;
+        //    transform.position = new Vector3(pos.x + moveX, pos.y + moveY, pos.z);
+        //}
+
+        Vector3 movement = new Vector3(horizontalMove, verticalMove);
+        transform.Translate(movement * moveAmount * Time.deltaTime);
     }
 }
