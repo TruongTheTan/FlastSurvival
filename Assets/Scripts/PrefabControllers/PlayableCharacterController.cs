@@ -9,25 +9,26 @@ public class PlayableCharacterController : MonoBehaviour
     private float verticalMove = 0f;
     private readonly float moverPerfame = 0.01f;
 
+    private void Awake()
+    {
+        if (joystick == null)
+        {
+            joystick = FindObjectOfType<Joystick>();
+        }
+    }
     private void Start()
     {
-
 #if UNITY_ANDROID || UNITY_IOS
         joystick.gameObject.SetActive(true);
 #else
         joystick.gameObject.SetActive(false);
 #endif
-
     }
     // Update is called once per frame
     void Update()
     {
         CharacterMovement();
     }
-
-
-
-
 
     private void CharacterMovement()
     {
