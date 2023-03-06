@@ -2,107 +2,99 @@
 
 public class PlayableCharacterController : MonoBehaviour
 {
-    [SerializeField]
-    private Joystick joystick;
+    private Joystick _joystick;
 
-    private float horizontalMove = 0f;
-    private float verticalMove = 0f;
-    private readonly float moverPerfame = 0.01f;
-
-    private GameObject gun;
+    private float _horizontalMove = 0f;
+    private float _verticalMove = 0f;
+    private readonly float _moveAmount = 2.5f;
 
     [SerializeField]
     private GameObject bulletPrefab;
+    private GameObject gun;
 
 
     private void Awake()
     {
+        if (_joystick == null)
+        {
+            _joystick = FindObjectOfType<Joystick>();
+        }
         gun = transform.GetChild(0).gameObject;
     }
 
+
+
     private void Start()
     {
-
 #if UNITY_ANDROID || UNITY_IOS
-        joystick.gameObject.SetActive(true);
+        _joystick.gameObject.SetActive(true);
 #else
         //joystick.gameObject.SetActive(false);
 #endif
-
     }
+
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         CharacterMovement();
-        AutoAimToClosetEnemy();
+        AimToClosetEnemy();
     }
-
 
 
     private void CharacterMovement()
     {
-        float moveX = 0;
-        horizontalMove = Input.GetAxis("Horizontal");
-        verticalMove = Input.GetAxis("Vertical");
+        _horizontalMove = Input.GetAxis("Horizontal");
+        _verticalMove = Input.GetAxis("Vertical");
 
 #if UNITY_ANDROID || UNITY_IOS
-        horizontalMove = joystick.Horizontal;
-        verticalMove = joystick.Vertical;
+        _horizontalMove = _joystick.Horizontal;
+        _verticalMove = _joystick.Vertical;
 #endif
 
-        if (horizontalMove != 0)
-        {
-            moveX = horizontalMove < 0 ? -moverPerfame : moverPerfame;
-        }
-
-        float moveY = 0;
-
-        if (verticalMove != 0)
-        {
-            moveY = verticalMove < 0 ? -moverPerfame : moverPerfame;
-        }
-
-        if (moveX != 0 || moveY != 0)
-        {
-            var pos = transform.position;
-            transform.position = new Vector3(pos.x + moveX, pos.y + moveY, pos.z);
-        }
+        Vector3 movement = new Vector3(_horizontalMove, _verticalMove);
+        transform.Translate(_moveAmount * Time.deltaTime * movement.normalized);
     }
 
 
 
-    private void AutoAimToClosetEnemy()
+
+    private void AimToClosetEnemy()
     {
-        float distanceToClosetEnemy = Mathf.Infinity;
+        GameObject[] enemiesOnMap = GameObject.FindGameObjectsWithTag("Enemy");
 
-        GameObject closetEnemy = null;
-        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
-
-
-        if (enemies.Length > 0)
+        // If there are at least 1 enemy on map
+        if (enemiesOnMap.Length > 0)
         {
-            /* Find closet enemy */
-            foreach (GameObject currentEnemy in enemies)
-            {
-                float distanceToEnemy = (currentEnemy.transform.position - transform.position).sqrMagnitude;
+            float distanceToClosetEnemy = Mathf.Infinity;
+            Collider2D[] colliderDetectedWithinRadius = Physics2D.OverlapCircleAll(transform.position, 10, 1);
 
-                // Find by distance between player and enemies
-                if (distanceToEnemy < distanceToClosetEnemy)
+
+            // Find closet enemy
+            foreach (GameObject currentEnemy in enemiesOnMap)
+            {
+                // Find enemy within the player collider radius
+                foreach (Collider2D colliderComponent in colliderDetectedWithinRadius)
                 {
-                    distanceToClosetEnemy = distanceToEnemy;
-                    closetEnemy = currentEnemy;
+                    // Find by Collider component in radius
+                    if (currentEnemy.GetComponent<Collider2D>().Equals(colliderComponent))
+                    {
+                        Vector3 currentEnemyPosition = currentEnemy.transform.position;
+                        float distanceToEnemy = (currentEnemy.transform.position - transform.position).sqrMagnitude;
+
+                        // Get the closet enemy and aim to it
+                        if (distanceToEnemy < distanceToClosetEnemy)
+                        {
+                            distanceToClosetEnemy = distanceToEnemy;
+
+                            /* Aim to rearest enemy */
+                            Vector3 aimDirection = (currentEnemy.transform.position - transform.position).normalized;
+                            float angle = Mathf.Atan2(aimDirection.y, aimDirection.x) * Mathf.Rad2Deg;
+
+                            gun.transform.eulerAngles = new Vector3(0, 0, angle);
+                        }
+                    }
                 }
             }
-
-            Debug.DrawLine(gun.transform.position, closetEnemy.transform.position);
-
-            /*Aim to the nearest Enemy*/
-            Vector3 aimDirection = (closetEnemy.transform.position - transform.position).normalized;
-            float angle = Mathf.Atan2(aimDirection.y, aimDirection.x) * Mathf.Rad2Deg;
-
-            gun.transform.eulerAngles = new Vector3(0, 0, angle);
         }
-
-
     }
 }
