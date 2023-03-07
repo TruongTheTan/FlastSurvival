@@ -11,10 +11,15 @@ public class ScenePlayGameController : MonoBehaviour
     [SerializeField]
     private Sprite SteveSprite;
 
+
+    private void Awake()
+    {
+        SpawnCharacterBySelectionNumber();
+    }
+
     // Start is called before the first frame update
     void Start()
     {
-        SpawnCharacterBySelectionNumber();
     }
 
     // Update is called once per frame
@@ -39,4 +44,6 @@ public class ScenePlayGameController : MonoBehaviour
             case 3: playerSpriteRenderer.sprite = SteveSprite; break;
         }
     }
+
+
 }

@@ -98,8 +98,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57248153124f03141bbcf9d9d384fe4b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _joystick: {fileID: 0}
-  bulletPrefab: {fileID: 9131424194326348873, guid: f7ef724155801c043993c6fa36b72af3, type: 3}
+  _bulletPrefab: {fileID: 7991649381083793365, guid: 31a085ee858c6474f8781ac0f85be2ef, type: 3}
 --- !u!1001 &2052497496464054406
 PrefabInstance:
   m_ObjectHideFlags: 0
