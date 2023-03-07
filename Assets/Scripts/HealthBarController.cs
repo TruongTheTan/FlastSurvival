@@ -3,18 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class HealthBarTestController : MonoBehaviour
+public class HealthBarController : MonoBehaviour
 {
     private float _maxHealth;
-    private GameObject HUD;
 
     public Slider healthBar;
     public GameObject objectToFollow;
-
-    // Start is called before the first frame update
-    private void Awake()
-    {
-    }
 
     public void SetData(GameObject follow, float maxHP)
     {
@@ -22,10 +16,12 @@ public class HealthBarTestController : MonoBehaviour
         objectToFollow = follow;
         FollowObject();
         _maxHealth = maxHP;
+
+        healthBar.maxValue = _maxHealth;
         healthBar.value = _maxHealth;
     }
 
-    private void OnHealthChanged(float hp)
+    public void OnHealthChanged(float hp)
     {
         healthBar.value = hp;
     }
@@ -35,6 +31,7 @@ public class HealthBarTestController : MonoBehaviour
         FollowObject();
     }
 
+    //Follow directly above object
     private void FollowObject()
     {
         Vector2 newPosition = new Vector2(objectToFollow.transform.position.x, objectToFollow.transform.position.y + 1);
