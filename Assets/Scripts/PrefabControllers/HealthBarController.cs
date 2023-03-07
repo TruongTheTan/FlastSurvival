@@ -7,23 +7,23 @@ public class HealthBarController : MonoBehaviour
 {
     private float _maxHealth;
 
-    public Slider healthBar;
-    public GameObject objectToFollow;
+    private Slider _healthBar;
+    private GameObject _objectToFollow;
 
     public void SetData(GameObject follow, float maxHP)
     {
-        healthBar = GetComponent<Slider>();
-        objectToFollow = follow;
+        _healthBar = GetComponent<Slider>();
+        _objectToFollow = follow;
         FollowObject();
         _maxHealth = maxHP;
 
-        healthBar.maxValue = _maxHealth;
-        healthBar.value = _maxHealth;
+        _healthBar.maxValue = _maxHealth;
+        _healthBar.value = _maxHealth;
     }
 
     public void OnHealthChanged(float hp)
     {
-        healthBar.value = hp;
+        _healthBar.value = hp;
     }
 
     private void Update()
@@ -34,7 +34,7 @@ public class HealthBarController : MonoBehaviour
     //Follow directly above object
     private void FollowObject()
     {
-        Vector2 newPosition = new Vector2(objectToFollow.transform.position.x, objectToFollow.transform.position.y + 1);
+        Vector2 newPosition = new Vector2(_objectToFollow.transform.position.x, _objectToFollow.transform.position.y + 1);
         transform.position = newPosition;
     }
 }
