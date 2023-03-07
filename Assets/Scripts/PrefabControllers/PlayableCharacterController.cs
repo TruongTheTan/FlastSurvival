@@ -9,8 +9,10 @@ public class PlayableCharacterController : MonoBehaviour
     private readonly float _moveAmount = 2.5f;
 
     [SerializeField]
-    private GameObject bulletPrefab;
-    private GameObject gun;
+    private GameObject _bulletPrefab;
+    private GameObject _gun;
+    private GameObject _gunSrpite;
+
 
 
     private void Awake()
@@ -19,7 +21,8 @@ public class PlayableCharacterController : MonoBehaviour
         {
             _joystick = FindObjectOfType<Joystick>();
         }
-        gun = transform.GetChild(0).gameObject;
+        _gun = transform.GetChild(0).gameObject;
+        _gunSrpite = _gun.transform.GetChild(0).gameObject;
     }
 
 
@@ -71,23 +74,33 @@ public class PlayableCharacterController : MonoBehaviour
             // Find closet enemy
             foreach (Collider2D colliderComponent in colliderDetectedWithinRadius)
             {
-                GameObject currentEnemy = colliderComponent.gameObject;
-
-                Vector3 currentEnemyPosition = currentEnemy.transform.position;
-                float distanceToEnemy = (currentEnemy.transform.position - transform.position).sqrMagnitude;
-
-                // Get the closet enemy and aim to it
-                if (distanceToEnemy < distanceToClosetEnemy)
+                // Point to enemy by collider tag name
+                if (colliderComponent.CompareTag("Enemy"))
                 {
-                    distanceToClosetEnemy = distanceToEnemy;
+                    GameObject currentEnemy = colliderComponent.gameObject;
 
-                    /* Aim to rearest enemy */
-                    Vector3 aimDirection = (currentEnemy.transform.position - transform.position).normalized;
-                    float angle = Mathf.Atan2(aimDirection.y, aimDirection.x) * Mathf.Rad2Deg;
+                    Vector3 currentEnemyPosition = currentEnemy.transform.position;
+                    float distanceToEnemy = (currentEnemy.transform.position - transform.position).sqrMagnitude;
 
-                    gun.transform.eulerAngles = new Vector3(0, 0, angle);
+                    // Get the closet enemy and aim to it
+                    if (distanceToEnemy < distanceToClosetEnemy)
+                    {
+                        distanceToClosetEnemy = distanceToEnemy;
+
+                        /* Aim to rearest enemy */
+                        Vector3 aimDirection = (currentEnemy.transform.position - transform.position).normalized;
+                        float angle = Mathf.Atan2(aimDirection.y, aimDirection.x) * Mathf.Rad2Deg;
+
+                        _gun.transform.eulerAngles = new Vector3(0, 0, angle);
+                    }
                 }
             }
         }
     }
+
+    public void Shoot()
+    {
+        Instantiate(_bulletPrefab, _gunSrpite.transform.position, _gunSrpite.transform.rotation);
+    }
+
 }
