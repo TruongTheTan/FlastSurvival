@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 8ad1e37a70adec642bdd5c14a5bc3117
+guid: 2249d3b5cfd37e24f9368fa91f157e35
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -45,10 +45,10 @@ TextureImporter:
   spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
-  alignment: 8
-  spritePivot: {x: 1, y: 0}
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
   spritePixelsToUnits: 100
-  spriteBorder: {x: 0, y: 259, z: 246, w: 0}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
   alphaIsTransparency: 1
@@ -102,18 +102,6 @@ TextureImporter:
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
-    buildTarget: WebGL
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 3
     buildTarget: Android
     maxTextureSize: 2048
     resizeAlgorithm: 0
@@ -137,68 +125,101 @@ TextureImporter:
     overridden: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: item_0
+      name: Fodder Joe
       rect:
         serializedVersion: 2
-        x: 34
-        y: 279
-        width: 201
-        height: 200
+        x: 15
+        y: 340
+        width: 136
+        height: 85
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 0f3061c59d6116644b9390d9cf3abdee
-      internalID: 1237723153
+      spriteID: 92779100675ad13489577bcd9cf6e05a
+      internalID: 1769872218
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: item_1
+      name: Blitz Jok
       rect:
         serializedVersion: 2
-        x: 285
-        y: 279
-        width: 190
-        height: 200
+        x: 253
+        y: 338
+        width: 127
+        height: 122
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 11846a619d89aa54180ab8fd69767e49
-      internalID: -477012057
+      spriteID: 45eb7b8de5ce27b4aa7ebcfe1609c2ee
+      internalID: 1600729081
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: item_2
+      name: Explosive Dave
       rect:
         serializedVersion: 2
-        x: 34
-        y: 33
-        width: 201
-        height: 200
+        x: 31
+        y: 93
+        width: 156
+        height: 136
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a3f33ce96c288884a88bfd077dcf56ce
-      internalID: -398749311
+      spriteID: f76604f0e2c777f40903d63763c741a6
+      internalID: -1784498269
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Big Daddy
+      rect:
+        serializedVersion: 2
+        x: 324
+        y: 109
+        width: 121
+        height: 125
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b2c0b2aca7c8b904e813e5482b2c44e9
+      internalID: 873240673
       vertices: []
       indices: 
       edges: []
@@ -207,16 +228,17 @@ TextureImporter:
     physicsShape: []
     bones: []
     spriteID: 5e97eb03825dee720800000000000000
-    internalID: 1537655665
+    internalID: 0
     vertices: []
     indices: 
     edges: []
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      item_2: -398749311
-      item_0: 1237723153
-      item_1: -477012057
+      Explosive Dave: -1784498269
+      Blitz Jok: 1600729081
+      Big Daddy: 873240673
+      Fodder Joe: 1769872218
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0
