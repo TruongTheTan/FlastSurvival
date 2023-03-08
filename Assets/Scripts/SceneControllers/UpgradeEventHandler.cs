@@ -40,7 +40,7 @@ public class UpgradeEventHandler : MonoBehaviour
         _currentMaxSpeed = GameObject.Find("SpeedCurrent").GetComponent<TextMeshProUGUI>();
         //Get player current max speed and set here
 
-        //_upgradePanelReference.SetActive(false);
+        _upgradePanelReference.SetActive(false);
     }
 
     public void Upgrade()
@@ -56,12 +56,14 @@ public class UpgradeEventHandler : MonoBehaviour
 
     public void UpgradeHealthClick()
     {
+        //Upgrade health here
         Debug.Log("Health + 10");
         _upgradePanelReference.SetActive(false);
     }
 
     public void UpgradeSpeedClick()
     {
+        //Upgrade speed here
         Debug.Log("Speed + 0.5");
         _upgradePanelReference.SetActive(false);
     }
