@@ -21,7 +21,6 @@ public class EnemyController : MonoBehaviour
     {
         m_target = GameObject.FindGameObjectWithTag("Player").transform;
         m_gameObject = m_target.gameObject;
-        Rigidbody2Dm_Rigidbody2 = GetComponent<Rigidbody2D>();
     }
 
 
@@ -36,7 +35,7 @@ public class EnemyController : MonoBehaviour
     private void FixedUpdate()
     {
         Vector3 direction = (m_target.position - transform.position).normalized;
-        Rigidbody2Dm_Rigidbody2.velocity = direction * speed;
+        gameObject.transform.Translate(direction * Time.deltaTime * speed, Space.Self);
     }
 
     private void OnCollisionStay2D(Collision2D collision)
