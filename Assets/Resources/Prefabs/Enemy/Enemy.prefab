@@ -76,7 +76,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 1769872218, guid: 2249d3b5cfd37e24f9368fa91f157e35, type: 3}
+  m_Sprite: {fileID: 1600729081, guid: 2249d3b5cfd37e24f9368fa91f157e35, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -116,6 +116,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 1
+  _healthBarPrefab: {fileID: 6151046435492452311, guid: 682adfb7bf833fa439385ea69c5e6ba1, type: 3}
 --- !u!50 &2017716453684191043
 Rigidbody2D:
   serializedVersion: 4
