@@ -1,7 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class EnemyController : MonoBehaviour
@@ -10,12 +6,29 @@ public class EnemyController : MonoBehaviour
     [SerializeField] float speed;
     GameObject m_gameObject;
     Rigidbody2D Rigidbody2Dm_Rigidbody2;
+
+
+
+    [SerializeField]
+    private GameObject _healthBarPrefab;
+
+    private GameObject _healthBars;
+    private float _maxHealth = 100f;
+    private HealthBarController _healthBarController;
+
     // Start is called before the first frame update
     private void Awake()
     {
         m_target = GameObject.FindGameObjectWithTag("Player").transform;
         m_gameObject = m_target.gameObject;
         Rigidbody2Dm_Rigidbody2 = GetComponent<Rigidbody2D>();
+    }
+
+
+    void Start()
+    {
+        InstantiateData();
+
     }
 
 
@@ -34,8 +47,42 @@ public class EnemyController : MonoBehaviour
         }
     }
 
+
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        DecreaseHPWhenGetAttackByPlayer(collision);
+    }
+
+
     private void Attack()
     {
         Debug.Log("Attack Player!!");
+    }
+
+
+    private void InstantiateData()
+    {
+        _healthBars = GameObject.Find("HealthBars");
+        GameObject healthBar = Instantiate(_healthBarPrefab, _healthBars.transform);
+        _healthBarController = healthBar.GetComponent<HealthBarController>();
+        _healthBarController.SetData(gameObject, _maxHealth);
+    }
+
+
+    private void DecreaseHPWhenGetAttackByPlayer(Collision2D collision)
+    {
+        // Decrease health by weapon's bullet (Include upgraded weapon  )
+        switch (collision.gameObject.tag)
+        {
+            case "PistolRifle": break;
+            case "AssaultRileBullet": break;
+            case "ShotGunBullet": break;
+            case "Sword": break;
+        }
+        _healthBarController.OnHealthChanged(_maxHealth);
+
+        if (_maxHealth <= 0)
+            Destroy(gameObject);
     }
 }
