@@ -11,8 +11,10 @@ GameObject:
   - component: {fileID: 8537557913161991338}
   - component: {fileID: 3135622706511573344}
   - component: {fileID: -196622493752990490}
+  - component: {fileID: -3645543647558739815}
+  - component: {fileID: 2017716453684191043}
   m_Layer: 0
-  m_Name: Big Daddy
+  m_Name: Enemy
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -74,7 +76,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 873240673, guid: 2249d3b5cfd37e24f9368fa91f157e35, type: 3}
+  m_Sprite: {fileID: 1769872218, guid: 2249d3b5cfd37e24f9368fa91f157e35, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -101,3 +103,37 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0.024577571}
   serializedVersion: 2
   m_Radius: 0.36888257
+--- !u!114 &-3645543647558739815
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5001590243908655695}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ff516839c2c5e3459df0597f53f129e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 1
+--- !u!50 &2017716453684191043
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5001590243908655695}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
