@@ -12,9 +12,6 @@ public class ScenePlayGameController : MonoBehaviour
     private Sprite SteveSprite;
 
 
-    [SerializeField]
-    private GameObject a;
-
 
     private void Awake()
     {
