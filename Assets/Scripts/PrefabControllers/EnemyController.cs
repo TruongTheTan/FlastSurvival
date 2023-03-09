@@ -15,6 +15,7 @@ public class EnemyController : MonoBehaviour
     private GameObject _healthBars;
     private float _maxHealth = 100f;
     private HealthBarController _healthBarController;
+    private float timer;
 
     // Start is called before the first frame update
     private void Awake()
@@ -35,7 +36,9 @@ public class EnemyController : MonoBehaviour
     private void FixedUpdate()
     {
         Vector3 direction = (m_target.position - transform.position).normalized;
-        gameObject.transform.Translate(direction * Time.deltaTime * speed);
+        gameObject.transform.Translate(direction * Time.deltaTime * speed, Space.Self);
+        timer += 1;
+
     }
 
     private void OnCollisionStay2D(Collision2D collision)
@@ -81,7 +84,10 @@ public class EnemyController : MonoBehaviour
         }
         _healthBarController.OnHealthChanged(_maxHealth);
 
-        if (_maxHealth <= 0)
+        if (timer > 2)
+        {
+            GetComponent<LootBag>().InstantiateLoot(transform.position);
             Destroy(gameObject);
+        }
     }
 }
