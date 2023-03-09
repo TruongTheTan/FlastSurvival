@@ -141,7 +141,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: item_0
+      name: Healing
       rect:
         serializedVersion: 2
         x: 34
@@ -149,7 +149,7 @@ TextureImporter:
         width: 201
         height: 200
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -162,7 +162,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: item_1
+      name: Speed Up
       rect:
         serializedVersion: 2
         x: 285
@@ -170,7 +170,7 @@ TextureImporter:
         width: 190
         height: 200
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -183,7 +183,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: item_2
+      name: Invincible Time
       rect:
         serializedVersion: 2
         x: 34
@@ -191,7 +191,7 @@ TextureImporter:
         width: 201
         height: 200
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -214,9 +214,9 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      item_2: -398749311
-      item_0: 1237723153
-      item_1: -477012057
+      Healing: 1237723153
+      Speed Up: -477012057
+      Invincible Time: -398749311
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0
