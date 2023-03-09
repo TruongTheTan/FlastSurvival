@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,6 +7,22 @@ public class HealthBarController : MonoBehaviour
 
     private Slider _healthBar;
     private GameObject _objectToFollow;
+
+
+
+    private void Update()
+    {
+        FollowObject();
+    }
+
+    //Follow directly above object
+    private void FollowObject()
+    {
+        Vector2 newPosition = new Vector2(_objectToFollow.transform.position.x, _objectToFollow.transform.position.y + 1);
+        transform.position = newPosition;
+    }
+
+
 
     public void SetData(GameObject follow, float maxHP)
     {
@@ -24,17 +38,8 @@ public class HealthBarController : MonoBehaviour
     public void OnHealthChanged(float hp)
     {
         _healthBar.value = hp;
-    }
 
-    private void Update()
-    {
-        FollowObject();
-    }
-
-    //Follow directly above object
-    private void FollowObject()
-    {
-        Vector2 newPosition = new Vector2(_objectToFollow.transform.position.x, _objectToFollow.transform.position.y + 1);
-        transform.position = newPosition;
+        if (_healthBar.value <= 0)
+            Destroy(gameObject);
     }
 }

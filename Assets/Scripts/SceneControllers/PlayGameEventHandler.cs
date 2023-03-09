@@ -24,4 +24,11 @@ public class PlayGameEventHandler : MonoBehaviour
     {
         _player.Shoot();
     }
+
+
+    public void PickupWeapon()
+    {
+        DataPreserve.allowPickUpWeapon = true;
+        _player.PickUpGun();
+    }
 }

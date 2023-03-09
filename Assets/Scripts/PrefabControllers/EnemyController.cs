@@ -38,6 +38,7 @@ public class EnemyController : MonoBehaviour
         Vector3 direction = (m_target.position - transform.position).normalized;
         gameObject.transform.Translate(direction * Time.deltaTime * speed, Space.Self);
         timer += 1;
+
     }
 
     private void OnCollisionStay2D(Collision2D collision)
