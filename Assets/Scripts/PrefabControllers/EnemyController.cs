@@ -35,7 +35,7 @@ public class EnemyController : MonoBehaviour
     private void FixedUpdate()
     {
         Vector3 direction = (m_target.position - transform.position).normalized;
-        gameObject.transform.Translate(direction * Time.deltaTime * speed, Space.Self);
+        gameObject.transform.Translate(direction * Time.deltaTime * speed);
     }
 
     private void OnCollisionStay2D(Collision2D collision)

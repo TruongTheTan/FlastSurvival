@@ -137,6 +137,7 @@ GameObject:
   - component: {fileID: 91697821}
   - component: {fileID: 91697822}
   - component: {fileID: 91697823}
+  - component: {fileID: 91697824}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -225,6 +226,7 @@ MonoBehaviour:
   JohnSprite: {fileID: 21300000, guid: 6de1c45208287f54a92543e1623b46f7, type: 3}
   AriahSprite: {fileID: 21300000, guid: 38e1cf97f657180408588095001be454, type: 3}
   SteveSprite: {fileID: 21300000, guid: 9b4ea91b175176b4b95f0b221668f597, type: 3}
+  a: {fileID: 2052497496015290595, guid: 91528e3c6e8232840b22b25440fd306e, type: 3}
 --- !u!114 &91697822
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -254,6 +256,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ba0ad5f6945aa4f4a8bd6fd6b1585b48, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &91697824
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 91697817}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4114dfcab9f10df47b97aa44e2884754, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &161653363
@@ -408,7 +422,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &200854450
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1664,7 +1678,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 626040110}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 990317545}
+        m_TargetAssemblyTypeName: PlayGameEventHandler, Assembly-CSharp
+        m_MethodName: PickupWeapon
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &626040110
 MonoBehaviour:
   m_ObjectHideFlags: 0
