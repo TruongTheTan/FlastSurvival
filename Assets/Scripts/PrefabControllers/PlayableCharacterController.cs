@@ -49,10 +49,10 @@ public class PlayableCharacterController : MonoBehaviour
         _horizontalMove = Input.GetAxis("Horizontal");
         _verticalMove = Input.GetAxis("Vertical");
 
-#if UNITY_ANDROID || UNITY_IOS
+//#if UNITY_ANDROID || UNITY_IOS
         _horizontalMove = _joystick.Horizontal;
         _verticalMove = _joystick.Vertical;
-#endif
+//#endif
 
         Vector3 movement = new Vector3(_horizontalMove, _verticalMove);
         transform.Translate(_moveAmount * Time.deltaTime * movement.normalized);

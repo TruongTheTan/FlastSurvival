@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 4777417993551703972}
   - component: {fileID: 4696600104944876990}
   - component: {fileID: -8256497976127591457}
-  - component: {fileID: 7506763795055559049}
   - component: {fileID: -69894699782999779}
+  - component: {fileID: 5767212293156407977}
   m_Layer: 0
   m_Name: Bullest_4
   m_TagString: Untagged
@@ -99,27 +99,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1accee3b52a90424e997c86cafe90466, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!50 &7506763795055559049
-Rigidbody2D:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1478471017295240097}
-  m_BodyType: 0
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0.05
-  m_GravityScale: 0
-  m_Material: {fileID: 0}
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 0
 --- !u!58 &-69894699782999779
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -136,3 +115,24 @@ CircleCollider2D:
   m_Offset: {x: 0.06587058, y: 0.0018508434}
   serializedVersion: 2
   m_Radius: 0.14927453
+--- !u!50 &5767212293156407977
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1478471017295240097}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
