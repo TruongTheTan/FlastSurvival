@@ -160,6 +160,7 @@ GameObject:
   - component: {fileID: 115276007685770541}
   - component: {fileID: -3404942182480524883}
   - component: {fileID: 9161976539573321140}
+  - component: {fileID: -6774685643383674732}
   m_Layer: 0
   m_Name: player
   m_TagString: Player
@@ -248,7 +249,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _bulletPrefab: {fileID: 1478471017295240097, guid: ef036884d6f575242848857832772e6b, type: 3}
-  changeWeaponButton: {fileID: 0}
 --- !u!61 &9161976539573321140
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -275,3 +275,24 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1.3701794, y: 1.8867141}
   m_EdgeRadius: 0
+--- !u!50 &-6774685643383674732
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8474394109558213255}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 4
