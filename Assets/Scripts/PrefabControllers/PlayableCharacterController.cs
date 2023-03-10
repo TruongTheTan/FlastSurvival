@@ -150,7 +150,7 @@ public class PlayableCharacterController : MonoBehaviour
             _healthBarReference.GetComponent<PlayerHealthBarController>().OnHealthChanged(_currentHealthPoint);
         } else
         {
-            Destroy(gameObject);
+            SceneManager.LoadScene("SceneGameOver");
         }
     }
 }
