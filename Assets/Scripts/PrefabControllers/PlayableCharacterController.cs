@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class PlayableCharacterController : MonoBehaviour
@@ -8,10 +9,11 @@ public class PlayableCharacterController : MonoBehaviour
 
     private float _horizontalMove = 0f;
     private float _verticalMove = 0f;
-    private readonly float _moveAmount = 2.5f;
+    private float _moveAmount = 2.5f;
 
     [SerializeField]
     private GameObject _bulletPrefab;
+
     private GameObject _gun;
     private GameObject _gunSprite;
 
@@ -19,12 +21,12 @@ public class PlayableCharacterController : MonoBehaviour
     private Button _changeWeaponButton;
     private readonly string[] _weaponTypes = { "Sword", "Pistol", "ShotGun", "AssaultRifle" };
 
-
+    //Default health to 100
+    private int _healthPoint = 100;
 
     private void Start()
     {
         InstantiateData();
-
     }
 
     // Update is called once per frame
@@ -32,11 +34,7 @@ public class PlayableCharacterController : MonoBehaviour
     {
         CharacterMovement();
         AimToClosetEnemy();
-
     }
-
-
-
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -49,8 +47,6 @@ public class PlayableCharacterController : MonoBehaviour
         _changeWeaponButton.image.gameObject.SetActive(false);
         DataPreserve.allowPickUpWeapon = false;
     }
-
-
 
     private void InstantiateData()
     {
@@ -70,7 +66,6 @@ public class PlayableCharacterController : MonoBehaviour
         _changeWeaponButton.image.gameObject.SetActive(false);
     }
 
-
     private void CharacterMovement()
     {
         _horizontalMove = _joystick.Horizontal;
@@ -79,9 +74,6 @@ public class PlayableCharacterController : MonoBehaviour
         Vector3 movement = new Vector3(_horizontalMove, _verticalMove);
         transform.Translate(_moveAmount * Time.deltaTime * movement.normalized);
     }
-
-
-
 
     private void AimToClosetEnemy()
     {
@@ -119,15 +111,10 @@ public class PlayableCharacterController : MonoBehaviour
         }
     }
 
-
-
-
-
     public void Shoot()
     {
         Instantiate(_bulletPrefab, _gunSprite.transform.position, _gunSprite.transform.rotation);
     }
-
 
     public void PickUpGun()
     {
@@ -141,6 +128,17 @@ public class PlayableCharacterController : MonoBehaviour
             // Change gun sprite if press "Change" button
             if (DataPreserve.allowPickUpWeapon)
                 _gunSprite.GetComponent<SpriteRenderer>().sprite = _collision.gameObject.GetComponent<SpriteRenderer>().sprite;
+        }
+    }
+
+    public void Damaged(int damage)
+    {
+        if(_healthPoint > damage)
+        {
+            _healthPoint -= damage;
+        } else
+        {
+            Destroy(gameObject);
         }
     }
 }
