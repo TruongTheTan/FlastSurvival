@@ -8,7 +8,7 @@ public class PlayerHealthBarController : MonoBehaviour
     private float _maxHealth;
     private Slider _healthBarSlider;
 
-    private void SetData(float maxHP)
+    public void SetData(float maxHP)
     {
         _healthBarSlider = GetComponent<Slider>();
         _maxHealth = maxHP;
@@ -16,7 +16,7 @@ public class PlayerHealthBarController : MonoBehaviour
         _healthBarSlider.value = _maxHealth;
     }
 
-    private void OnHealthChanged(float hp)
+    public void OnHealthChanged(float hp)
     {
         _healthBarSlider.value = hp;
     }

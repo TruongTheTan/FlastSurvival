@@ -17,12 +17,14 @@ public class PlayableCharacterController : MonoBehaviour
     private GameObject _gun;
     private GameObject _gunSprite;
 
+    private GameObject _healthBarReference;
     private Collider2D _collision;
     private Button _changeWeaponButton;
     private readonly string[] _weaponTypes = { "Sword", "Pistol", "ShotGun", "AssaultRifle" };
 
-    //Default health to 100
-    private int _healthPoint = 100;
+    //Default current and max health to 100
+    private int _currentHealthPoint = 100;
+    private int _maxHealthPoint = 100;
 
     private void Start()
     {
@@ -48,6 +50,14 @@ public class PlayableCharacterController : MonoBehaviour
         DataPreserve.allowPickUpWeapon = false;
     }
 
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if(collision.gameObject.CompareTag("Enemy"))
+        {
+            Damaged(50);
+        }
+    }
+
     private void InstantiateData()
     {
 #if UNITY_ANDROID || UNITY_IOS
@@ -61,7 +71,8 @@ public class PlayableCharacterController : MonoBehaviour
         }
         _gun = transform.GetChild(0).gameObject;
         _gunSprite = _gun.transform.GetChild(0).gameObject;
-
+        _healthBarReference = GameObject.Find("HealthBar");
+        _healthBarReference.GetComponent<PlayerHealthBarController>().SetData(_maxHealthPoint);
         _changeWeaponButton = FindObjectsOfType<Button>()[0];
         _changeWeaponButton.image.gameObject.SetActive(false);
     }
@@ -133,9 +144,10 @@ public class PlayableCharacterController : MonoBehaviour
 
     public void Damaged(int damage)
     {
-        if(_healthPoint > damage)
+        if(_currentHealthPoint > damage)
         {
-            _healthPoint -= damage;
+            _currentHealthPoint -= damage;
+            _healthBarReference.GetComponent<PlayerHealthBarController>().OnHealthChanged(_currentHealthPoint);
         } else
         {
             Destroy(gameObject);
