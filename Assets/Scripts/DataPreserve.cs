@@ -12,4 +12,5 @@ public class DataPreserve
     public static int characterSelectedNumber = 1; // default is John
     public static int totalScore = 0;
     public static float survivedTime = 0;
+    public static bool allowPickUpWeapon = false;
 }

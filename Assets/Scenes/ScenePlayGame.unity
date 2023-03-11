@@ -187,6 +187,7 @@ GameObject:
   - component: {fileID: 91697818}
   - component: {fileID: 91697821}
   - component: {fileID: 91697823}
+  - component: {fileID: 91697824}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -285,6 +286,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ba0ad5f6945aa4f4a8bd6fd6b1585b48, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &91697824
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 91697817}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4114dfcab9f10df47b97aa44e2884754, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &161653363
@@ -439,7 +452,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &200854450
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1695,7 +1708,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 626040110}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 990317545}
+        m_TargetAssemblyTypeName: PlayGameEventHandler, Assembly-CSharp
+        m_MethodName: PickupWeapon
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &626040110
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1880,6 +1905,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1124244386}
   - component: {fileID: 1124244387}
+  - component: {fileID: 1124244388}
   m_Layer: 5
   m_Name: HealthBar
   m_TagString: Untagged
@@ -1960,6 +1986,18 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &1124244388
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1124244385}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: efda0b7a392bf794dbb383fcf0d1e990, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1330081505
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,4 +1,7 @@
-﻿using UnityEngine;
+﻿using System.Linq;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class PlayableCharacterController : MonoBehaviour
 {
@@ -6,34 +9,26 @@ public class PlayableCharacterController : MonoBehaviour
 
     private float _horizontalMove = 0f;
     private float _verticalMove = 0f;
-    private readonly float _moveAmount = 2.5f;
+    private float _moveAmount = 2.5f;
 
     [SerializeField]
     private GameObject _bulletPrefab;
+
     private GameObject _gun;
-    private GameObject _gunSrpite;
+    private GameObject _gunSprite;
 
+    private GameObject _healthBarReference;
+    private Collider2D _collision;
+    private Button _changeWeaponButton;
+    private readonly string[] _weaponTypes = { "Sword", "Pistol", "ShotGun", "AssaultRifle" };
 
-
-    private void Awake()
-    {
-        if (_joystick == null)
-        {
-            _joystick = FindObjectOfType<Joystick>();
-        }
-        _gun = transform.GetChild(0).gameObject;
-        _gunSrpite = _gun.transform.GetChild(0).gameObject;
-    }
-
-
+    //Default current and max health to 100
+    private int _currentHealthPoint = 100;
+    private int _maxHealthPoint = 100;
 
     private void Start()
     {
-#if UNITY_ANDROID || UNITY_IOS
-        _joystick.gameObject.SetActive(true);
-#else
-        //joystick.gameObject.SetActive(false);
-#endif
+        InstantiateData();
     }
 
     // Update is called once per frame
@@ -43,23 +38,53 @@ public class PlayableCharacterController : MonoBehaviour
         AimToClosetEnemy();
     }
 
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        _collision = collision;
+        PickUpGun();
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        _changeWeaponButton.image.gameObject.SetActive(false);
+        DataPreserve.allowPickUpWeapon = false;
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if(collision.gameObject.CompareTag("Enemy"))
+        {
+            Damaged(50);
+        }
+    }
+
+    private void InstantiateData()
+    {
+#if UNITY_ANDROID || UNITY_IOS
+        _joystick.gameObject.SetActive(true);
+#else
+        //joystick.gameObject.SetActive(false);
+#endif
+        if (_joystick == null)
+        {
+            _joystick = FindObjectOfType<Joystick>();
+        }
+        _gun = transform.GetChild(0).gameObject;
+        _gunSprite = _gun.transform.GetChild(0).gameObject;
+        _healthBarReference = GameObject.Find("HealthBar");
+        _healthBarReference.GetComponent<PlayerHealthBarController>().SetData(_maxHealthPoint);
+        _changeWeaponButton = FindObjectsOfType<Button>()[0];
+        _changeWeaponButton.image.gameObject.SetActive(false);
+    }
 
     private void CharacterMovement()
     {
-        _horizontalMove = Input.GetAxis("Horizontal");
-        _verticalMove = Input.GetAxis("Vertical");
-
-//#if UNITY_ANDROID || UNITY_IOS
         _horizontalMove = _joystick.Horizontal;
         _verticalMove = _joystick.Vertical;
-//#endif
 
         Vector3 movement = new Vector3(_horizontalMove, _verticalMove);
         transform.Translate(_moveAmount * Time.deltaTime * movement.normalized);
     }
-
-
-
 
     private void AimToClosetEnemy()
     {
@@ -79,7 +104,6 @@ public class PlayableCharacterController : MonoBehaviour
                 {
                     GameObject currentEnemy = colliderComponent.gameObject;
 
-                    Vector3 currentEnemyPosition = currentEnemy.transform.position;
                     float distanceToEnemy = (currentEnemy.transform.position - transform.position).sqrMagnitude;
 
                     // Get the closet enemy and aim to it
@@ -100,7 +124,33 @@ public class PlayableCharacterController : MonoBehaviour
 
     public void Shoot()
     {
-        Instantiate(_bulletPrefab, _gunSrpite.transform.position, _gunSrpite.transform.rotation);
+        Instantiate(_bulletPrefab, _gunSprite.transform.position, _gunSprite.transform.rotation);
     }
 
+    public void PickUpGun()
+    {
+        string weaponTagName = _collision.gameObject.tag;
+
+        // Check if collision is a weapon
+        if (_weaponTypes.Contains(weaponTagName))
+        {
+            _changeWeaponButton.image.gameObject.SetActive(true);
+
+            // Change gun sprite if press "Change" button
+            if (DataPreserve.allowPickUpWeapon)
+                _gunSprite.GetComponent<SpriteRenderer>().sprite = _collision.gameObject.GetComponent<SpriteRenderer>().sprite;
+        }
+    }
+
+    public void Damaged(int damage)
+    {
+        if(_currentHealthPoint > damage)
+        {
+            _currentHealthPoint -= damage;
+            _healthBarReference.GetComponent<PlayerHealthBarController>().OnHealthChanged(_currentHealthPoint);
+        } else
+        {
+            SceneManager.LoadScene("SceneGameOver");
+        }
+    }
 }

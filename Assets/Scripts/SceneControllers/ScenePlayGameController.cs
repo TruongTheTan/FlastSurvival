@@ -12,6 +12,7 @@ public class ScenePlayGameController : MonoBehaviour
     private Sprite SteveSprite;
 
 
+
     private void Awake()
     {
         SpawnCharacterBySelectionNumber();
