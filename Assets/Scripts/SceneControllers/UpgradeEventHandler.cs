@@ -18,6 +18,7 @@ public class UpgradeEventHandler : MonoBehaviour
 
     private GameObject _upgradePanelReference;
     private GameObject _displayCharacterReference;
+    private Image _avatar;
     private TextMeshProUGUI _currentMaxHP;
     private TextMeshProUGUI _currentMaxSpeed;
 
@@ -28,11 +29,21 @@ public class UpgradeEventHandler : MonoBehaviour
     {
         _upgradePanelReference = GameObject.Find("UpgradePanel");
         _displayCharacterReference = GameObject.Find("CharacterDisplay");
+        _avatar = GameObject.Find("ImageAvatar").GetComponent<Image>();
         switch (DataPreserve.characterSelectedNumber)
         {
-            case 1: _displayCharacterReference.GetComponent<Image>().sprite = _john; break;
-            case 2: _displayCharacterReference.GetComponent<Image>().sprite = _ariah; break;
-            case 3: _displayCharacterReference.GetComponent<Image>().sprite = _steve; break;
+            case 1: 
+                _displayCharacterReference.GetComponent<Image>().sprite = _john;
+                _avatar.sprite = _john;
+                break;
+            case 2: 
+                _displayCharacterReference.GetComponent<Image>().sprite = _ariah;
+                _avatar.sprite = _ariah;
+                break;
+            case 3: 
+                _displayCharacterReference.GetComponent<Image>().sprite = _steve;
+                _avatar.sprite = _steve;
+                break;
         }
         _currentMaxHP = GameObject.Find("HealthCurrent").GetComponent<TextMeshProUGUI>();
         //Get player current max HP and set here
