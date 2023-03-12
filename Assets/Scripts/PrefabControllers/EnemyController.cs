@@ -1,9 +1,11 @@
+using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class EnemyController : MonoBehaviour
 {
     private Transform m_target;
-    [SerializeField] private float speed;
+    [SerializeField] private float _speed;
     private GameObject m_gameObject;
     private Rigidbody2D Rigidbody2Dm_Rigidbody2;
 
@@ -11,9 +13,11 @@ public class EnemyController : MonoBehaviour
     private GameObject _healthBarPrefab;
 
     private GameObject _healthBars;
-    private float _maxHealth = 100f;
+    private float _health = 100f;
+    private int _damage = 0;
+    private bool _isCollidingPlayer = false;
     private HealthBarController _healthBarController;
-    private float timer;
+    private float _timer;
 
     // Start is called before the first frame update
     private void Awake()
@@ -31,26 +35,30 @@ public class EnemyController : MonoBehaviour
     private void FixedUpdate()
     {
         Vector3 direction = (m_target.position - transform.position).normalized;
-        gameObject.transform.Translate(direction * Time.deltaTime * speed, Space.Self);
-        timer += 1;
-    }
-
-    private void OnCollisionStay2D(Collision2D collision)
-    {
-        if (collision.gameObject == m_gameObject)
-        {
-            Attack();
-        }
+        gameObject.transform.Translate(direction * Time.deltaTime * _speed, Space.Self);
+        _timer += 1;
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        DecreaseHPWhenGetAttackByPlayer(collision);
+        if (collision.gameObject == m_gameObject)
+        {
+            _isCollidingPlayer = true;
+            StartCoroutine(DealDamageEverySecond());
+        }
+    }
+
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        if (collision.gameObject == m_gameObject)
+        {
+            _isCollidingPlayer = false;
+        }
     }
 
     private void Attack()
     {
-        Debug.Log("Attack Player!!");
+        m_gameObject.GetComponent<PlayableCharacterController>().Damaged(_damage);
     }
 
     private void InstantiateData()
@@ -59,20 +67,28 @@ public class EnemyController : MonoBehaviour
 
         switch (currentSprite.name)
         {
-            case "Big Daddy":
-                _maxHealth = 200f;
+            case "Fodder Joe":
+                _health = 100f;
+                _speed = 2;
+                _damage = 20;
                 break;
 
             case "Blitz Jok":
-                _maxHealth = 75f;
+                _health = 75f;
+                _speed = 2.5f;
+                _damage = 20;
                 break;
 
-            case "Fodder Joe":
-                _maxHealth = 100f;
+            case "Big Daddy":
+                _health = 200f;
+                _speed = 1f;
+                _damage = 50;
                 break;
 
             case "Explosive Dave":
-                _maxHealth = 50f;
+                _health = 50f;
+                _speed = 3;
+                _damage = 100;
                 break;
 
             default: break;
@@ -81,7 +97,16 @@ public class EnemyController : MonoBehaviour
         _healthBars = GameObject.Find("HealthBars");
         GameObject healthBar = Instantiate(_healthBarPrefab, _healthBars.transform);
         _healthBarController = healthBar.GetComponent<HealthBarController>();
-        _healthBarController.SetData(gameObject, _maxHealth);
+        _healthBarController.SetData(gameObject, _health);
+    }
+
+    IEnumerator DealDamageEverySecond()
+    {
+        while (_isCollidingPlayer)
+        {
+            yield return new WaitForSeconds(1f);
+            Attack();
+        }
     }
 
     private void DecreaseHPWhenGetAttackByPlayer(Collision2D collision)
@@ -89,14 +114,25 @@ public class EnemyController : MonoBehaviour
         // Decrease health by weapon's bullet (Include upgraded weapon  )
         switch (collision.gameObject.tag)
         {
-            case "PistolRifle": break;
-            case "AssaultRileBullet": break;
-            case "ShotGunBullet": break;
-            case "Sword": break;
-        }
-        _healthBarController.OnHealthChanged(_maxHealth);
+            case "PistolRifle":
 
-        if (timer > 2)
+                break;
+
+            case "AssaultRileBullet":
+
+                break;
+
+            case "ShotGunBullet":
+
+                break;
+
+            case "Sword":
+
+                break;
+        }
+        _healthBarController.OnHealthChanged(_health);
+
+        if (_timer > 2)
         {
             GetComponent<LootBag>().InstantiateLoot(transform.position);
             Destroy(gameObject);
