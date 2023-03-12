@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,13 +9,19 @@ public class RandomSpawnEnermy : MonoBehaviour
     [SerializeField] Sprite[] enermy;
     [SerializeField] Vector2 spawnArea;
     [SerializeField] float spawnTimer;
+    float _cameraHeight;
+    float _cameraWidth;
+    float _enermySpawnOffset = 1f;
+    Camera mainCamera;
     GameObject _newEnermy;
 
     float _timer;
     // Start is called before the first frame update
     void Start()
     {
-        
+        mainCamera = Camera.main;
+        _cameraHeight = 2f * mainCamera.orthographicSize;
+        _cameraWidth = _cameraHeight * mainCamera.aspect;
     }
 
     // Update is called once per frame
@@ -46,20 +52,30 @@ public class RandomSpawnEnermy : MonoBehaviour
 
     private Vector3 GenerateRandomPosition()
     {
-        
+        Vector3 cameraPosition = mainCamera.transform.position;
+        float leftBound = cameraPosition.x - _cameraWidth / 2f;
+        float rightBound = cameraPosition.x + _cameraWidth / 2f;
+        float bottomBound = cameraPosition.y - mainCamera.orthographicSize;
+        float topBound = cameraPosition.y + mainCamera.orthographicSize;
+
         Vector3 positon = new Vector3();
-        float f = UnityEngine.Random.value > 0.5f ? -1f : 1f;
-        if(UnityEngine.Random.value > 0.5f)
+        float randomDirection = UnityEngine.Random.Range(0f, 1f);
+        if (randomDirection < 0.25f) // Spawn phía trên camera
         {
-            positon.x = UnityEngine.Random.Range(-spawnArea.x, spawnArea.y);
-            positon.y = spawnArea.y * f;
+            positon = new Vector3(UnityEngine.Random.Range(leftBound, rightBound), topBound + _enermySpawnOffset, 0f);
         }
-        else
+        else if (randomDirection < 0.5f) // Spawn phía bên phải camera
         {
-            positon.y = UnityEngine.Random.Range(-spawnArea.y,spawnArea.x);
-            positon.x = spawnArea.x * f;
+            positon = new Vector3(rightBound + _enermySpawnOffset, UnityEngine.Random.Range(bottomBound, topBound), 0f);
         }
-        positon.z = 0;
+        else if (randomDirection < 0.75f) // Spawn phía dưới camera
+        {
+            positon = new Vector3(UnityEngine.Random.Range(leftBound, rightBound), bottomBound - _enermySpawnOffset, 0f);
+        }
+        else // Spawn phía bên trái camera
+        {
+            positon = new Vector3(leftBound - _enermySpawnOffset, UnityEngine.Random.Range(bottomBound, topBound), 0f);
+        }
         return positon;
     }
 }
