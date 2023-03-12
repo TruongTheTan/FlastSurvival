@@ -15,8 +15,6 @@ public class GunController : MonoBehaviour
     private Sprite _assaultRifleSprite;
 
 
-    private int gunTypeNumber = 0;
-
 
     // Start is called before the first frame update
     void Start()
@@ -45,7 +43,7 @@ public class GunController : MonoBehaviour
         Vector2 boxCollider2DSize = new Vector2();
 
 
-        switch (gunTypeNumber = Random.Range(1, 4))
+        switch (Random.Range(1, 4))
         {
             case 1:
                 weaponTagName = "Pistol";
@@ -61,13 +59,12 @@ public class GunController : MonoBehaviour
 
             case 3:
                 weaponTagName = "ShotGun";
-                weaponSprite = _pistolSprite;
-                boxCollider2DSize = new Vector2(0.3291424f, 0.1410481f);
+                weaponSprite = _shotGunSprite;
                 break;
+
             case 4:
                 weaponTagName = "Sword";
-                weaponSprite = _pistolSprite;
-                boxCollider2DSize = new Vector2(0.3291424f, 0.1410481f);
+                weaponSprite = _swordSprite;
                 break;
         }
         transform.tag = weaponTagName;

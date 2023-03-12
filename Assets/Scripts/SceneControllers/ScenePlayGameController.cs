@@ -26,7 +26,7 @@ public class ScenePlayGameController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        DataPreserve.survivedTime += Time.deltaTime;
     }
 
 
