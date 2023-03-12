@@ -54,6 +54,10 @@ public class EnemyController : MonoBehaviour
         {
             _isCollidingPlayer = false;
         }
+        else
+        {
+            TestDamaged();
+        }
     }
 
     private void Attack()
@@ -106,6 +110,19 @@ public class EnemyController : MonoBehaviour
         {
             yield return new WaitForSeconds(1f);
             Attack();
+        }
+    }
+
+    private void TestDamaged()
+    {
+        if (_health > 50)
+        {
+            _health -= 50;
+            _healthBarController.OnHealthChanged(_health);
+        }
+        else
+        {
+            Destroy(gameObject);
         }
     }
 
