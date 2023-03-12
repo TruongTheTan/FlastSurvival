@@ -24,6 +24,7 @@ public class PlayableCharacterController : MonoBehaviour
 
     //Default current and max health to 100
     private int _currentHealthPoint = 100;
+
     private int _maxHealthPoint = 100;
 
     private void Start()
@@ -50,13 +51,13 @@ public class PlayableCharacterController : MonoBehaviour
         DataPreserve.allowPickUpWeapon = false;
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.CompareTag("Enemy"))
-        {
-            Damaged(50);
-        }
-    }
+    //private void OnCollisionEnter2D(Collision2D collision)
+    //{
+    //    if (collision.gameObject.CompareTag("Enemy"))
+    //    {
+    //        Damaged(50);
+    //    }
+    //}
 
     private void InstantiateData()
     {
