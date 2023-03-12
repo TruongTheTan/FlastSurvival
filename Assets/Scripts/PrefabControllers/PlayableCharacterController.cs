@@ -52,7 +52,7 @@ public class PlayableCharacterController : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if(collision.gameObject.CompareTag("Enemy"))
+        if (collision.gameObject.CompareTag("Enemy"))
         {
             Damaged(50);
         }
@@ -94,7 +94,7 @@ public class PlayableCharacterController : MonoBehaviour
         if (enemiesOnMap.Length > 0)
         {
             float distanceToClosetEnemy = Mathf.Infinity;
-            Collider2D[] colliderDetectedWithinRadius = Physics2D.OverlapCircleAll(transform.position, 10, 1);
+            Collider2D[] colliderDetectedWithinRadius = Physics2D.OverlapCircleAll(transform.position, 7.3f, 1);
 
             // Find closet enemy
             foreach (Collider2D colliderComponent in colliderDetectedWithinRadius)
@@ -144,11 +144,12 @@ public class PlayableCharacterController : MonoBehaviour
 
     public void Damaged(int damage)
     {
-        if(_currentHealthPoint > damage)
+        if (_currentHealthPoint > damage)
         {
             _currentHealthPoint -= damage;
             _healthBarReference.GetComponent<PlayerHealthBarController>().OnHealthChanged(_currentHealthPoint);
-        } else
+        }
+        else
         {
             SceneManager.LoadScene("SceneGameOver");
         }
