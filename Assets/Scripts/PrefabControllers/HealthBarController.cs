@@ -37,7 +37,10 @@ public class HealthBarController : MonoBehaviour
 
     public void OnHealthChanged(float hp)
     {
-        _healthBar.value = hp;
+        if(_healthBar.value < _healthBar.maxValue)
+        {
+            _healthBar.value = hp;
+        }
 
         if (_healthBar.value <= 0)
             Destroy(gameObject);
