@@ -5,6 +5,8 @@ public class BulletController : MonoBehaviour
 {
     private int _damage;
     private Timer _bulletTimer;
+    private bool _isBounceable;
+    private int _bounceTimes;
 
     // Start is called before the first frame update
     void Start()
@@ -14,17 +16,17 @@ public class BulletController : MonoBehaviour
         switch (gameObject.tag)
         {
             case "Pistol":
-                _damage = 20;
+                SetDamage(20);
                 _bulletTimer.Duration = 3;
                 break;
 
             case "AssaultRifle":
-                _damage = 40;
+                SetDamage(40);
                 _bulletTimer.Duration = 3;
                 break;
 
             case "Shotgun":
-                _damage = 70;
+                SetDamage(70);
                 _bulletTimer.Duration = 1;
                 break;
         }
@@ -50,6 +52,24 @@ public class BulletController : MonoBehaviour
             collision.gameObject.GetComponent<EnemyController>().Damaged(_damage);
         }
 
-        Destroy(gameObject);
+        if (!_isBounceable || _bounceTimes <= 0)
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+            _bounceTimes--;
+        }
+    }
+
+    public void SetDamage(int damage)
+    {
+        _damage = damage;
+    }
+
+    public void SetBounceable(bool bounce, int bounceTimes)
+    {
+        _isBounceable = bounce;
+        _bounceTimes = bounceTimes;
     }
 }
