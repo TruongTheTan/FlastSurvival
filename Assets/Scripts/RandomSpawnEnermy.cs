@@ -61,19 +61,19 @@ public class RandomSpawnEnermy : MonoBehaviour
         float randomDirection = UnityEngine.Random.Range(0f, 1f);
         if (randomDirection < 0.25f) // Spawn phía trên camera
         {
-            positon = new Vector3(UnityEngine.Random.Range(leftBound, rightBound), topBound + _enermySpawnOffset, 1);
+            positon = new Vector3(UnityEngine.Random.Range(leftBound, rightBound), topBound + _enermySpawnOffset, 0f);
         }
         else if (randomDirection < 0.5f) // Spawn phía bên phải camera
         {
-            positon = new Vector3(rightBound + _enermySpawnOffset, UnityEngine.Random.Range(bottomBound, topBound), 1);
+            positon = new Vector3(rightBound + _enermySpawnOffset, UnityEngine.Random.Range(bottomBound, topBound), 0f);
         }
         else if (randomDirection < 0.75f) // Spawn phía dưới camera
         {
-            positon = new Vector3(UnityEngine.Random.Range(leftBound, rightBound), bottomBound - _enermySpawnOffset, 1);
+            positon = new Vector3(UnityEngine.Random.Range(leftBound, rightBound), bottomBound - _enermySpawnOffset, 0f);
         }
         else // Spawn phía bên trái camera
         {
-            positon = new Vector3(leftBound - _enermySpawnOffset, UnityEngine.Random.Range(bottomBound, topBound), 1);
+            positon = new Vector3(leftBound - _enermySpawnOffset, UnityEngine.Random.Range(bottomBound, topBound), 0f);
         }
         return positon;
     }

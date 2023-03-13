@@ -155,4 +155,18 @@ public class PlayableCharacterController : MonoBehaviour
             SceneManager.LoadScene("SceneGameOver");
         }
     }
+
+    public void HealtBuff(int among)
+    {
+        if(_maxHealthPoint > _currentHealthPoint)
+        {
+            _currentHealthPoint += among;
+			_healthBarReference.GetComponent<PlayerHealthBarController>().OnHealthChanged(_currentHealthPoint);
+		}
+        else
+        {
+            _currentHealthPoint = _maxHealthPoint;
+			_healthBarReference.GetComponent<PlayerHealthBarController>().OnHealthChanged(_currentHealthPoint);
+		}
+    }
 }

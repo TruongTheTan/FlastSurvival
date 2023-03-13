@@ -1,35 +1,29 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEditor.Progress;
 
 public  class EffecItem : MonoBehaviour
 {
-	public List<Loot> items;
+	[SerializeField]
+	private Loot _health;
+	[SerializeField]
+	private Loot _invincible;
 	private void OnTriggerEnter2D(Collider2D collision)
 	{
 		if (collision.gameObject.tag.Equals("Player"))
 		{
-			foreach (var item in items)
+			if (gameObject.GetComponent<SpriteRenderer>().sprite.Equals(_health.lootSprite))
 			{
-				if (gameObject.GetComponent<Sprite>().Equals(item.lootSprite))
-				{
-					switch (gameObject.tag)
-					{
-						case "Healing":
-							Destroy(gameObject);
-							collision.GetComponent<PlayerHealthBarController>().OnHealthChanged(item.among);
-							break;
-						case "Incincible Time":
-							Destroy(gameObject);
-							collision.GetComponent<SpriteRenderer>().color = Color.white;
-							break;
-						case "Speed Up":
-							Destroy(gameObject);
-							collision.GetComponent<SpriteRenderer>().color = Color.yellow;
-							break;
-					}
-
-				}
+				collision.gameObject.GetComponent<PlayableCharacterController>().HealtBuff(_health.among);
+				Destroy(gameObject);
+			}else if (gameObject.GetComponent<SpriteRenderer>().sprite.Equals(_invincible.lootSprite))
+			{
+				Destroy(gameObject);
+			}
+			else
+			{
+				Destroy(gameObject);
 			}
 		}		
 	}

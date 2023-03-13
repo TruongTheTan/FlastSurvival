@@ -146,7 +146,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f53bdf7f055dc241b1c01d2d29e6f76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  items:
-  - {fileID: 11400000, guid: 1456972e1379b2b4f93a829811971015, type: 2}
-  - {fileID: 11400000, guid: a73fcd6262813e840a640e7160628fcd, type: 2}
-  - {fileID: 11400000, guid: d1babcc856ca81b4ca67b88403a9ffda, type: 2}
+  _health: {fileID: 11400000, guid: a73fcd6262813e840a640e7160628fcd, type: 2}
+  _invincible: {fileID: 11400000, guid: 1456972e1379b2b4f93a829811971015, type: 2}

@@ -18,9 +18,6 @@ public class PlayerHealthBarController : MonoBehaviour
 
     public void OnHealthChanged(float hp)
     {
-        if(_healthBarSlider.value < _healthBarSlider.maxValue)
-        {
-            _healthBarSlider.value = hp;
-        }
+        _healthBarSlider.value = hp;
     }
 }

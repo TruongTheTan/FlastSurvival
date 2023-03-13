@@ -16,8 +16,4 @@ public class Loot : ScriptableObject
         this.lootName = lootName;
         this.dropChange = dropChange;
     }
-	public void Apply(GameObject gameObject)
-	{
-		
-	}
 }
