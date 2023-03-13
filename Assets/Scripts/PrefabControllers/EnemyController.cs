@@ -1,5 +1,4 @@
 using System.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class EnemyController : MonoBehaviour
@@ -19,6 +18,7 @@ public class EnemyController : MonoBehaviour
     private bool _isCollidingPlayer = false;
     private HealthBarController _healthBarController;
     private float _timer;
+    private int _point;
 
     // Start is called before the first frame update
     private void Awake()
@@ -72,24 +72,28 @@ public class EnemyController : MonoBehaviour
                 _health = 100f;
                 _speed = 2;
                 _damage = 20;
+                _point = 10;
                 break;
 
             case "Blitz Jok":
                 _health = 75f;
                 _speed = 2.5f;
                 _damage = 20;
+                _point = 20;
                 break;
 
             case "Big Daddy":
                 _health = 200f;
                 _speed = 1f;
                 _damage = 50;
+                _point = 30;
                 break;
 
             case "Explosive Dave":
                 _health = 50f;
                 _speed = 3;
                 _damage = 100;
+                _point = 5;
                 break;
 
             default: break;
@@ -120,6 +124,8 @@ public class EnemyController : MonoBehaviour
         }
         else
         {
+            DataPreserve.enemyKilled++;
+            DataPreserve.totalScore += (_point * DataPreserve.enemyKilled) + (DataPreserve.gameRound * 100);
             Destroy(_currentHealthBar);
             Destroy(gameObject);
         }
