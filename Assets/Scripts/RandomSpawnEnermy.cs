@@ -7,7 +7,6 @@ using UnityEngine.UIElements;
 public class RandomSpawnEnermy : MonoBehaviour
 {
     [SerializeField] Sprite[] enermy;
-    [SerializeField] Vector2 spawnArea;
     [SerializeField] float spawnTimer;
     float _cameraHeight;
     float _cameraWidth;

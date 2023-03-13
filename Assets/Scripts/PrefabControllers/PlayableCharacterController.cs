@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -126,21 +125,7 @@ public class PlayableCharacterController : MonoBehaviour
 
     public void Shoot()
     {
-        GameObject bullet = Instantiate(_bulletPrefab, _gunSprite.transform.position, _gunSprite.transform.rotation);
-        switch (_gunSprite.GetComponent<SpriteRenderer>().sprite.name)
-        {
-            case "Gun_5":
-                bullet.gameObject.tag = _weaponTypes[3];
-                break;
-
-            case "Gun_10":
-                bullet.gameObject.tag = _weaponTypes[1];
-                break;
-
-            case "Gun_11":
-                bullet.gameObject.tag = _weaponTypes[2];
-                break;
-        }
+        Instantiate(_bulletPrefab, _gunSprite.transform.position, _gunSprite.transform.rotation);
     }
 
     public void PickUpGun()
@@ -169,5 +154,19 @@ public class PlayableCharacterController : MonoBehaviour
         {
             SceneManager.LoadScene("SceneGameOver");
         }
+    }
+
+    public void HealtBuff(int among)
+    {
+        if(_maxHealthPoint > _currentHealthPoint)
+        {
+            _currentHealthPoint += among;
+			_healthBarReference.GetComponent<PlayerHealthBarController>().OnHealthChanged(_currentHealthPoint);
+		}
+        else
+        {
+            _currentHealthPoint = _maxHealthPoint;
+			_healthBarReference.GetComponent<PlayerHealthBarController>().OnHealthChanged(_currentHealthPoint);
+		}
     }
 }
