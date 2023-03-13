@@ -13,4 +13,7 @@ public class DataPreserve
     public static int totalScore = 0;
     public static float survivedTime = 0;
     public static bool allowPickUpWeapon = false;
+    public static int enemyKilled = 0;
+    public static int gameRound = 1;
+
 }
