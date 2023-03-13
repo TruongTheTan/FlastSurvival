@@ -47,10 +47,6 @@ public class EnemyController : MonoBehaviour
             _isCollidingPlayer = true;
             StartCoroutine(DealDamageEverySecond());
         }
-        else
-        {
-            Damaged(50);
-        }
     }
 
     private void OnCollisionExit2D(Collision2D collision)
