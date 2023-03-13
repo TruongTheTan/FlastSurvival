@@ -13,6 +13,7 @@ public class EnemyController : MonoBehaviour
     private GameObject _healthBarPrefab;
 
     private GameObject _healthBars;
+    private GameObject _currentHealthBar;
     private float _health = 100f;
     private int _damage = 0;
     private bool _isCollidingPlayer = false;
@@ -96,6 +97,7 @@ public class EnemyController : MonoBehaviour
 
         _healthBars = GameObject.Find("HealthBars");
         GameObject healthBar = Instantiate(_healthBarPrefab, _healthBars.transform);
+        _currentHealthBar = healthBar;
         _healthBarController = healthBar.GetComponent<HealthBarController>();
         _healthBarController.SetData(gameObject, _health);
     }
@@ -109,32 +111,16 @@ public class EnemyController : MonoBehaviour
         }
     }
 
-    private void DecreaseHPWhenGetAttackByPlayer(Collision2D collision)
+    public void Damaged(int damage)
     {
-        // Decrease health by weapon's bullet (Include upgraded weapon  )
-        switch (collision.gameObject.tag)
+        if (_health > damage)
         {
-            case "PistolRifle":
-
-                break;
-
-            case "AssaultRileBullet":
-
-                break;
-
-            case "ShotGunBullet":
-
-                break;
-
-            case "Sword":
-
-                break;
+            _health -= damage;
+            _healthBarController.OnHealthChanged(_health);
         }
-        _healthBarController.OnHealthChanged(_health);
-
-        if (_timer > 2)
+        else
         {
-            GetComponent<LootBag>().InstantiateLoot(transform.position);
+            Destroy(_currentHealthBar);
             Destroy(gameObject);
         }
     }
