@@ -117,17 +117,18 @@ public class EnemyController : MonoBehaviour
 
     public void Damaged(int damage)
     {
-        if (_health > damage)
-        {
-            _health -= damage;
-            _healthBarController.OnHealthChanged(_health);
-        }
-        else
-        {
-            DataPreserve.enemyKilled++;
-            DataPreserve.totalScore += (_point * DataPreserve.enemyKilled) + (DataPreserve.gameRound * 100);
-            Destroy(_currentHealthBar);
-            Destroy(gameObject);
-        }
+        //if (_health > damage)
+        //{
+        //    _health -= damage;
+        //    _healthBarController.OnHealthChanged(_health);
+        //}
+        //else
+        //{
+        //    DataPreserve.enemyKilled++;
+        //    DataPreserve.totalScore += (_point * DataPreserve.enemyKilled) + (DataPreserve.gameRound * 100);
+        //    Destroy(_currentHealthBar);
+        //    Destroy(gameObject);
+        //}
+        Destroy(gameObject);
     }
 }
