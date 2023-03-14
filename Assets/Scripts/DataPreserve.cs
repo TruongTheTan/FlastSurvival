@@ -15,5 +15,5 @@ public class DataPreserve
     public static bool allowPickUpWeapon = false;
     public static int enemyKilled = 0;
     public static int gameRound = 1;
-
+    public static int totalEnemiesOnMap = 0;
 }

@@ -4,9 +4,8 @@ using UnityEngine;
 public class EnemyController : MonoBehaviour
 {
     private Transform m_target;
-    [SerializeField] private float _speed;
-    private GameObject m_gameObject;
-    private Rigidbody2D Rigidbody2Dm_Rigidbody2;
+    private float _speed;
+    private GameObject _player;
 
     [SerializeField]
     private GameObject _healthBarPrefab;
@@ -24,13 +23,20 @@ public class EnemyController : MonoBehaviour
     private void Awake()
     {
         m_target = GameObject.FindGameObjectWithTag("Player").transform;
-        m_gameObject = m_target.gameObject;
+        _player = m_target.gameObject;
     }
 
     void Start()
     {
         InstantiateData();
     }
+
+
+    private void Update()
+    {
+        DestroyWhenTooFarFromPlayer();
+    }
+
 
     // Update is called once per frame
     private void FixedUpdate()
@@ -42,7 +48,7 @@ public class EnemyController : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject == m_gameObject)
+        if (collision.gameObject == _player)
         {
             _isCollidingPlayer = true;
             StartCoroutine(DealDamageEverySecond());
@@ -51,7 +57,7 @@ public class EnemyController : MonoBehaviour
 
     private void OnCollisionExit2D(Collision2D collision)
     {
-        if (collision.gameObject == m_gameObject)
+        if (collision.gameObject == _player)
         {
             _isCollidingPlayer = false;
         }
@@ -59,7 +65,7 @@ public class EnemyController : MonoBehaviour
 
     private void Attack()
     {
-        m_gameObject.GetComponent<PlayableCharacterController>().Damaged(_damage);
+        _player.GetComponent<PlayableCharacterController>().Damaged(_damage);
     }
 
     private void InstantiateData()
@@ -100,10 +106,14 @@ public class EnemyController : MonoBehaviour
         }
 
         _healthBars = GameObject.Find("HealthBars");
+
         GameObject healthBar = Instantiate(_healthBarPrefab, _healthBars.transform);
+
         _currentHealthBar = healthBar;
         _healthBarController = healthBar.GetComponent<HealthBarController>();
         _healthBarController.SetData(gameObject, _health);
+
+        DataPreserve.totalEnemiesOnMap++;
     }
 
     IEnumerator DealDamageEverySecond()
@@ -120,13 +130,23 @@ public class EnemyController : MonoBehaviour
         if (_health > damage)
         {
             _health -= damage;
-           _healthBarController.OnHealthChanged(_health);
+            _healthBarController.OnHealthChanged(_health);
         }
         else
         {
-			GetComponent<LootBag>().InstantiateLoot(transform.position);
-			DataPreserve.enemyKilled++;
+            GetComponent<LootBag>().InstantiateLoot(transform.position);
+            DataPreserve.enemyKilled++;
             DataPreserve.totalScore += (_point * DataPreserve.enemyKilled) + (DataPreserve.gameRound * 100);
+            Destroy(_currentHealthBar);
+            Destroy(gameObject);
+        }
+    }
+
+    private void DestroyWhenTooFarFromPlayer()
+    {
+        if (Vector3.Distance(transform.position, _player.transform.position) >= 25f)
+        {
+            DataPreserve.totalEnemiesOnMap--;
             Destroy(_currentHealthBar);
             Destroy(gameObject);
         }

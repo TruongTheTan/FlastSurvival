@@ -24,13 +24,15 @@ public class PlayableCharacterController : MonoBehaviour
 
     //Default current and max health to 100
     private int _currentHealthPoint = 100;
-
     private int _maxHealthPoint = 100;
+
+
 
     private void Start()
     {
         InstantiateData();
     }
+
 
     // Update is called once per frame
     private void Update()
@@ -39,11 +41,13 @@ public class PlayableCharacterController : MonoBehaviour
         AimToClosetEnemy();
     }
 
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         _collision = collision;
         PickUpGun();
     }
+
 
     private void OnTriggerExit2D(Collider2D collision)
     {
@@ -51,13 +55,7 @@ public class PlayableCharacterController : MonoBehaviour
         DataPreserve.allowPickUpWeapon = false;
     }
 
-    //private void OnCollisionEnter2D(Collision2D collision)
-    //{
-    //    if (collision.gameObject.CompareTag("Enemy"))
-    //    {
-    //        Damaged(50);
-    //    }
-    //}
+
 
     private void InstantiateData()
     {
@@ -67,13 +65,14 @@ public class PlayableCharacterController : MonoBehaviour
         //joystick.gameObject.SetActive(false);
 #endif
         if (_joystick == null)
-        {
             _joystick = FindObjectOfType<Joystick>();
-        }
+
         _gun = transform.GetChild(0).gameObject;
         _gunSprite = _gun.transform.GetChild(0).gameObject;
+
         _healthBarReference = GameObject.Find("HealthBar");
         _healthBarReference.GetComponent<PlayerHealthBarController>().SetData(_maxHealthPoint);
+
         _changeWeaponButton = FindObjectsOfType<Button>()[0];
         _changeWeaponButton.image.gameObject.SetActive(false);
     }
@@ -126,21 +125,21 @@ public class PlayableCharacterController : MonoBehaviour
     public void Shoot()
     {
         GameObject bullet = Instantiate(_bulletPrefab, _gunSprite.transform.position, _gunSprite.transform.rotation);
+
         switch (_gunSprite.GetComponent<SpriteRenderer>().sprite.name)
         {
             case "Gun_5":
-                bullet.gameObject.tag = _weaponTypes[3];
+                bullet.tag = _weaponTypes[3];
                 break;
 
             case "Gun_10":
-                bullet.gameObject.tag = _weaponTypes[1];
+                bullet.tag = _weaponTypes[1];
                 break;
 
             case "Gun_11":
-                bullet.gameObject.tag = _weaponTypes[2];
+                bullet.tag = _weaponTypes[2];
                 break;
         }
-        Instantiate(_bulletPrefab, _gunSprite.transform.position, _gunSprite.transform.rotation);
     }
 
     public void PickUpGun()
@@ -173,15 +172,15 @@ public class PlayableCharacterController : MonoBehaviour
 
     public void HealtBuff(int among)
     {
-        if(_maxHealthPoint > _currentHealthPoint)
+        if (_maxHealthPoint > _currentHealthPoint)
         {
             _currentHealthPoint += among;
-			_healthBarReference.GetComponent<PlayerHealthBarController>().OnHealthChanged(_currentHealthPoint);
-		}
+            _healthBarReference.GetComponent<PlayerHealthBarController>().OnHealthChanged(_currentHealthPoint);
+        }
         else
         {
             _currentHealthPoint = _maxHealthPoint;
-			_healthBarReference.GetComponent<PlayerHealthBarController>().OnHealthChanged(_currentHealthPoint);
-		}
+            _healthBarReference.GetComponent<PlayerHealthBarController>().OnHealthChanged(_currentHealthPoint);
+        }
     }
 }
