@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -141,6 +140,7 @@ public class PlayableCharacterController : MonoBehaviour
                 bullet.gameObject.tag = _weaponTypes[2];
                 break;
         }
+        Instantiate(_bulletPrefab, _gunSprite.transform.position, _gunSprite.transform.rotation);
     }
 
     public void PickUpGun()
@@ -169,5 +169,19 @@ public class PlayableCharacterController : MonoBehaviour
         {
             SceneManager.LoadScene("SceneGameOver");
         }
+    }
+
+    public void HealtBuff(int among)
+    {
+        if(_maxHealthPoint > _currentHealthPoint)
+        {
+            _currentHealthPoint += among;
+			_healthBarReference.GetComponent<PlayerHealthBarController>().OnHealthChanged(_currentHealthPoint);
+		}
+        else
+        {
+            _currentHealthPoint = _maxHealthPoint;
+			_healthBarReference.GetComponent<PlayerHealthBarController>().OnHealthChanged(_currentHealthPoint);
+		}
     }
 }
