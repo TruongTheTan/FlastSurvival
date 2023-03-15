@@ -31,6 +31,7 @@ public class PlayableCharacterController : MonoBehaviour
     private void Start()
     {
         InstantiateData();
+        InstantiatePlayerStatBySelectedNumber();
     }
 
 
@@ -181,6 +182,26 @@ public class PlayableCharacterController : MonoBehaviour
         {
             _currentHealthPoint = _maxHealthPoint;
             _healthBarReference.GetComponent<PlayerHealthBarController>().OnHealthChanged(_currentHealthPoint);
+        }
+    }
+
+
+
+    private void InstantiatePlayerStatBySelectedNumber()
+    {
+        int selectedNumber = DataPreserve.characterSelectedNumber;
+
+        if (selectedNumber == 2)
+        {
+            _moveAmount = 3;
+            _maxHealthPoint = 75;
+            _currentHealthPoint = 75;
+        }
+        else if (selectedNumber == 3)
+        {
+            _moveAmount = 2;
+            _maxHealthPoint = 125;
+            _currentHealthPoint = 125;
         }
     }
 }
