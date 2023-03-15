@@ -18,25 +18,29 @@ public class EnemyController : MonoBehaviour
     private HealthBarController _healthBarController;
     private float _timer;
     private int _point;
+    private Vector3 _directionToPlayer;
+
+    private GameObject _bullet;
+    private bool _isRanged;
 
     // Start is called before the first frame update
     private void Awake()
     {
         m_target = GameObject.FindGameObjectWithTag("Player").transform;
         _player = m_target.gameObject;
+        _isRanged = false;
     }
 
     void Start()
     {
         InstantiateData();
+        if (_isRanged) { StartCoroutine(nameof(RangedAttack)); }
     }
-
 
     private void Update()
     {
         DestroyWhenTooFarFromPlayer();
     }
-
 
     // Update is called once per frame
     private void FixedUpdate()
@@ -68,6 +72,20 @@ public class EnemyController : MonoBehaviour
         _player.GetComponent<PlayableCharacterController>().Damaged(_damage);
     }
 
+    IEnumerator RangedAttack()
+    {
+        while (_isRanged && Vector2.Distance(m_target.position, transform.position) <= 20)
+        {
+            _directionToPlayer = (m_target.position - gameObject.transform.position).normalized;
+            float angle = Vector3.Angle(_directionToPlayer, Vector3.right);
+            GameObject bullet = Instantiate(_bullet, transform.position, Quaternion.identity);
+
+            bullet.transform.eulerAngles = new Vector3(bullet.transform.position.x, bullet.transform.position.y, angle);
+            bullet.GetComponent<Rigidbody2D>().velocity = _directionToPlayer * 5f;
+            yield return new WaitForSeconds(1.5f);
+        }
+    }
+
     private void InstantiateData()
     {
         Sprite currentSprite = gameObject.GetComponent<SpriteRenderer>().sprite;
@@ -86,6 +104,7 @@ public class EnemyController : MonoBehaviour
                 _speed = 2.5f;
                 _damage = 20;
                 _point = 20;
+                _isRanged = true;
                 break;
 
             case "Big Daddy":
@@ -113,6 +132,11 @@ public class EnemyController : MonoBehaviour
         _healthBarController = healthBar.GetComponent<HealthBarController>();
         _healthBarController.SetData(gameObject, _health);
 
+        if (_isRanged)
+        {
+            _bullet = (GameObject)Resources.Load("Prefabs/Bullet/Bullet_9");
+        }
+
         DataPreserve.totalEnemiesOnMap++;
     }
 
@@ -120,8 +144,8 @@ public class EnemyController : MonoBehaviour
     {
         while (_isCollidingPlayer)
         {
-            yield return new WaitForSeconds(1f);
             Attack();
+            yield return new WaitForSeconds(1f);
         }
     }
 
@@ -150,5 +174,10 @@ public class EnemyController : MonoBehaviour
             Destroy(_currentHealthBar);
             Destroy(gameObject);
         }
+    }
+
+    void OnDestroy()
+    {
+        StopCoroutine(nameof(RangedAttack));
     }
 }
