@@ -22,6 +22,7 @@ public class EnemyController : MonoBehaviour
 
     private GameObject _bullet;
     private bool _isRanged;
+    private float _distance;
 
     // Start is called before the first frame update
     private void Awake()
@@ -40,6 +41,7 @@ public class EnemyController : MonoBehaviour
     private void Update()
     {
         DestroyWhenTooFarFromPlayer();
+        _distance = Vector2.Distance(m_target.position, gameObject.transform.position);
     }
 
     // Update is called once per frame
@@ -74,10 +76,10 @@ public class EnemyController : MonoBehaviour
 
     IEnumerator RangedAttack()
     {
-        while (_isRanged && Vector2.Distance(m_target.position, transform.position) <= 20)
+        while (_isRanged && _distance <= 10)
         {
             _directionToPlayer = (m_target.position - gameObject.transform.position).normalized;
-            float angle = Vector3.Angle(_directionToPlayer, Vector3.right);
+            float angle = Vector3.Angle(Vector3.right, _directionToPlayer);
             GameObject bullet = Instantiate(_bullet, transform.position, Quaternion.identity);
 
             bullet.transform.eulerAngles = new Vector3(bullet.transform.position.x, bullet.transform.position.y, angle);
