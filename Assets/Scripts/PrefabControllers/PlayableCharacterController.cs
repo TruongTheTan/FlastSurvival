@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -26,6 +27,7 @@ public class PlayableCharacterController : MonoBehaviour
     private int _currentHealthPoint = 100;
     private int _maxHealthPoint = 100;
 
+    private TextMeshProUGUI _changeWeaponText;
 
 
     private void Start()
@@ -39,7 +41,7 @@ public class PlayableCharacterController : MonoBehaviour
     private void Update()
     {
         CharacterMovement();
-        AimToClosetEnemy();
+        AimToClosestEnemy();
     }
 
 
@@ -74,8 +76,12 @@ public class PlayableCharacterController : MonoBehaviour
         _healthBarReference = GameObject.Find("HealthBar");
         _healthBarReference.GetComponent<PlayerHealthBarController>().SetData(_maxHealthPoint);
 
+
         _changeWeaponButton = FindObjectsOfType<Button>()[0];
+        _changeWeaponText = FindObjectsOfType<TextMeshProUGUI>()[1];
         _changeWeaponButton.image.gameObject.SetActive(false);
+
+        Debug.Log(_changeWeaponText.name);
     }
 
     private void CharacterMovement()
@@ -87,7 +93,7 @@ public class PlayableCharacterController : MonoBehaviour
         transform.Translate(_moveAmount * Time.deltaTime * movement.normalized);
     }
 
-    private void AimToClosetEnemy()
+    private void AimToClosestEnemy()
     {
         GameObject[] enemiesOnMap = GameObject.FindGameObjectsWithTag("Enemy");
 
@@ -145,18 +151,34 @@ public class PlayableCharacterController : MonoBehaviour
 
     public void PickUpGun()
     {
-        string weaponTagName = _collision.gameObject.tag;
+        GameObject gunGameObject = _collision.gameObject;
 
         // Check if collision is a weapon
-        if (_weaponTypes.Contains(weaponTagName))
+        if (_weaponTypes.Contains(gunGameObject.tag))
         {
             _changeWeaponButton.image.gameObject.SetActive(true);
+
+
+            #region Pick the same gun (Upgrade)
+
+            string playerGunSpriteName = _gunSprite.GetComponent<SpriteRenderer>().sprite.name;
+            string gunGameObjectSpriteName = gunGameObject.GetComponent<SpriteRenderer>().sprite.name;
+
+            if (gunGameObjectSpriteName.Equals(playerGunSpriteName))
+            {
+                _changeWeaponText.text = "Pick Up";
+            }
+
+            #endregion
+
 
             // Change gun sprite if press "Change" button
             if (DataPreserve.allowPickUpWeapon)
                 _gunSprite.GetComponent<SpriteRenderer>().sprite = _collision.gameObject.GetComponent<SpriteRenderer>().sprite;
         }
     }
+
+
 
     public void Damaged(int damage)
     {

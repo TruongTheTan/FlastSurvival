@@ -1,4 +1,3 @@
-using System.Threading;
 using UnityEngine;
 
 public class BulletController : MonoBehaviour
@@ -34,6 +33,8 @@ public class BulletController : MonoBehaviour
         _bulletTimer.Run();
 
         GetComponent<Rigidbody2D>().velocity = transform.right * 25f;
+
+        Debug.Log(_damage);
     }
 
     // Update is called once per frame

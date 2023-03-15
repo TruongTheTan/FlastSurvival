@@ -42,8 +42,8 @@ public class GunController : MonoBehaviour
         Sprite weaponSprite = null;
         Vector2 boxCollider2DSize = new Vector2();
 
-
-        switch (Random.Range(1, 4))
+        //Random.Range(1, 4)
+        switch (1)
         {
             case 1:
                 weaponTagName = "Pistol";
