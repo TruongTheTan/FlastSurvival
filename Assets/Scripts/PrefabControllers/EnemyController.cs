@@ -79,10 +79,8 @@ public class EnemyController : MonoBehaviour
         while (_isRanged && _distance <= 10)
         {
             _directionToPlayer = (m_target.position - gameObject.transform.position).normalized;
-            float angle = Vector3.Angle(Vector3.right, _directionToPlayer);
-            GameObject bullet = Instantiate(_bullet, transform.position, Quaternion.identity);
-
-            bullet.transform.eulerAngles = new Vector3(bullet.transform.position.x, bullet.transform.position.y, angle);
+            float angle = Mathf.Atan2(_directionToPlayer.y, _directionToPlayer.x) * Mathf.Rad2Deg;
+            GameObject bullet = Instantiate(_bullet, transform.position, Quaternion.Euler(transform.position.x, transform.position.y, angle));
             bullet.GetComponent<Rigidbody2D>().velocity = _directionToPlayer * 5f;
             yield return new WaitForSeconds(1.5f);
         }
@@ -176,10 +174,5 @@ public class EnemyController : MonoBehaviour
             Destroy(_currentHealthBar);
             Destroy(gameObject);
         }
-    }
-
-    void OnDestroy()
-    {
-        StopCoroutine(nameof(RangedAttack));
     }
 }
