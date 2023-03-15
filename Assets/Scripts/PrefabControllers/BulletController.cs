@@ -16,7 +16,7 @@ public class BulletController : MonoBehaviour
 
         InstantiateBulletProperties();
 
-        Debug.Log($"Damage setted: {_damage}");
+
     }
 
 
@@ -68,7 +68,7 @@ public class BulletController : MonoBehaviour
                 _bulletTimer.Duration = 3;
                 break;
 
-            case "Shotgun":
+            case "ShotGun":
                 if (DataPreserve.gunLevel == 0)
                     SetDamage(70);
                 _bulletTimer.Duration = 1;
@@ -77,6 +77,8 @@ public class BulletController : MonoBehaviour
         _bulletTimer.Run();
 
         GetComponent<Rigidbody2D>().velocity = transform.right * 25f;
+
+        Debug.Log($"Damage setted: {_damage}");
     }
 
 

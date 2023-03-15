@@ -149,6 +149,8 @@ public class PlayableCharacterController : MonoBehaviour
                 bullet.tag = _weaponTypes[2];
                 break;
         }
+
+        Debug.Log(bullet.tag);
     }
 
     public void PickUpGun()
@@ -179,20 +181,24 @@ public class PlayableCharacterController : MonoBehaviour
             // Change new or pick up the same gun (Include Upgrade)
             if (DataPreserve.allowPickUpWeapon)
             {
-                gunSpriteRender.sprite = _collision.gameObject.GetComponent<SpriteRenderer>().sprite;
-
                 // Upgrade gun if pick the same gun
                 if (isTheSameGun)
                 {
-                    DataPreserve.gunLevel++;
+                    int currentGunLevel = DataPreserve.gunLevel;
+
+                    // Upgrade range, avoid infinite upgrade (bad performance)
+                    if (currentGunLevel >= 0 && currentGunLevel <= 3)
+                        DataPreserve.gunLevel++;
+
                     GunController.UpgradeGunByLevel(gunGameObject.tag);
                 }
                 // Pick up new gun
                 else
                 {
                     DataPreserve.gunLevel = 0;
+                    gunSpriteRender.sprite = _collision.gameObject.GetComponent<SpriteRenderer>().sprite;
                 }
-
+                Debug.Log($"Gun level: {DataPreserve.gunLevel}");
                 Destroy(gunGameObject);
             }
         }

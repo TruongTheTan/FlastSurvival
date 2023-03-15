@@ -79,9 +79,8 @@ public class GunController : MonoBehaviour
     public static void UpgradeGunByLevel(string weaponTagName)
     {
         _currentGunLevel = DataPreserve.gunLevel;
-        Debug.Log($"Gun level: {_currentGunLevel}");
 
-        // O nly upgrade if pick up same weapone the 2nd time
+        // Avoid upgrade gun when its still default level (level = 0, bad performance)
         if (_currentGunLevel > 0)
         {
             switch (weaponTagName)
@@ -124,7 +123,7 @@ public class GunController : MonoBehaviour
     {
         switch (_currentGunLevel)
         {
-            case 1: _newGunDamage = 40; break;
+            case 1: _newGunDamage = 60; break;
             case 2: _newGunDamage = 60; break;
             case 3: _newGunDamage = 80; break;
         }
@@ -134,6 +133,7 @@ public class GunController : MonoBehaviour
     {
         switch (_currentGunLevel)
         {
+            case 0: _newGunDamage = 70; break;
             case 1: _newGunDamage = 70; break;
             case 2: _newGunDamage = 70; break;
             case 3: _newGunDamage = 105; break;

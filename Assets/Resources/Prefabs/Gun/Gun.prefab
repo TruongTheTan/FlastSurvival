@@ -160,7 +160,7 @@ MonoBehaviour:
   _swordSprite: {fileID: -175038746, guid: 5db19cb3d094a614ca767925dd25c2ef, type: 3}
   _pistolSprite: {fileID: -656580334, guid: 5db19cb3d094a614ca767925dd25c2ef, type: 3}
   _shotGunSprite: {fileID: -1046595183, guid: 5db19cb3d094a614ca767925dd25c2ef, type: 3}
-  _assaultRifleSprite: {fileID: -1823414491, guid: 5db19cb3d094a614ca767925dd25c2ef, type: 3}
+  _assaultRifleSprite: {fileID: 546575571, guid: 5db19cb3d094a614ca767925dd25c2ef, type: 3}
 --- !u!50 &2041895850
 Rigidbody2D:
   serializedVersion: 4
