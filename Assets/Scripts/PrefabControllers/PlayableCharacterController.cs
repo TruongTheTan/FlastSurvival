@@ -30,6 +30,7 @@ public class PlayableCharacterController : MonoBehaviour
     private TextMeshProUGUI _changeWeaponText;
 
 
+
     private void Start()
     {
         InstantiateData();
@@ -56,6 +57,7 @@ public class PlayableCharacterController : MonoBehaviour
     {
         _changeWeaponButton.image.gameObject.SetActive(false);
         DataPreserve.allowPickUpWeapon = false;
+        _changeWeaponText.text = "Change";
     }
 
 
@@ -76,12 +78,10 @@ public class PlayableCharacterController : MonoBehaviour
         _healthBarReference = GameObject.Find("HealthBar");
         _healthBarReference.GetComponent<PlayerHealthBarController>().SetData(_maxHealthPoint);
 
+        _changeWeaponText = FindObjectsOfType<TextMeshProUGUI>()[1];
 
         _changeWeaponButton = FindObjectsOfType<Button>()[0];
-        _changeWeaponText = FindObjectsOfType<TextMeshProUGUI>()[1];
         _changeWeaponButton.image.gameObject.SetActive(false);
-
-        Debug.Log(_changeWeaponText.name);
     }
 
     private void CharacterMovement()
@@ -129,6 +129,8 @@ public class PlayableCharacterController : MonoBehaviour
         }
     }
 
+
+
     public void Shoot()
     {
         GameObject bullet = Instantiate(_bulletPrefab, _gunSprite.transform.position, _gunSprite.transform.rotation);
@@ -158,23 +160,41 @@ public class PlayableCharacterController : MonoBehaviour
         {
             _changeWeaponButton.image.gameObject.SetActive(true);
 
+            SpriteRenderer gunSpriteRender = _gunSprite.GetComponent<SpriteRenderer>();
 
-            #region Pick the same gun (Upgrade)
 
-            string playerGunSpriteName = _gunSprite.GetComponent<SpriteRenderer>().sprite.name;
+            bool isTheSameGun = false;
+            string playerGunSpriteName = gunSpriteRender.sprite.name;
             string gunGameObjectSpriteName = gunGameObject.GetComponent<SpriteRenderer>().sprite.name;
 
+
+            // Change text
             if (gunGameObjectSpriteName.Equals(playerGunSpriteName))
             {
+                isTheSameGun = true;
                 _changeWeaponText.text = "Pick Up";
             }
 
-            #endregion
 
-
-            // Change gun sprite if press "Change" button
+            // Change new or pick up the same gun (Include Upgrade)
             if (DataPreserve.allowPickUpWeapon)
-                _gunSprite.GetComponent<SpriteRenderer>().sprite = _collision.gameObject.GetComponent<SpriteRenderer>().sprite;
+            {
+                gunSpriteRender.sprite = _collision.gameObject.GetComponent<SpriteRenderer>().sprite;
+
+                // Upgrade gun if pick the same gun
+                if (isTheSameGun)
+                {
+                    DataPreserve.gunLevel++;
+                    GunController.UpgradeGunByLevel(gunGameObject.tag);
+                }
+                // Pick up new gun
+                else
+                {
+                    DataPreserve.gunLevel = 0;
+                }
+
+                Destroy(gunGameObject);
+            }
         }
     }
 
@@ -186,6 +206,7 @@ public class PlayableCharacterController : MonoBehaviour
         {
             _currentHealthPoint -= damage;
             _healthBarReference.GetComponent<PlayerHealthBarController>().OnHealthChanged(_currentHealthPoint);
+            Debug.Log($"Player current HP: {_currentHealthPoint}");
         }
         else
         {
