@@ -24,8 +24,8 @@ public class PlayableCharacterController : MonoBehaviour
     private readonly string[] _weaponTypes = { "Sword", "Pistol", "ShotGun", "AssaultRifle" };
 
     //Default current and max health to 100
-    private int _currentHealthPoint = 110;
-    private int _maxHealthPoint = 110;
+    private int _currentHealthPoint = 100;
+    private int _maxHealthPoint = 100;
 
     private TextMeshProUGUI _changeWeaponText;
 
