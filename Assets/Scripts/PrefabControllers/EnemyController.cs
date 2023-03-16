@@ -25,7 +25,6 @@ public class EnemyController : MonoBehaviour
     private float _distance;
     private HealthBarController _healthBarController;
 
-
     // Start is called before the first frame update
     private void Awake()
     {
@@ -160,11 +159,11 @@ public class EnemyController : MonoBehaviour
         {
             _health -= damage;
             _healthBarController.OnHealthChanged(_health);
-            Debug.Log($"{gameObject.GetComponent<SpriteRenderer>().sprite.name} current HP: {_health}");
         }
         else
         {
             GetComponent<LootBag>().InstantiateLoot(transform.position);
+            DataPreserve.totalEnemiesOnMap--;
             DataPreserve.enemyKilled++;
             DataPreserve.totalScore += (_point * DataPreserve.enemyKilled) + (DataPreserve.gameRound * 100);
             Destroy(_currentHealthBar);
@@ -176,7 +175,6 @@ public class EnemyController : MonoBehaviour
     {
         if (Vector3.Distance(transform.position, _player.transform.position) >= 25f)
         {
-            DataPreserve.totalEnemiesOnMap--;
             Destroy(_currentHealthBar);
             Destroy(gameObject);
         }

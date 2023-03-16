@@ -6,58 +6,91 @@ using UnityEngine.UIElements;
 
 public class RandomSpawnEnermy : MonoBehaviour
 {
-    [SerializeField] Sprite[] enermy;
-    [SerializeField] float spawnTimer;
-    float _cameraHeight;
-    float _cameraWidth;
-    float _enermySpawnOffset = 1f;
-    Camera mainCamera;
-    GameObject _newEnermy;
+    [SerializeField]
+    private Sprite[] _enemy;
 
-    float _timer;
+    private float _cameraHeight;
+    private float _cameraWidth;
+    private float _enermySpawnOffset = 1f;
+    private Camera _mainCamera;
+    private GameObject _newEnermy;
+    private int _spawnLimit;
+    private int _gameRoundSeconds;
+    private int _gameRound;
+
+    private void Awake()
+    {
+        _gameRound = 0;
+        _gameRoundSeconds = 60;
+        _spawnLimit = 60;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
-        mainCamera = Camera.main;
-        _cameraHeight = 2f * mainCamera.orthographicSize;
-        _cameraWidth = _cameraHeight * mainCamera.aspect;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        _timer -= Time.deltaTime;
-        if(_timer < 0f)
-        {
-            SpawnEnemy();
-            _timer = spawnTimer;
-        }
+        _mainCamera = Camera.main;
+        _cameraHeight = 2f * _mainCamera.orthographicSize;
+        _cameraWidth = _cameraHeight * _mainCamera.aspect;
+        StartCoroutine(nameof(SpawnEnemyByRound));
+        StartCoroutine(nameof(IncreaseEnemySpawnLimit));
+        StartCoroutine(nameof(EnemyRushEvent));
     }
 
     private void SpawnEnemy()
     {
         Vector3 postion = GenerateRandomPosition();
         postion += GameObject.FindGameObjectWithTag("Player").transform.position;
-        int randomSprite = UnityEngine.Random.Range(0, enermy.Length);
+        int randomSprite = UnityEngine.Random.Range(0, _enemy.Length);
 
         GameObject enemyPrefab = Resources.Load<GameObject>("Prefabs/Enemy/Enemy");
         SpriteRenderer playerSpriteRenderer = enemyPrefab.GetComponent<SpriteRenderer>();
-        playerSpriteRenderer.sprite = enermy[randomSprite];
+        playerSpriteRenderer.sprite = _enemy[randomSprite];
 
-        _newEnermy = Instantiate(enemyPrefab, postion, Quaternion.identity) as GameObject;
+        _newEnermy = Instantiate(enemyPrefab, postion, Quaternion.identity);
         _newEnermy.transform.parent = transform;
+    }
 
+    IEnumerator SpawnEnemyByRound()
+    {
+        while (DataPreserve.totalEnemiesOnMap < 150)
+        {
+            float secondsBetweenSpawn = (float)_gameRoundSeconds / _spawnLimit;
+            SpawnEnemy();
+            yield return new WaitForSeconds(secondsBetweenSpawn);
+        }
+    }
+
+    IEnumerator IncreaseEnemySpawnLimit()
+    {
+        while (_spawnLimit < 150)
+        {
+            yield return new WaitForSeconds(_gameRoundSeconds);
+            _gameRound++;
+            _spawnLimit += 10;
+        }
+    }
+
+    IEnumerator EnemyRushEvent()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(_gameRoundSeconds * 5);
+            for (int i = 0; i < (_spawnLimit * 2); i++)
+            {
+                SpawnEnemy();
+            }
+        }
     }
 
     private Vector3 GenerateRandomPosition()
     {
-        Vector3 cameraPosition = mainCamera.transform.position;
+        Vector3 cameraPosition = _mainCamera.transform.position;
         float leftBound = cameraPosition.x - _cameraWidth / 2f;
         float rightBound = cameraPosition.x + _cameraWidth / 2f;
-        float bottomBound = cameraPosition.y - mainCamera.orthographicSize;
-        float topBound = cameraPosition.y + mainCamera.orthographicSize;
+        float bottomBound = cameraPosition.y - _mainCamera.orthographicSize;
+        float topBound = cameraPosition.y + _mainCamera.orthographicSize;
 
-        Vector3 positon = new Vector3();
+        Vector3 positon;
         float randomDirection = UnityEngine.Random.Range(0f, 1f);
         if (randomDirection < 0.25f) // Spawn phía trên camera
         {
