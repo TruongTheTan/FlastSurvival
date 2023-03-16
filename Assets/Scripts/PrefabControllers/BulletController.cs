@@ -6,17 +6,13 @@ public class BulletController : MonoBehaviour
     private Timer _bulletTimer;
     private bool _isBounceable;
     private int _bounceTimes;
-    private GameObject _playerGunSprite;
 
     // Start is called before the first frame update
     void Start()
     {
-        _playerGunSprite = GameObject.Find("GunSprite");
         _bulletTimer = gameObject.AddComponent<Timer>();
 
         InstantiateBulletProperties();
-
-
     }
 
 
