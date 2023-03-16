@@ -152,12 +152,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11cb006af7cadfb4fb5f5aabb04d6ebd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enermy:
+  _enemy:
   - {fileID: 873240673, guid: 2249d3b5cfd37e24f9368fa91f157e35, type: 3}
   - {fileID: 1600729081, guid: 2249d3b5cfd37e24f9368fa91f157e35, type: 3}
   - {fileID: -1784498269, guid: 2249d3b5cfd37e24f9368fa91f157e35, type: 3}
   - {fileID: 1769872218, guid: 2249d3b5cfd37e24f9368fa91f157e35, type: 3}
-  spawnTimer: 1
 --- !u!4 &69548032
 Transform:
   m_ObjectHideFlags: 0
