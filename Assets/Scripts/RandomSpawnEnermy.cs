@@ -56,7 +56,6 @@ public class RandomSpawnEnermy : MonoBehaviour
         {
             float secondsBetweenSpawn = (float)_gameRoundSeconds / _spawnLimit;
             SpawnEnemy();
-            Debug.Log("Spawning " + _spawnLimit + " enemies");
             yield return new WaitForSeconds(secondsBetweenSpawn);
         }
     }
@@ -67,9 +66,7 @@ public class RandomSpawnEnermy : MonoBehaviour
         {
             yield return new WaitForSeconds(_gameRoundSeconds);
             _gameRound++;
-            Debug.Log("Finished round " + _gameRound);
             _spawnLimit += 10;
-            Debug.Log("Current spawn limit " + _spawnLimit);
         }
     }
 
@@ -78,7 +75,6 @@ public class RandomSpawnEnermy : MonoBehaviour
         while (true)
         {
             yield return new WaitForSeconds(_gameRoundSeconds * 5);
-            Debug.Log("Enemy is rushing toward you! Number of enemies: " + _spawnLimit * 2);
             for (int i = 0; i < (_spawnLimit * 2); i++)
             {
                 SpawnEnemy();

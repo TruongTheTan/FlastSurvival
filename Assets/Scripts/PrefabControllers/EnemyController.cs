@@ -159,7 +159,6 @@ public class EnemyController : MonoBehaviour
         {
             _health -= damage;
             _healthBarController.OnHealthChanged(_health);
-            Debug.Log($"{gameObject.GetComponent<SpriteRenderer>().sprite.name} current HP: {_health}");
         }
         else
         {
