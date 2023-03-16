@@ -11,7 +11,6 @@ public class BulletController : MonoBehaviour
     void Start()
     {
         _bulletTimer = gameObject.AddComponent<Timer>();
-
         InstantiateBulletProperties();
     }
 
