@@ -1,40 +1,25 @@
-using System.Threading;
 using UnityEngine;
 
 public class BulletController : MonoBehaviour
 {
-    private int _damage;
+    private static int _damage;
     private Timer _bulletTimer;
     private bool _isBounceable;
     private int _bounceTimes;
+    private GameObject _playerGunSprite;
 
     // Start is called before the first frame update
     void Start()
     {
+        _playerGunSprite = GameObject.Find("GunSprite");
         _bulletTimer = gameObject.AddComponent<Timer>();
 
-        switch (gameObject.tag)
-        {
-            case "Pistol":
-                SetDamage(20);
-                _bulletTimer.Duration = 3;
-                break;
+        InstantiateBulletProperties();
 
-            case "AssaultRifle":
-                SetDamage(40);
-                _bulletTimer.Duration = 3;
-                break;
 
-            case "Shotgun":
-                SetDamage(70);
-                _bulletTimer.Duration = 1;
-                break;
-        }
-
-        _bulletTimer.Run();
-
-        GetComponent<Rigidbody2D>().velocity = transform.right * 25f;
     }
+
+
 
     // Update is called once per frame
     void Update()
@@ -44,6 +29,8 @@ public class BulletController : MonoBehaviour
             Destroy(gameObject);
         }
     }
+
+
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
@@ -62,7 +49,40 @@ public class BulletController : MonoBehaviour
         }
     }
 
-    public void SetDamage(int damage)
+
+
+
+    private void InstantiateBulletProperties()
+    {
+        switch (gameObject.tag)
+        {
+            case "Pistol":
+                if (DataPreserve.gunLevel == 0)
+                    SetDamage(20);
+                _bulletTimer.Duration = 3;
+                break;
+
+            case "AssaultRifle":
+                if (DataPreserve.gunLevel == 0)
+                    SetDamage(40);
+                _bulletTimer.Duration = 3;
+                break;
+
+            case "ShotGun":
+                if (DataPreserve.gunLevel == 0)
+                    SetDamage(70);
+                _bulletTimer.Duration = 1;
+                break;
+        }
+        _bulletTimer.Run();
+
+        GetComponent<Rigidbody2D>().velocity = transform.right * 25f;
+
+        Debug.Log($"Damage setted: {_damage}");
+    }
+
+
+    public static void SetDamage(int damage)
     {
         _damage = damage;
     }

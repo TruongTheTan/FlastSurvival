@@ -4,7 +4,7 @@
 /// </para>
 ///
 /// <para>
-/// All field must be pulbic static for accessing directly from outside to read, change the properties
+/// All fields must be pulbic static for accessing directly from outside to read, change the properties
 /// </para>
 /// </summary>
 public class DataPreserve
@@ -16,4 +16,5 @@ public class DataPreserve
     public static int enemyKilled = 0;
     public static int gameRound = 1;
     public static int totalEnemiesOnMap = 0;
+    public static int gunLevel = 0;
 }

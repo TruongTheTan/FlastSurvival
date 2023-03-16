@@ -3,7 +3,6 @@ using UnityEngine;
 
 public class EnemyController : MonoBehaviour
 {
-    private Transform m_target;
     private float _speed;
     private GameObject _player;
 
@@ -12,10 +11,11 @@ public class EnemyController : MonoBehaviour
 
     private GameObject _healthBars;
     private GameObject _currentHealthBar;
+
     private float _health = 100f;
     private int _damage = 0;
     private bool _isCollidingPlayer = false;
-    private HealthBarController _healthBarController;
+
     private float _timer;
     private int _point;
     private Vector3 _directionToPlayer;
@@ -23,13 +23,14 @@ public class EnemyController : MonoBehaviour
     private GameObject _bullet;
     private bool _isRanged;
     private float _distance;
+    private HealthBarController _healthBarController;
+
 
     // Start is called before the first frame update
     private void Awake()
     {
-        m_target = GameObject.FindGameObjectWithTag("Player").transform;
-        _player = m_target.gameObject;
         _isRanged = false;
+        _player = GameObject.FindGameObjectWithTag("Player");
     }
 
     void Start()
@@ -41,14 +42,14 @@ public class EnemyController : MonoBehaviour
     private void Update()
     {
         DestroyWhenTooFarFromPlayer();
-        _distance = Vector2.Distance(m_target.position, gameObject.transform.position);
+        _distance = Vector2.Distance(_player.transform.position, gameObject.transform.position);
     }
 
     // Update is called once per frame
     private void FixedUpdate()
     {
-        Vector3 direction = (m_target.position - transform.position).normalized;
-        gameObject.transform.Translate(direction * Time.deltaTime * _speed, Space.Self);
+        Vector3 direction = (_player.transform.position - transform.position).normalized;
+        gameObject.transform.Translate(_speed * Time.deltaTime * direction, Space.Self);
         _timer += 1;
     }
 
@@ -78,10 +79,14 @@ public class EnemyController : MonoBehaviour
     {
         while (_isRanged && _distance <= 10)
         {
-            _directionToPlayer = (m_target.position - gameObject.transform.position).normalized;
+            _directionToPlayer = (_player.transform.position - gameObject.transform.position).normalized;
+
             float angle = Mathf.Atan2(_directionToPlayer.y, _directionToPlayer.x) * Mathf.Rad2Deg;
+
             GameObject bullet = Instantiate(_bullet, transform.position, Quaternion.Euler(transform.position.x, transform.position.y, angle));
+
             bullet.GetComponent<Rigidbody2D>().velocity = _directionToPlayer * 5f;
+
             yield return new WaitForSeconds(1.5f);
         }
     }
@@ -155,6 +160,7 @@ public class EnemyController : MonoBehaviour
         {
             _health -= damage;
             _healthBarController.OnHealthChanged(_health);
+            Debug.Log($"{gameObject.GetComponent<SpriteRenderer>().sprite.name} current HP: {_health}");
         }
         else
         {

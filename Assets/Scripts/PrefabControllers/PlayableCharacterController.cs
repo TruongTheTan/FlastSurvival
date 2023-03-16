@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -26,6 +27,8 @@ public class PlayableCharacterController : MonoBehaviour
     private int _currentHealthPoint = 100;
     private int _maxHealthPoint = 100;
 
+    private TextMeshProUGUI _changeWeaponText;
+
 
 
     private void Start()
@@ -39,7 +42,7 @@ public class PlayableCharacterController : MonoBehaviour
     private void Update()
     {
         CharacterMovement();
-        AimToClosetEnemy();
+        AimToClosestEnemy();
     }
 
 
@@ -54,6 +57,7 @@ public class PlayableCharacterController : MonoBehaviour
     {
         _changeWeaponButton.image.gameObject.SetActive(false);
         DataPreserve.allowPickUpWeapon = false;
+        _changeWeaponText.text = "Change";
     }
 
 
@@ -74,6 +78,8 @@ public class PlayableCharacterController : MonoBehaviour
         _healthBarReference = GameObject.Find("HealthBar");
         _healthBarReference.GetComponent<PlayerHealthBarController>().SetData(_maxHealthPoint);
 
+        _changeWeaponText = FindObjectsOfType<TextMeshProUGUI>()[1];
+
         _changeWeaponButton = FindObjectsOfType<Button>()[0];
         _changeWeaponButton.image.gameObject.SetActive(false);
     }
@@ -87,7 +93,7 @@ public class PlayableCharacterController : MonoBehaviour
         transform.Translate(_moveAmount * Time.deltaTime * movement.normalized);
     }
 
-    private void AimToClosetEnemy()
+    private void AimToClosestEnemy()
     {
         GameObject[] enemiesOnMap = GameObject.FindGameObjectsWithTag("Enemy");
 
@@ -123,6 +129,8 @@ public class PlayableCharacterController : MonoBehaviour
         }
     }
 
+
+
     public void Shoot()
     {
         GameObject bullet = Instantiate(_bulletPrefab, _gunSprite.transform.position, _gunSprite.transform.rotation);
@@ -141,22 +149,62 @@ public class PlayableCharacterController : MonoBehaviour
                 bullet.tag = _weaponTypes[2];
                 break;
         }
+
+        Debug.Log(bullet.tag);
     }
 
     public void PickUpGun()
     {
-        string weaponTagName = _collision.gameObject.tag;
+        GameObject gunGameObject = _collision.gameObject;
 
         // Check if collision is a weapon
-        if (_weaponTypes.Contains(weaponTagName))
+        if (_weaponTypes.Contains(gunGameObject.tag))
         {
             _changeWeaponButton.image.gameObject.SetActive(true);
 
-            // Change gun sprite if press "Change" button
+            SpriteRenderer gunSpriteRender = _gunSprite.GetComponent<SpriteRenderer>();
+
+
+            bool isTheSameGun = false;
+            string playerGunSpriteName = gunSpriteRender.sprite.name;
+            string gunGameObjectSpriteName = gunGameObject.GetComponent<SpriteRenderer>().sprite.name;
+
+
+            // Change text
+            if (gunGameObjectSpriteName.Equals(playerGunSpriteName))
+            {
+                isTheSameGun = true;
+                _changeWeaponText.text = "Pick Up";
+            }
+
+
+            // Change new or pick up the same gun (Include Upgrade)
             if (DataPreserve.allowPickUpWeapon)
-                _gunSprite.GetComponent<SpriteRenderer>().sprite = _collision.gameObject.GetComponent<SpriteRenderer>().sprite;
+            {
+                // Upgrade gun if pick the same gun
+                if (isTheSameGun)
+                {
+                    int currentGunLevel = DataPreserve.gunLevel;
+
+                    // Upgrade range, avoid infinite upgrade (bad performance)
+                    if (currentGunLevel >= 0 && currentGunLevel <= 3)
+                        DataPreserve.gunLevel++;
+
+                    GunController.UpgradeGunByLevel(gunGameObject.tag);
+                }
+                // Pick up new gun
+                else
+                {
+                    DataPreserve.gunLevel = 0;
+                    gunSpriteRender.sprite = _collision.gameObject.GetComponent<SpriteRenderer>().sprite;
+                }
+                Debug.Log($"Gun level: {DataPreserve.gunLevel}");
+                Destroy(gunGameObject);
+            }
         }
     }
+
+
 
     public void Damaged(int damage)
     {
@@ -164,6 +212,7 @@ public class PlayableCharacterController : MonoBehaviour
         {
             _currentHealthPoint -= damage;
             _healthBarReference.GetComponent<PlayerHealthBarController>().OnHealthChanged(_currentHealthPoint);
+            Debug.Log($"Player current HP: {_currentHealthPoint}");
         }
         else
         {
