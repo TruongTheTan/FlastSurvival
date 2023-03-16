@@ -58,6 +58,19 @@ public class EnemyController : MonoBehaviour
         {
             _isCollidingPlayer = true;
             StartCoroutine(DealDamageEverySecond());
+
+            // Explode when collide to player (for Dave)
+            if (gameObject.GetComponent<SpriteRenderer>().sprite.name.Equals("Explosive Dave"))
+            {
+                DataPreserve.totalEnemiesOnMap--;
+                GameObject explosionPrefab = Resources.Load<GameObject>("Prefabs/Explosion/Explosion");
+
+                Instantiate(explosionPrefab, transform.position, Quaternion.identity);
+
+                Destroy(_currentHealthBar);
+                Destroy(gameObject);
+            }
+
         }
     }
 
