@@ -21,7 +21,7 @@ public class RandomSpawnEnermy : MonoBehaviour
     private void Awake()
     {
         _gameRound = 0;
-        _gameRoundSeconds = 10;
+        _gameRoundSeconds = 60;
         _spawnLimit = 60;
     }
 
@@ -33,6 +33,7 @@ public class RandomSpawnEnermy : MonoBehaviour
         _cameraWidth = _cameraHeight * _mainCamera.aspect;
         StartCoroutine(nameof(SpawnEnemyByRound));
         StartCoroutine(nameof(IncreaseEnemySpawnLimit));
+        StartCoroutine(nameof(EnemyRushEvent));
     }
 
     private void SpawnEnemy()
@@ -69,6 +70,19 @@ public class RandomSpawnEnermy : MonoBehaviour
             Debug.Log("Finished round " + _gameRound);
             _spawnLimit += 10;
             Debug.Log("Current spawn limit " + _spawnLimit);
+        }
+    }
+
+    IEnumerator EnemyRushEvent()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(_gameRoundSeconds * 5);
+            Debug.Log("Enemy is rushing toward you! Number of enemies: " + _spawnLimit * 2);
+            for (int i = 0; i < (_spawnLimit * 2); i++)
+            {
+                SpawnEnemy();
+            }
         }
     }
 
