@@ -15,8 +15,15 @@ public class RandomSpawnEnermy : MonoBehaviour
     private Camera _mainCamera;
     private GameObject _newEnermy;
     private int _spawnLimit;
+    private int _gameRoundSeconds;
+    private int _gameRound;
 
-    private float _timer;
+    private void Awake()
+    {
+        _gameRound = 0;
+        _gameRoundSeconds = 10;
+        _spawnLimit = 60;
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -24,8 +31,8 @@ public class RandomSpawnEnermy : MonoBehaviour
         _mainCamera = Camera.main;
         _cameraHeight = 2f * _mainCamera.orthographicSize;
         _cameraWidth = _cameraHeight * _mainCamera.aspect;
-        _spawnLimit = 120;
         StartCoroutine(nameof(SpawnEnemyByRound));
+        StartCoroutine(nameof(IncreaseEnemySpawnLimit));
     }
 
     private void SpawnEnemy()
@@ -44,11 +51,24 @@ public class RandomSpawnEnermy : MonoBehaviour
 
     IEnumerator SpawnEnemyByRound()
     {
-        float secondsBetweenSpawn = 60f / _spawnLimit;
         while (DataPreserve.totalEnemiesOnMap < 150)
         {
+            float secondsBetweenSpawn = (float)_gameRoundSeconds / _spawnLimit;
             SpawnEnemy();
+            Debug.Log("Spawning " + _spawnLimit + " enemies");
             yield return new WaitForSeconds(secondsBetweenSpawn);
+        }
+    }
+
+    IEnumerator IncreaseEnemySpawnLimit()
+    {
+        while (_spawnLimit < 150)
+        {
+            yield return new WaitForSeconds(_gameRoundSeconds);
+            _gameRound++;
+            Debug.Log("Finished round " + _gameRound);
+            _spawnLimit += 10;
+            Debug.Log("Current spawn limit " + _spawnLimit);
         }
     }
 
