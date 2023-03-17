@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -22,6 +23,7 @@ public class PlayableCharacterController : MonoBehaviour
     private Collider2D _collision;
     private Button _changeWeaponButton;
     private readonly string[] _weaponTypes = { "Sword", "Pistol", "ShotGun", "AssaultRifle" };
+    private bool _isMeleeing = false;
 
     //Default current and max health to 100
     private int _currentHealthPoint = 100;
@@ -29,14 +31,11 @@ public class PlayableCharacterController : MonoBehaviour
 
     private TextMeshProUGUI _changeWeaponText;
 
-
-
     private void Start()
     {
         InstantiateData();
         InstantiatePlayerStatBySelectedNumber();
     }
-
 
     // Update is called once per frame
     private void Update()
@@ -45,13 +44,11 @@ public class PlayableCharacterController : MonoBehaviour
         AimToClosestEnemy();
     }
 
-
     private void OnTriggerEnter2D(Collider2D collision)
     {
         _collision = collision;
         PickUpGun();
     }
-
 
     private void OnTriggerExit2D(Collider2D collision)
     {
@@ -60,17 +57,15 @@ public class PlayableCharacterController : MonoBehaviour
         _changeWeaponText.text = "Change";
     }
 
-
-
     private void InstantiateData()
     {
+        if (_joystick == null)
+            _joystick = FindObjectOfType<Joystick>();
 #if UNITY_ANDROID || UNITY_IOS
         _joystick.gameObject.SetActive(true);
 #else
         //joystick.gameObject.SetActive(false);
 #endif
-        if (_joystick == null)
-            _joystick = FindObjectOfType<Joystick>();
 
         _gun = transform.GetChild(0).gameObject;
         _gunSprite = _gun.transform.GetChild(0).gameObject;
@@ -129,28 +124,60 @@ public class PlayableCharacterController : MonoBehaviour
         }
     }
 
-
-
     public void Shoot()
     {
-        GameObject bullet = Instantiate(_bulletPrefab, _gunSprite.transform.position, _gunSprite.transform.rotation);
-
-        switch (_gunSprite.GetComponent<SpriteRenderer>().sprite.name)
+        if (_gunSprite.GetComponent<SpriteRenderer>().sprite.name != "Gun_3")
         {
-            case "Gun_5":
-                bullet.tag = _weaponTypes[3];
-                break;
+            GameObject bullet = Instantiate(_bulletPrefab, _gunSprite.transform.position, _gunSprite.transform.rotation);
 
-            case "Gun_10":
-                bullet.tag = _weaponTypes[1];
-                break;
+            switch (_gunSprite.GetComponent<SpriteRenderer>().sprite.name)
+            {
+                case "Gun_5":
+                    bullet.tag = _weaponTypes[3];
+                    break;
 
-            case "Gun_11":
-                bullet.tag = _weaponTypes[2];
-                break;
+                case "Gun_10":
+                    bullet.tag = _weaponTypes[1];
+                    break;
+
+                case "Gun_11":
+                    bullet.tag = _weaponTypes[2];
+                    break;
+            }
+
+            Debug.Log(bullet.tag);
+        }
+        else if (_gunSprite.GetComponent<SpriteRenderer>().sprite.name == "Gun_3" && !_isMeleeing)
+        {
+            StartCoroutine(nameof(Melee));
+        }
+    }
+
+    IEnumerator Melee()
+    {
+        _isMeleeing = true;
+        BoxCollider2D collider = _gunSprite.AddComponent<BoxCollider2D>();
+        collider.size = new Vector2(0.6761025f, 0.235665f);
+        collider.isTrigger = true;
+        Vector3 currentAngle = _gun.transform.eulerAngles;
+        Vector3 up = new Vector3(currentAngle.x, currentAngle.y, currentAngle.z + 90);
+        Vector3 down = new Vector3(currentAngle.x, currentAngle.y, currentAngle.z - 90);
+
+        float elapsedTime = 0;
+        float duration = 1;
+
+        while (elapsedTime < duration)
+        {
+            elapsedTime += Time.deltaTime;
+            float t = Mathf.Clamp01(elapsedTime / duration);
+            _gun.transform.eulerAngles = Vector3.Lerp(up, down, t * 5);
+            yield return null;
         }
 
-        Debug.Log(bullet.tag);
+        _gun.transform.eulerAngles = currentAngle;
+        _isMeleeing = false;
+        Destroy(collider);
+        StopCoroutine(nameof(Melee));
     }
 
     public void PickUpGun()
@@ -164,11 +191,9 @@ public class PlayableCharacterController : MonoBehaviour
 
             SpriteRenderer gunSpriteRender = _gunSprite.GetComponent<SpriteRenderer>();
 
-
             bool isTheSameGun = false;
             string playerGunSpriteName = gunSpriteRender.sprite.name;
             string gunGameObjectSpriteName = gunGameObject.GetComponent<SpriteRenderer>().sprite.name;
-
 
             // Change text
             if (gunGameObjectSpriteName.Equals(playerGunSpriteName))
@@ -176,7 +201,6 @@ public class PlayableCharacterController : MonoBehaviour
                 isTheSameGun = true;
                 _changeWeaponText.text = "Pick Up";
             }
-
 
             // Change new or pick up the same gun (Include Upgrade)
             if (DataPreserve.allowPickUpWeapon)
@@ -203,8 +227,6 @@ public class PlayableCharacterController : MonoBehaviour
             }
         }
     }
-
-
 
     public void Damaged(int damage)
     {
@@ -233,8 +255,6 @@ public class PlayableCharacterController : MonoBehaviour
             _healthBarReference.GetComponent<PlayerHealthBarController>().OnHealthChanged(_currentHealthPoint);
         }
     }
-
-
 
     private void InstantiatePlayerStatBySelectedNumber()
     {
