@@ -58,6 +58,7 @@ public class EnemyController : MonoBehaviour
         {
             _isCollidingPlayer = true;
             StartCoroutine(DealDamageEverySecond());
+            ExplodeWhenCollideToPlayer();
         }
     }
 
@@ -175,6 +176,31 @@ public class EnemyController : MonoBehaviour
     {
         if (Vector3.Distance(transform.position, _player.transform.position) >= 25f)
         {
+            Destroy(_currentHealthBar);
+            Destroy(gameObject);
+        }
+    }
+
+
+    /// <summary>
+    /// <para>
+    /// Function use for Explosive Dave. Create an explosion animation when collide to player.
+    /// </para>
+    ///
+    /// <para>
+    /// Destroy Enemy instantly when collide, damage the player
+    /// </para>
+    /// </summary>
+    private void ExplodeWhenCollideToPlayer()
+    {
+        // Explode when collide to player (for Dave)
+        if (gameObject.GetComponent<SpriteRenderer>().sprite.name.Equals("Explosive Dave"))
+        {
+            DataPreserve.totalEnemiesOnMap--;
+            GameObject explosionPrefab = Resources.Load<GameObject>("Prefabs/Explosion/Explosion");
+
+            Instantiate(explosionPrefab, transform.position, Quaternion.identity);
+
             Destroy(_currentHealthBar);
             Destroy(gameObject);
         }

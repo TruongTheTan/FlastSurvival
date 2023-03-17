@@ -24,14 +24,6 @@ public class GunController : MonoBehaviour
         RandomGunType();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-    }
-
-
-
-
 
 
     private void RandomGunType()
