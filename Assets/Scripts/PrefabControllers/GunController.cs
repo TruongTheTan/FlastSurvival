@@ -14,9 +14,9 @@ public class GunController : MonoBehaviour
     [SerializeField]
     private Sprite _assaultRifleSprite;
 
-
     private static int _currentGunLevel = 0;
     private static int _newGunDamage = 0;
+    private int _currentDamgeMelee = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -24,49 +24,44 @@ public class GunController : MonoBehaviour
         RandomGunType();
     }
 
-
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Enemy") && gameObject.GetComponent<SpriteRenderer>().sprite.name == "Gun_3")
+        {
+            collision.gameObject.GetComponent<EnemyController>().Damaged(_currentDamgeMelee);
+        }
+    }
 
     private void RandomGunType()
     {
-        BoxCollider2D boxCollider2D = GetComponent<BoxCollider2D>();
-
         string weaponTagName = "";
         Sprite weaponSprite = null;
-        Vector2 boxCollider2DSize = new Vector2();
-
         switch (Random.Range(1, 4))
         {
             case 1:
                 weaponTagName = "Pistol";
                 weaponSprite = _pistolSprite;
-                boxCollider2DSize = new Vector2(0.3291424f, 0.1410481f);
                 break;
 
             case 2:
                 weaponTagName = "AssaultRifle";
                 weaponSprite = _assaultRifleSprite;
-                boxCollider2DSize = new Vector2(0.6761025f, 0.235665f);
                 break;
 
             case 3:
                 weaponTagName = "ShotGun";
-                boxCollider2DSize = new Vector2(0.6761025f, 0.235665f);
                 weaponSprite = _shotGunSprite;
                 break;
 
             case 4:
                 weaponTagName = "Sword";
-                boxCollider2DSize = new Vector2(0.6761025f, 0.235665f);
                 weaponSprite = _swordSprite;
+                _currentDamgeMelee = 70;
                 break;
         }
         transform.tag = weaponTagName;
-        boxCollider2D.size = boxCollider2DSize;
         transform.GetComponent<SpriteRenderer>().sprite = weaponSprite;
     }
-
-
-
 
     public static void UpgradeGunByLevel(string weaponTagName)
     {
@@ -86,9 +81,6 @@ public class GunController : MonoBehaviour
         }
     }
 
-
-
-
     private static void UpgradeSword()
     {
         switch (_currentGunLevel)
@@ -99,7 +91,6 @@ public class GunController : MonoBehaviour
         }
     }
 
-
     private static void UpgradePistol()
     {
         switch (_currentGunLevel)
@@ -109,7 +100,6 @@ public class GunController : MonoBehaviour
             case 3: _newGunDamage = 40; break;
         }
     }
-
 
     private static void UpgradeAssaultRifle()
     {
@@ -131,5 +121,4 @@ public class GunController : MonoBehaviour
             case 3: _newGunDamage = 105; break;
         }
     }
-
 }

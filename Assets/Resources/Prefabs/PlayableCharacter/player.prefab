@@ -43,6 +43,7 @@ GameObject:
   m_Component:
   - component: {fileID: 763887178}
   - component: {fileID: 763887179}
+  - component: {fileID: 261294246237254530}
   m_Layer: 0
   m_Name: GunSprite
   m_TagString: Untagged
@@ -117,6 +118,22 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &261294246237254530
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 763887177}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 72b0a701e95d9444c93111d5cca93bbd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _swordSprite: {fileID: -175038746, guid: 5db19cb3d094a614ca767925dd25c2ef, type: 3}
+  _pistolSprite: {fileID: -656580334, guid: 5db19cb3d094a614ca767925dd25c2ef, type: 3}
+  _shotGunSprite: {fileID: 546575571, guid: 5db19cb3d094a614ca767925dd25c2ef, type: 3}
+  _assaultRifleSprite: {fileID: -1823414491, guid: 5db19cb3d094a614ca767925dd25c2ef, type: 3}
 --- !u!1 &112920631977259805
 GameObject:
   m_ObjectHideFlags: 0
