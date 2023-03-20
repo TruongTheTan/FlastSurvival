@@ -24,12 +24,14 @@ public class EnemyController : MonoBehaviour
     private bool _isRanged;
     private float _distance;
     private HealthBarController _healthBarController;
+    private GameObject _expBarController;
 
     // Start is called before the first frame update
     private void Awake()
     {
         _isRanged = false;
         _player = GameObject.FindGameObjectWithTag("Player");
+        _expBarController = GameObject.Find("ExpBar");
     }
 
     void Start()
@@ -168,7 +170,30 @@ public class EnemyController : MonoBehaviour
             DataPreserve.enemyKilled++;
             DataPreserve.totalScore += (_point * DataPreserve.enemyKilled) + (DataPreserve.gameRound * 100);
             Destroy(_currentHealthBar);
+            Sprite currentSprite = gameObject.GetComponent<SpriteRenderer>().sprite;
             Destroy(gameObject);
+            switch (currentSprite.name)
+            {
+                case "Fodder Joe":
+                    _expBarController.GetComponent<ExpBarController>().OnExpChanged(50);
+                    _player.GetComponent<PlayableCharacterController>().UpgratePlayer();
+                    break;
+
+                case "Blitz Jok":
+                    _expBarController.GetComponent<ExpBarController>().OnExpChanged(50);
+                    _player.GetComponent<PlayableCharacterController>().UpgratePlayer();
+                    break;
+
+                case "Big Daddy":
+                    _expBarController.GetComponent<ExpBarController>().OnExpChanged(50);
+                    _player.GetComponent<PlayableCharacterController>().UpgratePlayer();
+                    break;
+
+                case "Explosive Dave":
+                    _expBarController.GetComponent<ExpBarController>().OnExpChanged(50);
+                    _player.GetComponent<PlayableCharacterController>().UpgratePlayer();
+                    break;
+            }
         }
     }
 

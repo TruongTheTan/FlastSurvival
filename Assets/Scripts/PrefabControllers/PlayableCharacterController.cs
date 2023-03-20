@@ -20,6 +20,7 @@ public class PlayableCharacterController : MonoBehaviour
     private GameObject _gunSprite;
 
     private GameObject _healthBarReference;
+    private GameObject _expBarReference;
     private Collider2D _collision;
     private Button _changeWeaponButton;
     private readonly string[] _weaponTypes = { "Sword", "Pistol", "ShotGun", "AssaultRifle" };
@@ -28,7 +29,9 @@ public class PlayableCharacterController : MonoBehaviour
     //Default current and max health to 100
     private int _currentHealthPoint = 100;
     private int _maxHealthPoint = 100;
-
+    private int _maxExp = 100;
+    private int _level = 1;
+    
     private TextMeshProUGUI _changeWeaponText;
 
     private void Start()
@@ -72,6 +75,9 @@ public class PlayableCharacterController : MonoBehaviour
 
         _healthBarReference = GameObject.Find("HealthBar");
         _healthBarReference.GetComponent<PlayerHealthBarController>().SetData(_maxHealthPoint);
+
+        _expBarReference = GameObject.Find("ExpBar");
+        _expBarReference.GetComponent<ExpBarController>().SetData(_maxExp);
 
         _changeWeaponText = FindObjectsOfType<TextMeshProUGUI>()[1];
 
@@ -255,7 +261,19 @@ public class PlayableCharacterController : MonoBehaviour
             _healthBarReference.GetComponent<PlayerHealthBarController>().OnHealthChanged(_currentHealthPoint);
         }
     }
+    public void UpgratePlayer()
+    {
+        float currentExp = _expBarReference.GetComponent<ExpBarController>().GetCurrentExp();
+        if(currentExp == _maxExp)
+        {
+            _level += 1;
+            _maxExp += 50;
+            _expBarReference.GetComponent<ExpBarController>().SetData(_maxExp);
 
+            GameObject upgrade = GameObject.Find("PlayGameSceneEventHandler");
+            upgrade.GetComponent<UpgradeEventHandler>().Upgrade();
+        }
+    }
     private void InstantiatePlayerStatBySelectedNumber()
     {
         int selectedNumber = DataPreserve.characterSelectedNumber;
