@@ -175,22 +175,22 @@ public class EnemyController : MonoBehaviour
             switch (currentSprite.name)
             {
                 case "Fodder Joe":
-                    _expBarController.GetComponent<ExpBarController>().OnExpChanged(50);
+                    _expBarController.GetComponent<ExpBarController>().OnExpChanged(5);
                     _player.GetComponent<PlayableCharacterController>().UpgratePlayer();
                     break;
 
                 case "Blitz Jok":
-                    _expBarController.GetComponent<ExpBarController>().OnExpChanged(50);
+                    _expBarController.GetComponent<ExpBarController>().OnExpChanged(10);
                     _player.GetComponent<PlayableCharacterController>().UpgratePlayer();
                     break;
 
                 case "Big Daddy":
-                    _expBarController.GetComponent<ExpBarController>().OnExpChanged(50);
+                    _expBarController.GetComponent<ExpBarController>().OnExpChanged(20);
                     _player.GetComponent<PlayableCharacterController>().UpgratePlayer();
                     break;
 
                 case "Explosive Dave":
-                    _expBarController.GetComponent<ExpBarController>().OnExpChanged(50);
+                    _expBarController.GetComponent<ExpBarController>().OnExpChanged(15);
                     _player.GetComponent<PlayableCharacterController>().UpgratePlayer();
                     break;
             }
