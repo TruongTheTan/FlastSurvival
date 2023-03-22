@@ -14,7 +14,7 @@ public class EffecItem : MonoBehaviour
         {
             if (gameObject.GetComponent<SpriteRenderer>().sprite.Equals(_health.lootSprite))
             {
-                collision.gameObject.GetComponent<PlayableCharacterController>().HealtBuff(_health.among);
+                collision.gameObject.GetComponent<PlayableCharacterController>().HealthBuff(_health.among);
                 Destroy(gameObject);
             }
             else if (gameObject.GetComponent<SpriteRenderer>().sprite.Equals(_invincible.lootSprite))

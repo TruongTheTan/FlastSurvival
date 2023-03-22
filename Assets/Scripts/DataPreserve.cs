@@ -17,4 +17,5 @@ public class DataPreserve
     public static int gameRound = 1;
     public static int totalEnemiesOnMap = 0;
     public static int gunLevel = 0;
+    public static int numberOfUpgrades = 0;
 }
