@@ -6,25 +6,31 @@ public class EffecItem : MonoBehaviour
     private Loot _health;
 
     [SerializeField]
-    private Loot _invincible;
+    private Loot _invicible;
+
+    [SerializeField]
+    private Loot _speed;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.tag.Equals("Player"))
+        if (collision.gameObject.CompareTag("Player"))
         {
-            if (gameObject.GetComponent<SpriteRenderer>().sprite.Equals(_health.lootSprite))
-            {
-                collision.gameObject.GetComponent<PlayableCharacterController>().HealthBuff(_health.among);
-                Destroy(gameObject);
-            }
-            else if (gameObject.GetComponent<SpriteRenderer>().sprite.Equals(_invincible.lootSprite))
-            {
-                Destroy(gameObject);
-            }
+            PlayableCharacterController player = collision.gameObject.GetComponent<PlayableCharacterController>();
+            Sprite supportItemSprite = GetComponent<SpriteRenderer>().sprite;
+
+
+            if (supportItemSprite.Equals(_health.lootSprite))
+                player.HealthBuff(_health.among);
+
+
+            else if (supportItemSprite.Equals(_invicible.lootSprite))
+                player.SetInvicibleTime();
+
+
             else
-            {
-                Destroy(gameObject);
-            }
+                player.SpeedBuff();
+
+            Destroy(gameObject);
         }
     }
 }
