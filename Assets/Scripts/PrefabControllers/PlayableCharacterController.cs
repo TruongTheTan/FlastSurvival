@@ -7,288 +7,366 @@ using UnityEngine.UI;
 
 public class PlayableCharacterController : MonoBehaviour
 {
-    private Joystick _joystick;
+	private Joystick _joystick;
 
-    private float _horizontalMove = 0f;
-    private float _verticalMove = 0f;
-    private float _moveAmount = 2.5f;
+	private float _horizontalMove = 0f;
+	private float _verticalMove = 0f;
+	private float _moveAmount = 2.5f;
 
-    [SerializeField]
-    private GameObject _bulletPrefab;
+	[SerializeField]
+	private GameObject _bulletPrefab;
 
-    private GameObject _gun;
-    private GameObject _gunSprite;
+	private GameObject _gun;
+	private GameObject _gunSprite;
 
-    private GameObject _healthBarReference;
-    private GameObject _expBarReference;
-    private Collider2D _collision;
-    private Button _changeWeaponButton;
-    private readonly string[] _weaponTypes = { "Sword", "Pistol", "ShotGun", "AssaultRifle" };
-    private bool _isMeleeing = false;
+	private GameObject _healthBarReference;
+	private GameObject _expBarReference;
+	private Collider2D _collision;
+	private Button _changeWeaponButton;
+	private readonly string[] _weaponTypes = { "Sword", "Pistol", "ShotGun", "AssaultRifle" };
+	private bool _isMeleeing = false;
 
-    //Default current and max health to 100
-    private int _currentHealthPoint = 100;
-    private int _maxHealthPoint = 100;
-    private int _maxExp = 100;
-    private int _level = 1;
+	//Default current and max health to 100
+	private int _currentHealthPoint = 100;
+	private int _maxHealthPoint = 100;
+	private int _maxExp = 100;
+	private int _level = 1;
 
-    private TextMeshProUGUI _changeWeaponText;
+	private TextMeshProUGUI _changeWeaponText;
 
-    private void Start()
-    {
-        InstantiateData();
-        InstantiatePlayerStatBySelectedNumber();
-    }
+	private float _defaultSpeed = 2.5f;
+	private bool _pickedUpInvicibleItem = false;
 
-    // Update is called once per frame
-    private void Update()
-    {
-        CharacterMovement();
-        AimToClosestEnemy();
-    }
+	private float _invicibleTimer = 0;
+	private float _speedBuffTimer = 0;
 
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        _collision = collision;
-        PickUpGun();
-    }
+	private Text _speedBuffTimerText;
+	private Text _invicibleTimerText;
 
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        _changeWeaponButton.image.gameObject.SetActive(false);
-        DataPreserve.allowPickUpWeapon = false;
-        _changeWeaponText.text = "Change";
-    }
 
-    private void InstantiateData()
-    {
-        if (_joystick == null)
-            _joystick = FindObjectOfType<Joystick>();
+	private void Start()
+	{
+		InstantiateData();
+		InstantiatePlayerStatBySelectedNumber();
+	}
+
+	// Update is called once per frame
+	private void Update()
+	{
+		CharacterMovement();
+		AimToClosestEnemy();
+		UpdateSpeedBuffTime();
+		UpdateInvicibleTime();
+	}
+
+	private void OnTriggerEnter2D(Collider2D collision)
+	{
+		_collision = collision;
+		PickUpGun();
+	}
+
+	private void OnTriggerExit2D(Collider2D collision)
+	{
+		_changeWeaponButton.image.gameObject.SetActive(false);
+		DataPreserve.allowPickUpWeapon = false;
+		_changeWeaponText.text = "Change";
+	}
+
+	private void InstantiateData()
+	{
+		if (_joystick == null)
+			_joystick = FindObjectOfType<Joystick>();
 #if UNITY_ANDROID || UNITY_IOS
-        _joystick.gameObject.SetActive(true);
+		_joystick.gameObject.SetActive(true);
 #else
         //joystick.gameObject.SetActive(false);
 #endif
 
-        _gun = transform.GetChild(0).gameObject;
-        _gunSprite = _gun.transform.GetChild(0).gameObject;
+		_gun = transform.GetChild(0).gameObject;
+		_gunSprite = _gun.transform.GetChild(0).gameObject;
 
-        _healthBarReference = GameObject.Find("HealthBar");
-        _healthBarReference.GetComponent<PlayerHealthBarController>().SetData(_maxHealthPoint);
+		_healthBarReference = GameObject.Find("HealthBar");
+		_healthBarReference.GetComponent<PlayerHealthBarController>().SetData(_maxHealthPoint);
 
-        _expBarReference = GameObject.Find("ExpBar");
-        _expBarReference.GetComponent<ExpBarController>().SetData(_maxExp);
+		_expBarReference = GameObject.Find("ExpBar");
+		_expBarReference.GetComponent<ExpBarController>().SetData(_maxExp);
 
-        _changeWeaponText = FindObjectsOfType<TextMeshProUGUI>()[1];
+		_changeWeaponText = FindObjectsOfType<TextMeshProUGUI>()[1];
 
-        _changeWeaponButton = FindObjectsOfType<Button>()[0];
-        _changeWeaponButton.image.gameObject.SetActive(false);
-    }
+		_changeWeaponButton = FindObjectsOfType<Button>()[0];
+		_changeWeaponButton.image.gameObject.SetActive(false);
 
-    private void CharacterMovement()
-    {
-        _horizontalMove = _joystick.Horizontal;
-        _verticalMove = _joystick.Vertical;
 
-        Vector3 movement = new Vector3(_horizontalMove, _verticalMove);
-        transform.Translate(_moveAmount * Time.deltaTime * movement.normalized);
-    }
+		_speedBuffTimerText = GameObject.Find("SpeedBuffTimer").GetComponent<Text>();
+		_invicibleTimerText = GameObject.Find("InvicibleTimer").GetComponent<Text>();
 
-    private void AimToClosestEnemy()
-    {
-        GameObject[] enemiesOnMap = GameObject.FindGameObjectsWithTag("Enemy");
+		_speedBuffTimerText.text = string.Empty;
+		_invicibleTimerText.text = string.Empty;
+	}
 
-        // If there are at least 1 enemy on map
-        if (enemiesOnMap.Length > 0)
-        {
-            float distanceToClosetEnemy = Mathf.Infinity;
-            Collider2D[] colliderDetectedWithinRadius = Physics2D.OverlapCircleAll(transform.position, 7.3f, 1);
+	private void CharacterMovement()
+	{
+		_horizontalMove = _joystick.Horizontal;
+		_verticalMove = _joystick.Vertical;
 
-            // Find closet enemy
-            foreach (Collider2D colliderComponent in colliderDetectedWithinRadius)
-            {
-                // Point to enemy by collider tag name
-                if (colliderComponent.CompareTag("Enemy"))
-                {
-                    GameObject currentEnemy = colliderComponent.gameObject;
+		Vector3 movement = new Vector3(_horizontalMove, _verticalMove);
+		transform.Translate(_moveAmount * Time.deltaTime * movement.normalized);
+	}
 
-                    float distanceToEnemy = (currentEnemy.transform.position - transform.position).sqrMagnitude;
+	private void AimToClosestEnemy()
+	{
+		GameObject[] enemiesOnMap = GameObject.FindGameObjectsWithTag("Enemy");
 
-                    // Get the closet enemy and aim to it
-                    if (distanceToEnemy < distanceToClosetEnemy)
-                    {
-                        distanceToClosetEnemy = distanceToEnemy;
+		// If there are at least 1 enemy on map
+		if (enemiesOnMap.Length > 0)
+		{
+			float distanceToClosetEnemy = Mathf.Infinity;
+			Collider2D[] colliderDetectedWithinRadius = Physics2D.OverlapCircleAll(transform.position, 7.3f, 1);
 
-                        /* Aim to rearest enemy */
-                        Vector3 aimDirection = (currentEnemy.transform.position - transform.position).normalized;
-                        float angle = Mathf.Atan2(aimDirection.y, aimDirection.x) * Mathf.Rad2Deg;
+			// Find closet enemy
+			foreach (Collider2D colliderComponent in colliderDetectedWithinRadius)
+			{
+				// Point to enemy by collider tag name
+				if (colliderComponent.CompareTag("Enemy"))
+				{
+					GameObject currentEnemy = colliderComponent.gameObject;
 
-                        _gun.transform.eulerAngles = new Vector3(0, 0, angle);
-                    }
-                }
-            }
-        }
-    }
+					float distanceToEnemy = (currentEnemy.transform.position - transform.position).sqrMagnitude;
 
-    public void Shoot()
-    {
-        if (_gunSprite.GetComponent<SpriteRenderer>().sprite.name != "Gun_3")
-        {
-            GameObject bullet = Instantiate(_bulletPrefab, _gunSprite.transform.position, _gunSprite.transform.rotation);
+					// Get the closet enemy and aim to it
+					if (distanceToEnemy < distanceToClosetEnemy)
+					{
+						distanceToClosetEnemy = distanceToEnemy;
 
-            switch (_gunSprite.GetComponent<SpriteRenderer>().sprite.name)
-            {
-                case "Gun_5":
-                    bullet.tag = _weaponTypes[3];
-                    break;
+						/* Aim to rearest enemy */
+						Vector3 aimDirection = (currentEnemy.transform.position - transform.position).normalized;
+						float angle = Mathf.Atan2(aimDirection.y, aimDirection.x) * Mathf.Rad2Deg;
 
-                case "Gun_10":
-                    bullet.tag = _weaponTypes[1];
-                    break;
+						_gun.transform.eulerAngles = new Vector3(0, 0, angle);
+					}
+				}
+			}
+		}
+	}
 
-                case "Gun_11":
-                    bullet.tag = _weaponTypes[2];
-                    break;
-            }
+	public void Shoot()
+	{
+		if (_gunSprite.GetComponent<SpriteRenderer>().sprite.name != "Gun_3")
+		{
+			GameObject bullet = Instantiate(_bulletPrefab, _gunSprite.transform.position, _gunSprite.transform.rotation);
 
-            Debug.Log(bullet.tag);
-        }
-        else if (_gunSprite.GetComponent<SpriteRenderer>().sprite.name == "Gun_3" && !_isMeleeing)
-        {
-            StartCoroutine(nameof(Melee));
-        }
-    }
+			switch (_gunSprite.GetComponent<SpriteRenderer>().sprite.name)
+			{
+				case "Gun_5":
+					bullet.tag = _weaponTypes[3];
+					break;
 
-    IEnumerator Melee()
-    {
-        _isMeleeing = true;
-        BoxCollider2D collider = _gunSprite.AddComponent<BoxCollider2D>();
-        collider.size = new Vector2(0.6761025f, 0.235665f);
-        collider.isTrigger = true;
-        Vector3 currentAngle = _gun.transform.eulerAngles;
-        Vector3 up = new Vector3(currentAngle.x, currentAngle.y, currentAngle.z + 90);
-        Vector3 down = new Vector3(currentAngle.x, currentAngle.y, currentAngle.z - 90);
+				case "Gun_10":
+					bullet.tag = _weaponTypes[1];
+					break;
 
-        float elapsedTime = 0;
-        float duration = 1;
+				case "Gun_11":
+					bullet.tag = _weaponTypes[2];
+					break;
+			}
 
-        while (elapsedTime < duration)
-        {
-            elapsedTime += Time.deltaTime;
-            float t = Mathf.Clamp01(elapsedTime / duration);
-            _gun.transform.eulerAngles = Vector3.Lerp(up, down, t * 5);
-            yield return null;
-        }
+			Debug.Log(bullet.tag);
+		}
+		else if (_gunSprite.GetComponent<SpriteRenderer>().sprite.name == "Gun_3" && !_isMeleeing)
+		{
+			StartCoroutine(nameof(Melee));
+		}
+	}
 
-        _gun.transform.eulerAngles = currentAngle;
-        _isMeleeing = false;
-        Destroy(collider);
-        StopCoroutine(nameof(Melee));
-    }
+	IEnumerator Melee()
+	{
+		_isMeleeing = true;
+		BoxCollider2D collider = _gunSprite.AddComponent<BoxCollider2D>();
+		collider.size = new Vector2(0.6761025f, 0.235665f);
+		collider.isTrigger = true;
+		Vector3 currentAngle = _gun.transform.eulerAngles;
+		Vector3 up = new Vector3(currentAngle.x, currentAngle.y, currentAngle.z + 90);
+		Vector3 down = new Vector3(currentAngle.x, currentAngle.y, currentAngle.z - 90);
 
-    public void PickUpGun()
-    {
-        GameObject gunGameObject = _collision.gameObject;
+		float elapsedTime = 0;
+		float duration = 1;
 
-        // Check if collision is a weapon
-        if (_weaponTypes.Contains(gunGameObject.tag))
-        {
-            _changeWeaponButton.image.gameObject.SetActive(true);
+		while (elapsedTime < duration)
+		{
+			elapsedTime += Time.deltaTime;
+			float t = Mathf.Clamp01(elapsedTime / duration);
+			_gun.transform.eulerAngles = Vector3.Lerp(up, down, t * 5);
+			yield return null;
+		}
 
-            SpriteRenderer gunSpriteRender = _gunSprite.GetComponent<SpriteRenderer>();
+		_gun.transform.eulerAngles = currentAngle;
+		_isMeleeing = false;
+		Destroy(collider);
+		StopCoroutine(nameof(Melee));
+	}
 
-            bool isTheSameGun = false;
-            string playerGunSpriteName = gunSpriteRender.sprite.name;
-            string gunGameObjectSpriteName = gunGameObject.GetComponent<SpriteRenderer>().sprite.name;
+	public void PickUpGun()
+	{
+		GameObject gunGameObject = _collision.gameObject;
 
-            // Change text
-            if (gunGameObjectSpriteName.Equals(playerGunSpriteName))
-            {
-                isTheSameGun = true;
-                _changeWeaponText.text = "Pick Up";
-            }
+		// Check if collision is a weapon
+		if (_weaponTypes.Contains(gunGameObject.tag))
+		{
+			_changeWeaponButton.image.gameObject.SetActive(true);
 
-            // Change new or pick up the same gun (Include Upgrade)
-            if (DataPreserve.allowPickUpWeapon)
-            {
-                // Upgrade gun if pick the same gun
-                if (isTheSameGun)
-                {
-                    int currentGunLevel = DataPreserve.gunLevel;
+			SpriteRenderer gunSpriteRender = _gunSprite.GetComponent<SpriteRenderer>();
 
-                    // Upgrade range, avoid infinite upgrade (bad performance)
-                    if (currentGunLevel >= 0 && currentGunLevel <= 3)
-                    {
-                        DataPreserve.gunLevel++;
-                        GunController.UpgradeGunByLevel(gunGameObject.tag);
-                    }
-                }
-                // Pick up new gun
-                else
-                {
-                    DataPreserve.gunLevel = 0;
-                    gunSpriteRender.sprite = _collision.gameObject.GetComponent<SpriteRenderer>().sprite;
-                }
-                Debug.Log($"Gun level: {DataPreserve.gunLevel}");
-                Destroy(gunGameObject);
-            }
-        }
-    }
+			bool isTheSameGun = false;
+			string playerGunSpriteName = gunSpriteRender.sprite.name;
+			string gunGameObjectSpriteName = gunGameObject.GetComponent<SpriteRenderer>().sprite.name;
 
-    public void Damaged(int damage)
-    {
-        if (_currentHealthPoint > damage)
-        {
-            _currentHealthPoint -= damage;
-            _healthBarReference.GetComponent<PlayerHealthBarController>().OnHealthChanged(_currentHealthPoint);
-            Debug.Log($"Player current HP: {_currentHealthPoint}");
-        }
-        else
-        {
-            SceneManager.LoadScene("SceneGameOver");
-        }
-    }
+			// Change text
+			if (gunGameObjectSpriteName.Equals(playerGunSpriteName))
+			{
+				isTheSameGun = true;
+				_changeWeaponText.text = "Pick Up";
+			}
 
-    public void HealthBuff(int among)
-    {
-        if (_maxHealthPoint > _currentHealthPoint)
-        {
-            _currentHealthPoint += among;
-        }
-        else
-        {
-            _currentHealthPoint = _maxHealthPoint;
-        }
-        _healthBarReference.GetComponent<PlayerHealthBarController>().OnHealthChanged(_currentHealthPoint);
-    }
-    public void UpgratePlayer()
-    {
-        float currentExp = _expBarReference.GetComponent<ExpBarController>().GetCurrentExp();
-        if (currentExp == _maxExp)
-        {
-            _level += 1;
-            _maxExp += 50;
-            _expBarReference.GetComponent<ExpBarController>().SetData(_maxExp);
+			// Change new or pick up the same gun (Include Upgrade)
+			if (DataPreserve.allowPickUpWeapon)
+			{
+				// Upgrade gun if pick the same gun
+				if (isTheSameGun)
+				{
+					int currentGunLevel = DataPreserve.gunLevel;
 
-            GameObject upgrade = GameObject.Find("PlayGameSceneEventHandler");
-            upgrade.GetComponent<UpgradeEventHandler>().Upgrade();
-        }
-    }
-    private void InstantiatePlayerStatBySelectedNumber()
-    {
-        int selectedNumber = DataPreserve.characterSelectedNumber;
+					// Upgrade range, avoid infinite upgrade (bad performance)
+					if (currentGunLevel >= 0 && currentGunLevel <= 3)
+					{
+						DataPreserve.gunLevel++;
+						GunController.UpgradeGunByLevel(gunGameObject.tag);
+					}
+				}
+				// Pick up new gun
+				else
+				{
+					DataPreserve.gunLevel = 0;
+					gunSpriteRender.sprite = _collision.gameObject.GetComponent<SpriteRenderer>().sprite;
+				}
+				Debug.Log($"Gun level: {DataPreserve.gunLevel}");
+				Destroy(gunGameObject);
+			}
+		}
+	}
 
-        if (selectedNumber == 2)
-        {
-            _moveAmount = 3;
-            _maxHealthPoint = 75;
-            _currentHealthPoint = 75;
-        }
-        else if (selectedNumber == 3)
-        {
-            _moveAmount = 2;
-            _maxHealthPoint = 125;
-            _currentHealthPoint = 125;
-        }
-    }
+	public void Damaged(int damage)
+	{
+
+		if (!_pickedUpInvicibleItem)
+		{
+			if (_currentHealthPoint > damage)
+			{
+				_currentHealthPoint -= damage;
+				_healthBarReference.GetComponent<PlayerHealthBarController>().OnHealthChanged(_currentHealthPoint);
+				Debug.Log($"Player current HP: {_currentHealthPoint}");
+			}
+			else
+			{
+				SceneManager.LoadScene("SceneGameOver");
+			}
+		}
+	}
+
+
+
+	public void HealthBuff(int among)
+	{
+		if (_maxHealthPoint > _currentHealthPoint)
+		{
+			_currentHealthPoint += among;
+		}
+		else
+		{
+			_currentHealthPoint = _maxHealthPoint;
+		}
+		_healthBarReference.GetComponent<PlayerHealthBarController>().OnHealthChanged(_currentHealthPoint);
+	}
+
+
+	public void SpeedBuff()
+	{
+		_moveAmount += _moveAmount / 100 * 20;
+		_speedBuffTimer = 10;
+	}
+
+
+	private void UpdateSpeedBuffTime()
+	{
+		if (_speedBuffTimer > 0)
+		{
+			_speedBuffTimer -= Time.deltaTime;
+			_speedBuffTimerText.text = $"Speed time remain: {(int)_speedBuffTimer}";
+		}
+		// Reset speed to deafault
+		else
+		{
+			_moveAmount = _defaultSpeed;
+			_speedBuffTimerText.text = string.Empty;
+		}
+	}
+
+
+	public void SetInvicibleTime()
+	{
+		_pickedUpInvicibleItem = true;
+		_invicibleTimer = 10f;
+	}
+
+
+	private void UpdateInvicibleTime()
+	{
+		// Reduce invicible time
+		if (_pickedUpInvicibleItem)
+		{
+			_invicibleTimer -= Time.deltaTime;
+			_invicibleTimerText.text = $"Invicible time remain: {(int)_invicibleTimer}";
+
+
+			// Invicible time no longer effected
+			if (_invicibleTimer <= 0)
+			{
+				_pickedUpInvicibleItem = false;
+				_invicibleTimerText.text = string.Empty;
+			}
+		}
+	}
+
+
+
+	public void UpgratePlayer()
+	{
+		float currentExp = _expBarReference.GetComponent<ExpBarController>().GetCurrentExp();
+		if (currentExp == _maxExp)
+		{
+			_level += 1;
+			_maxExp += 50;
+			_expBarReference.GetComponent<ExpBarController>().SetData(_maxExp);
+
+			GameObject upgrade = GameObject.Find("PlayGameSceneEventHandler");
+			upgrade.GetComponent<UpgradeEventHandler>().Upgrade();
+		}
+	}
+	private void InstantiatePlayerStatBySelectedNumber()
+	{
+		int selectedNumber = DataPreserve.characterSelectedNumber;
+
+		if (selectedNumber == 2)
+		{
+			_moveAmount = 3;
+			_maxHealthPoint = 75;
+			_currentHealthPoint = 75;
+		}
+		else if (selectedNumber == 3)
+		{
+			_moveAmount = 2;
+			_maxHealthPoint = 125;
+			_currentHealthPoint = 125;
+		}
+		_defaultSpeed = _moveAmount;
+	}
 }

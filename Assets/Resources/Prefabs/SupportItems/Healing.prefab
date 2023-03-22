@@ -147,4 +147,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _health: {fileID: 11400000, guid: a73fcd6262813e840a640e7160628fcd, type: 2}
-  _invincible: {fileID: 11400000, guid: 1456972e1379b2b4f93a829811971015, type: 2}
+  _invicible: {fileID: 11400000, guid: 1456972e1379b2b4f93a829811971015, type: 2}
+  _speed: {fileID: 11400000, guid: d1babcc856ca81b4ca67b88403a9ffda, type: 2}
