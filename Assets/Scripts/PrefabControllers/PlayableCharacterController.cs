@@ -31,7 +31,7 @@ public class PlayableCharacterController : MonoBehaviour
     private int _maxHealthPoint = 100;
     private int _maxExp = 100;
     private int _level = 1;
-    
+
     private TextMeshProUGUI _changeWeaponText;
 
     private void Start()
@@ -218,9 +218,10 @@ public class PlayableCharacterController : MonoBehaviour
 
                     // Upgrade range, avoid infinite upgrade (bad performance)
                     if (currentGunLevel >= 0 && currentGunLevel <= 3)
+                    {
                         DataPreserve.gunLevel++;
-
-                    GunController.UpgradeGunByLevel(gunGameObject.tag);
+                        GunController.UpgradeGunByLevel(gunGameObject.tag);
+                    }
                 }
                 // Pick up new gun
                 else
@@ -248,23 +249,22 @@ public class PlayableCharacterController : MonoBehaviour
         }
     }
 
-    public void HealtBuff(int among)
+    public void HealthBuff(int among)
     {
         if (_maxHealthPoint > _currentHealthPoint)
         {
             _currentHealthPoint += among;
-            _healthBarReference.GetComponent<PlayerHealthBarController>().OnHealthChanged(_currentHealthPoint);
         }
         else
         {
             _currentHealthPoint = _maxHealthPoint;
-            _healthBarReference.GetComponent<PlayerHealthBarController>().OnHealthChanged(_currentHealthPoint);
         }
+        _healthBarReference.GetComponent<PlayerHealthBarController>().OnHealthChanged(_currentHealthPoint);
     }
     public void UpgratePlayer()
     {
         float currentExp = _expBarReference.GetComponent<ExpBarController>().GetCurrentExp();
-        if(currentExp == _maxExp)
+        if (currentExp == _maxExp)
         {
             _level += 1;
             _maxExp += 50;

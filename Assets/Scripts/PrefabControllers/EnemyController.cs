@@ -166,34 +166,18 @@ public class EnemyController : MonoBehaviour
         else
         {
             GetComponent<LootBag>().InstantiateLoot(transform.position);
+
             DataPreserve.totalEnemiesOnMap--;
             DataPreserve.enemyKilled++;
             DataPreserve.totalScore += (_point * DataPreserve.enemyKilled) + (DataPreserve.gameRound * 100);
+
+
+            // Add XP to player
+            _expBarController.GetComponent<ExpBarController>().OnExpChanged(_point);
+            _player.GetComponent<PlayableCharacterController>().UpgratePlayer();
+
             Destroy(_currentHealthBar);
-            Sprite currentSprite = gameObject.GetComponent<SpriteRenderer>().sprite;
             Destroy(gameObject);
-            switch (currentSprite.name)
-            {
-                case "Fodder Joe":
-                    _expBarController.GetComponent<ExpBarController>().OnExpChanged(5);
-                    _player.GetComponent<PlayableCharacterController>().UpgratePlayer();
-                    break;
-
-                case "Blitz Jok":
-                    _expBarController.GetComponent<ExpBarController>().OnExpChanged(10);
-                    _player.GetComponent<PlayableCharacterController>().UpgratePlayer();
-                    break;
-
-                case "Big Daddy":
-                    _expBarController.GetComponent<ExpBarController>().OnExpChanged(20);
-                    _player.GetComponent<PlayableCharacterController>().UpgratePlayer();
-                    break;
-
-                case "Explosive Dave":
-                    _expBarController.GetComponent<ExpBarController>().OnExpChanged(15);
-                    _player.GetComponent<PlayableCharacterController>().UpgratePlayer();
-                    break;
-            }
         }
     }
 
@@ -230,4 +214,5 @@ public class EnemyController : MonoBehaviour
             Destroy(gameObject);
         }
     }
+
 }
