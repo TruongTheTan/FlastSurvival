@@ -70,6 +70,7 @@ public class UpgradeEventHandler : MonoBehaviour
         //Upgrade health here
         Debug.Log("Health + 10");
         _upgradePanelReference.SetActive(false);
+        Time.timeScale = 1f;
     }
 
     public void UpgradeSpeedClick()
@@ -77,10 +78,12 @@ public class UpgradeEventHandler : MonoBehaviour
         //Upgrade speed here
         Debug.Log("Speed + 0.5");
         _upgradePanelReference.SetActive(false);
+        Time.timeScale = 1f;
     }
 
     public void UpgradeBackClick()
     {
         _upgradePanelReference.SetActive(false);
+        Time.timeScale = 1f;
     }
 }
