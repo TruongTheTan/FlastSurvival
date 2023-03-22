@@ -11,16 +11,30 @@ public class ScenePlayGameController : MonoBehaviour
     [SerializeField]
     private Sprite SteveSprite;
 
-
+    private GameObject _playableCharacter;
 
     private void Awake()
     {
-        SpawnCharacterBySelectionNumber();
-    }
+        if (DataPreserve.isNewGame)
+        {
+            SpawnCharacterBySelectionNumber();
+        }
+        else
+        {
+            //Load all saved data
+            DataManager dataManager = new DataManager();
+            SaveData saveData = dataManager.ReadData();
+            DataPreserve.characterSelectedNumber = saveData.CharacterNumber;
+            DataPreserve.survivedTime = saveData.SurvivedTime;
+            DataPreserve.totalScore = saveData.Score;
+            SpawnCharacterBySelectionNumber();
 
-    // Start is called before the first frame update
-    void Start()
-    {
+            PlayableCharacterController controller = _playableCharacter.GetComponent<PlayableCharacterController>();
+            RandomSpawnEnermy spawnController = GameObject.Find("SpawnEnemy").GetComponent<RandomSpawnEnermy>();
+            controller.LoadSaveData(saveData);
+            DataPreserve.numberOfUpgrades = saveData.NumberOfUpgrades;
+            spawnController.SetSpawnLimit(saveData.SpawnLimit);
+        }
     }
 
     // Update is called once per frame
@@ -29,14 +43,12 @@ public class ScenePlayGameController : MonoBehaviour
         DataPreserve.survivedTime += Time.deltaTime;
     }
 
-
     private void SpawnCharacterBySelectionNumber()
     {
-
         GameObject playablePrefab = Resources.Load<GameObject>("Prefabs/PlayableCharacter/Player");
-        GameObject playableCharacter = Instantiate(playablePrefab, new Vector3(0, 0, 1), Quaternion.identity);
+        _playableCharacter = Instantiate(playablePrefab, new Vector3(0, 0, 1), Quaternion.identity);
 
-        SpriteRenderer playerSpriteRenderer = playableCharacter.GetComponent<SpriteRenderer>();
+        SpriteRenderer playerSpriteRenderer = _playableCharacter.GetComponent<SpriteRenderer>();
 
         switch (DataPreserve.characterSelectedNumber)
         {
@@ -45,6 +57,4 @@ public class ScenePlayGameController : MonoBehaviour
             case 3: playerSpriteRenderer.sprite = SteveSprite; break;
         }
     }
-
-
 }

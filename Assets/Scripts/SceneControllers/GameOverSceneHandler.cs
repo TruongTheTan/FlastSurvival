@@ -1,3 +1,4 @@
+using System.IO;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -33,7 +34,11 @@ public class GameOverSceneHandler : MonoBehaviour
         //Reset saved score and time
         DataPreserve.totalScore = 0;
         DataPreserve.survivedTime = 0;
-
+        string saveFile = Application.persistentDataPath + "/savedata.json";
+        if (File.Exists(saveFile))
+        {
+            File.Delete(saveFile);
+        }
         //Load main menu scene
         SceneManager.LoadScene("SceneMainMenu");
     }
