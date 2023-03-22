@@ -75,6 +75,7 @@ public class QuitEventHandler : MonoBehaviour
             Score = DataPreserve.totalScore,
             MaxHealth = playerController.MaxHealthPoint,
             CurrentHealth = playerController.CurrentHealthPoint,
+            CurrentSpeed = playerController.DefaultSpeed,
             RequiredExp = playerController.MaxExp,
             CurrentExp = currentExp,
             Level = playerController.Level,

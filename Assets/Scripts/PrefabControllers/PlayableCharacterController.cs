@@ -61,6 +61,7 @@ public class PlayableCharacterController : MonoBehaviour
     public int MaxExp { get => _maxExp; set => _maxExp = value; }
     public int Level { get => _level; set => _level = value; }
     public GameObject GunSprite { get => _gunSprite; }
+    public float DefaultSpeed { get => _defaultSpeed; }
 
     private void Awake()
     {
@@ -414,6 +415,8 @@ public class PlayableCharacterController : MonoBehaviour
         _expBarReference = GameObject.Find("ExpBar");
         _expBarReference.GetComponent<ExpBarController>().SetData(_maxExp);
         _expBarReference.GetComponent<ExpBarController>().OnExpChanged(data.CurrentExp);
+
+        _defaultSpeed = _moveAmount = data.CurrentSpeed;
 
         Damaged(_maxHealthPoint - data.CurrentHealth);
     }

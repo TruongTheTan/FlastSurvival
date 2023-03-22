@@ -6,6 +6,7 @@ public class SaveData
     public int Score;
     public int MaxHealth;
     public int CurrentHealth;
+    public float CurrentSpeed;
     public int RequiredExp;
     public float CurrentExp;
     public int Level;
