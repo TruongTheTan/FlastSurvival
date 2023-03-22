@@ -19,9 +19,12 @@ public class GunController : MonoBehaviour
     private int _currentDamgeMelee = 0;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
-        RandomGunType();
+        if (DataPreserve.isNewGame)
+        {
+            RandomGunType();
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

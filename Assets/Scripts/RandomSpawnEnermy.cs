@@ -18,6 +18,8 @@ public class RandomSpawnEnermy : MonoBehaviour
     private int _gameRoundSeconds;
     private int _gameRound;
 
+    public int SpawnLimit { get => _spawnLimit; }
+
     private void Awake()
     {
         _gameRound = 0;
@@ -80,6 +82,11 @@ public class RandomSpawnEnermy : MonoBehaviour
                 SpawnEnemy();
             }
         }
+    }
+
+    public void SetSpawnLimit(int spawnLimit)
+    {
+        _spawnLimit = spawnLimit;
     }
 
     private Vector3 GenerateRandomPosition()

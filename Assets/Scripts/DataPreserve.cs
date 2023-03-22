@@ -18,4 +18,19 @@ public class DataPreserve
     public static int totalEnemiesOnMap = 0;
     public static int gunLevel = 0;
     public static int numberOfUpgrades = 0;
+    public static bool isNewGame = true;
+
+    public static void ResetFields()
+    {
+        characterSelectedNumber = 1;
+        totalScore = 0;
+        survivedTime = 0;
+        allowPickUpWeapon = false;
+        enemyKilled = 0;
+        gameRound = 1;
+        totalEnemiesOnMap = 0;
+        gunLevel = 0;
+        isNewGame = true;
+        numberOfUpgrades = 0;
+    }
 }
