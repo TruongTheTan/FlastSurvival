@@ -188,11 +188,11 @@ public class PlayableCharacterController : MonoBehaviour
                     break;
 
                 case "Gun_5":
-                    bullet.tag = _weaponTypes[2];
+                    bullet.tag = _weaponTypes[3];
                     break;
 
-                case "Gun_6":
-                    bullet.tag = _weaponTypes[3];
+                case "Gun_11":
+                    bullet.tag = _weaponTypes[2];
                     break;
             }
 
@@ -288,7 +288,6 @@ public class PlayableCharacterController : MonoBehaviour
             {
                 _currentHealthPoint -= damage;
                 _healthBarReference.GetComponent<PlayerHealthBarController>().OnHealthChanged(_currentHealthPoint);
-                Debug.Log($"Player current HP: {_currentHealthPoint}");
             }
             else
             {
@@ -434,7 +433,7 @@ public class PlayableCharacterController : MonoBehaviour
 
             case 2:
                 _gunSprite.GetComponent<SpriteRenderer>().sprite = _shotgun;
-                GunController.UpgradeGunByLevel("Shotgun");
+                GunController.UpgradeGunByLevel("ShotGun");
                 break;
 
             case 3:
