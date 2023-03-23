@@ -74,15 +74,13 @@ public class UpgradeEventHandler : MonoBehaviour
 		_currentMaxSpeed.text = $"Current Speed: {_playerController.DefaultSpeed}";
 	}
 
-	public void Upgrade()
+	public void OpenUpgradePanel()
 	{
-		if (_upgradePanelReference == null)
+		if (_playerController.Level % 5 == 0)
 		{
-			_upgradePanelReference = GameObject.Find("UpgradePanel");
+			_upgradePanelReference.SetActive(true);
+			Time.timeScale = 0;
 		}
-		_upgradePanelReference.SetActive(true);
-
-		Time.timeScale = 0;
 	}
 
 	public void UpgradeHealthClick()

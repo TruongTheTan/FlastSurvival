@@ -14,10 +14,10 @@ public class ExpBarController : MonoBehaviour
 		_expBarSlider.value = 0;
 	}
 
-	public void OnExpChanged(float exp)
+	public void OnExpChanged(float enemyPoint)
 	{
-		_expBarSlider.value += exp;
-		Debug.Log($"Enemy current point: ({exp})");
+		_expBarSlider.value += enemyPoint;
+		Debug.Log($"Enemy current point: ({enemyPoint})");
 	}
 	public float GetCurrentExp()
 	{

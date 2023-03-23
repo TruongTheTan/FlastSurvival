@@ -47,7 +47,7 @@ public class PlayableCharacterController : MonoBehaviour
 
     private TextMeshProUGUI _changeWeaponText;
 
-    private float _defaultSpeed = 2.5f;
+    private float _defaultSpeed = 2.5f;// reset to default speed when no longer effect by Speed up item
     private bool _pickedUpInvicibleItem = false;
 
     private float _invicibleTimer = 0;
@@ -55,6 +55,8 @@ public class PlayableCharacterController : MonoBehaviour
 
     private Text _speedBuffTimerText;
     private Text _invicibleTimerText;
+    private Text _levelText;
+
 
     public int CurrentHealthPoint { get => _currentHealthPoint; }
     public int MaxHealthPoint { get => _maxHealthPoint; set => _maxHealthPoint = value; }
@@ -62,6 +64,8 @@ public class PlayableCharacterController : MonoBehaviour
     public int Level { get => _level; set => _level = value; }
     public GameObject GunSprite { get => _gunSprite; }
     public float DefaultSpeed { get => _defaultSpeed; }
+
+
 
     private void Awake()
     {
@@ -110,16 +114,20 @@ public class PlayableCharacterController : MonoBehaviour
         _expBarReference = GameObject.Find("ExpBar");
         _expBarReference.GetComponent<ExpBarController>().SetData(_maxExp);
 
-        _changeWeaponText = FindObjectsOfType<TextMeshProUGUI>()[1];
+        _changeWeaponText = GameObject.Find("ChangeWeaponText").GetComponent<TextMeshProUGUI>();
 
-        _changeWeaponButton = FindObjectsOfType<Button>()[0];
+        _changeWeaponButton = GameObject.Find("Picked").GetComponent<Button>();
         _changeWeaponButton.image.gameObject.SetActive(false);
 
         _speedBuffTimerText = GameObject.Find("SpeedBuffTimer").GetComponent<Text>();
         _invicibleTimerText = GameObject.Find("InvicibleTimer").GetComponent<Text>();
+        _levelText = GameObject.Find("CurrentLevel").GetComponent<Text>();
+
 
         _speedBuffTimerText.text = string.Empty;
         _invicibleTimerText.text = string.Empty;
+        _levelText.text = $"Lv: {_level}";
+
     }
 
     private void CharacterMovement()
@@ -346,18 +354,32 @@ public class PlayableCharacterController : MonoBehaviour
         }
     }
 
-    public void UpgradePlayer()
+    public void UpgradePlayerLevel()
     {
         float currentExp = _expBarReference.GetComponent<ExpBarController>().GetCurrentExp();
-        if (currentExp == _maxExp)
+        if (currentExp >= _maxExp)
         {
             _level += 1;
             _maxExp += 50;
-            _expBarReference.GetComponent<ExpBarController>().SetData(_maxExp);
+            _levelText.text = $"Lv: {_level}";
 
-            GameObject upgrade = GameObject.Find("PlayGameSceneEventHandler");
-            upgrade.GetComponent<UpgradeEventHandler>().Upgrade();
+            _expBarReference.GetComponent<ExpBarController>().SetData(_maxExp);
+            GameObject.Find("PlayGameSceneEventHandler").GetComponent<UpgradeEventHandler>().OpenUpgradePanel();
         }
+    }
+
+
+
+
+    public void UpgradeHealth()
+    {
+        Debug.Log(11);
+    }
+
+
+    public void UpgradeSpeed()
+    {
+
     }
 
     private void InstantiatePlayerStatBySelectedNumber()
