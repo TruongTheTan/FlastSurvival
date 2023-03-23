@@ -4,26 +4,26 @@ using UnityEngine;
 public class LootBagWeapon : MonoBehaviour
 {
     [SerializeField]
-    private GameObject lootWeaponPrefab;
+    private GameObject _lootWeaponPrefab;
 
-    private LootWeapon[] weapons;
+    private LootWeapon[] _weapons;
 
     private void Awake()
     {
-        weapons = Resources.LoadAll("LootWeapon") as LootWeapon[];
+        _weapons = Resources.LoadAll<LootWeapon>("LootWeapon");
     }
 
     private LootWeapon GetLootWeapon()
     {
         int randomize = Random.Range(1, 4);
-        LootWeapon weapon = weapons.FirstOrDefault(x => x.DropIndicator == randomize);
+        LootWeapon weapon = _weapons.FirstOrDefault(x => x.DropIndicator == randomize);
         return weapon;
     }
 
     public void InstantiateLoot(Vector3 position)
     {
         LootWeapon drop = GetLootWeapon();
-        GameObject weaponDropped = Instantiate(lootWeaponPrefab, position, Quaternion.identity);
+        GameObject weaponDropped = Instantiate(_lootWeaponPrefab, position, Quaternion.identity);
         weaponDropped.GetComponent<SpriteRenderer>().sprite = drop.WeaponSprite;
         weaponDropped.tag = drop.WeaponTag;
     }
