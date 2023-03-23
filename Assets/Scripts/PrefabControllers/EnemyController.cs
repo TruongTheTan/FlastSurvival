@@ -173,7 +173,7 @@ public class EnemyController : MonoBehaviour
 
             // Add XP to player
             _expBarController.GetComponent<ExpBarController>().OnExpChanged(_point);
-            _player.GetComponent<PlayableCharacterController>().UpgradePlayer();
+            _player.GetComponent<PlayableCharacterController>().UpgradePlayerLevel();
 
             Destroy(_currentHealthBar);
             Destroy(gameObject);
