@@ -83,22 +83,24 @@ public class UpgradeEventHandler : MonoBehaviour
 
 	public void UpgradeHealthClick()
 	{
-		if (DataPreserve.numberOfUpgrades > 0 && DataPreserve.numberOfUpgrades <= 15)
+		if (DataPreserve.numberOfUpgrades > 0)
 		{
 			_playerController.UpgradeHealth();
 			DataPreserve.numberOfUpgrades--;
+			_currentMaxHP.text = $"Current Health: {_playerController.MaxHealthPoint}";
+			_upgradePanelTitle.text = $"Choose a stat to upgrade:\nUpgrade available: {DataPreserve.numberOfUpgrades}";
 		}
-
-
 	}
 
 	public void UpgradeSpeedClick()
 	{
 
-		if (DataPreserve.numberOfUpgrades > 0 && DataPreserve.numberOfUpgrades <= 15)
+		if (DataPreserve.numberOfUpgrades > 0)
 		{
 			_playerController.UpgradeSpeed();
 			DataPreserve.numberOfUpgrades--;
+			_currentMaxSpeed.text = $"Current Speed: {_playerController.DefaultSpeed}";
+			_upgradePanelTitle.text = $"Choose a stat to upgrade:\nUpgrade available: {DataPreserve.numberOfUpgrades}";
 		}
 	}
 

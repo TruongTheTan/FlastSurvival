@@ -39,9 +39,9 @@ public class PlayableCharacterController : MonoBehaviour
     private bool _isMeleeing = false;
 
     //Default current and max health to 100
-    private int _currentHealthPoint = 100;
+    private int _currentHealthPoint = 500;
 
-    private int _maxHealthPoint = 100;
+    private int _maxHealthPoint = 500;
     private int _maxExp = 100;
     private int _level = 4;
 
@@ -382,13 +382,13 @@ public class PlayableCharacterController : MonoBehaviour
 
     public void UpgradeHealth()
     {
-        Debug.Log(11);
+        _maxHealthPoint += 10;
     }
 
 
     public void UpgradeSpeed()
     {
-
+        _defaultSpeed = _moveAmount += 0.5f;
     }
 
     private void InstantiatePlayerStatBySelectedNumber()
