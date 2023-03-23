@@ -165,12 +165,11 @@ public class EnemyController : MonoBehaviour
         }
         else
         {
-            GetComponent<LootBag>().InstantiateLoot(transform.position);
+            Drop();
 
             DataPreserve.totalEnemiesOnMap--;
             DataPreserve.enemyKilled++;
             DataPreserve.totalScore += (_point * DataPreserve.enemyKilled) + (DataPreserve.gameRound * 100);
-
 
             // Add XP to player
             _expBarController.GetComponent<ExpBarController>().OnExpChanged(_point);
@@ -178,6 +177,21 @@ public class EnemyController : MonoBehaviour
 
             Destroy(_currentHealthBar);
             Destroy(gameObject);
+        }
+    }
+
+    private void Drop()
+    {
+        if (Random.Range(1, 10) == 5)
+        {
+            if (Random.Range(0, 1) > 0.5)
+            {
+                GetComponent<LootBag>().InstantiateLoot(transform.position);
+            }
+            else
+            {
+                GetComponent<LootBagWeapon>().InstantiateLoot(transform.position);
+            }
         }
     }
 
@@ -189,7 +203,6 @@ public class EnemyController : MonoBehaviour
             Destroy(gameObject);
         }
     }
-
 
     /// <summary>
     /// <para>
@@ -214,5 +227,4 @@ public class EnemyController : MonoBehaviour
             Destroy(gameObject);
         }
     }
-
 }
