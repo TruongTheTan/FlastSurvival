@@ -318,6 +318,7 @@ public class PlayableCharacterController : MonoBehaviour
 
     private void UpdateSpeedBuffTime()
     {
+        // Speed effect count down
         if (_speedBuffTimer > 0)
         {
             _speedBuffTimer -= Time.deltaTime;
