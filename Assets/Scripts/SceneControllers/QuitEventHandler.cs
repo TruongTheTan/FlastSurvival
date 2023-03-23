@@ -57,11 +57,11 @@ public class QuitEventHandler : MonoBehaviour
                 weaponType = 1;
                 break;
 
-            case "Gun_5":
+            case "Gun_11":
                 weaponType = 2;
                 break;
 
-            case "Gun_6":
+            case "Gun_5":
                 weaponType = 3;
                 break;
         }
