@@ -33,6 +33,10 @@ public class GunController : MonoBehaviour
         {
             collision.gameObject.GetComponent<EnemyController>().Damaged(_currentDamgeMelee);
         }
+        else if (!collision.gameObject.CompareTag("Enemy") && DataPreserve.gunLevel == 3)
+        {
+            Destroy(collision.gameObject);
+        }
     }
 
     private void RandomGunType()
