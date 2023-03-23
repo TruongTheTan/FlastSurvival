@@ -39,11 +39,11 @@ public class PlayableCharacterController : MonoBehaviour
     private bool _isMeleeing = false;
 
     //Default current and max health to 100
-    private int _currentHealthPoint = 500;
+    private int _currentHealthPoint = 100;
 
-    private int _maxHealthPoint = 500;
+    private int _maxHealthPoint = 100;
     private int _maxExp = 100;
-    private int _level = 4;
+    private int _level = 1;
 
     private TextMeshProUGUI _changeWeaponText;
 
@@ -360,24 +360,24 @@ public class PlayableCharacterController : MonoBehaviour
         {
             float currentExp = _expBarReference.GetComponent<ExpBarController>().GetCurrentExp();
 
-            // Increase player level when XP is full filled
+            // Increase player level, upgrade available number when XP is full filled
             if (currentExp >= _maxExp)
             {
                 _level += 1;
                 _maxExp += 50;
-
-                if (_level % 5 == 0)
-                    DataPreserve.numberOfUpgrades++;
-
                 _levelText.text = $"Lv: {_level}";
 
                 _expBarReference.GetComponent<ExpBarController>().SetData(_maxExp);
-                GameObject.Find("PlayGameSceneEventHandler").GetComponent<UpgradeEventHandler>().OpenUpgradePanel();
+
+                // Increase upgrade available number
+                if (_level % 5 == 0)
+                {
+                    DataPreserve.numberOfUpgrades++;
+                    GameObject.Find("PlayGameSceneEventHandler").GetComponent<UpgradeEventHandler>().OpenUpgradePanel();
+                }
             }
         }
     }
-
-
 
 
     public void UpgradeHealth()

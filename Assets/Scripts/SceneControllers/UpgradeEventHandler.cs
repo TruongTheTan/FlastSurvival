@@ -73,12 +73,9 @@ public class UpgradeEventHandler : MonoBehaviour
 
 	public void OpenUpgradePanel()
 	{
-		if (_playerController.Level % 5 == 0)
-		{
-			_upgradePanelReference.SetActive(true);
-			_upgradePanelTitle.text = $"Choose a stat to upgrade:\nUpgrade available: {DataPreserve.numberOfUpgrades}";
-			Time.timeScale = 0;
-		}
+		_upgradePanelReference.SetActive(true);
+		_upgradePanelTitle.text = $"Choose a stat to upgrade:\nUpgrade available: {DataPreserve.numberOfUpgrades}";
+		Time.timeScale = 0;
 	}
 
 	public void UpgradeHealthClick()
