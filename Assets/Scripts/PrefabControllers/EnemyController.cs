@@ -184,7 +184,7 @@ public class EnemyController : MonoBehaviour
     {
         if (Random.Range(1, 10) == 5)
         {
-            if (Random.Range(0, 1) > 0.5)
+            if (Random.Range(0, 1f) > 0.5f)
             {
                 GetComponent<LootBag>().InstantiateLoot(transform.position);
             }
