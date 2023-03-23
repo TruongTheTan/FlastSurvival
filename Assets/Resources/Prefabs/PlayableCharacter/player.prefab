@@ -132,8 +132,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _swordSprite: {fileID: -175038746, guid: 5db19cb3d094a614ca767925dd25c2ef, type: 3}
   _pistolSprite: {fileID: -656580334, guid: 5db19cb3d094a614ca767925dd25c2ef, type: 3}
-  _shotGunSprite: {fileID: 546575571, guid: 5db19cb3d094a614ca767925dd25c2ef, type: 3}
-  _assaultRifleSprite: {fileID: -1823414491, guid: 5db19cb3d094a614ca767925dd25c2ef, type: 3}
+  _shotGunSprite: {fileID: -1046595183, guid: 5db19cb3d094a614ca767925dd25c2ef, type: 3}
+  _assaultRifleSprite: {fileID: 546575571, guid: 5db19cb3d094a614ca767925dd25c2ef, type: 3}
 --- !u!1 &112920631977259805
 GameObject:
   m_ObjectHideFlags: 0
@@ -268,8 +268,8 @@ MonoBehaviour:
   _bulletPrefab: {fileID: 1478471017295240097, guid: ef036884d6f575242848857832772e6b, type: 3}
   _sword: {fileID: -175038746, guid: 5db19cb3d094a614ca767925dd25c2ef, type: 3}
   _pistol: {fileID: -656580334, guid: 5db19cb3d094a614ca767925dd25c2ef, type: 3}
-  _shotgun: {fileID: 546575571, guid: 5db19cb3d094a614ca767925dd25c2ef, type: 3}
-  _assaultRifle: {fileID: -1823414491, guid: 5db19cb3d094a614ca767925dd25c2ef, type: 3}
+  _shotgun: {fileID: -1046595183, guid: 5db19cb3d094a614ca767925dd25c2ef, type: 3}
+  _assaultRifle: {fileID: 546575571, guid: 5db19cb3d094a614ca767925dd25c2ef, type: 3}
 --- !u!61 &9161976539573321140
 BoxCollider2D:
   m_ObjectHideFlags: 0
