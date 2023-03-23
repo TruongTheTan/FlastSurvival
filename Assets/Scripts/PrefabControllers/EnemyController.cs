@@ -190,7 +190,7 @@ public class EnemyController : MonoBehaviour
             }
             else
             {
-                //Randomly drop weapon here
+                GetComponent<LootBagWeapon>().InstantiateLoot(transform.position);
             }
         }
     }
