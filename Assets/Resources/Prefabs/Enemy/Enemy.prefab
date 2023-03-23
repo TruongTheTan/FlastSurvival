@@ -146,4 +146,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f185b85b03adbe64cbc19a6246f83585, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lootWeaponPrefab: {fileID: 7988573687397995301, guid: a4cb2a938c613fd4991f0cffdd84db01, type: 3}
+  _lootWeaponPrefab: {fileID: 7988573687397995301, guid: a4cb2a938c613fd4991f0cffdd84db01, type: 3}
