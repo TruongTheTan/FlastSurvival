@@ -4,7 +4,7 @@
 
 ## Installation:
 - Clone the project repository.
-- Open Unity Hub, choose cloned folder and open. Start run the program in Unity Editor.
+- Open **Unity Hub**, choose cloned folder and open. Start run the program in **Unity Editor**.
 - Open project by double click on **.sln** file extension for coding.
 
 ## About working process:
@@ -16,7 +16,7 @@
   - Assignee creates branch named is **"#2"** then start coding.
   - After done at coding, create a **"Pull Request"**.
   - Write comment, post videos demo or images for evidence in **"Pull Request"** if needed and wait for review.
-  - When review is OK => Merge branch into **"master"**.
+  - When review is **OK** => Merge branch into **"master"**.
   
 
 
@@ -26,7 +26,7 @@
 - Leader assigns issue fixing bug to members in team.
 - Member fix bugs then create **"Pull Request"** with title (Issue number + Fix bug).
 - Write comments, post videos or images for evidence and wait Leader reviews.
-- Review OK => Merge branch (Issue) to **"master"**.
+- Review **OK** => Merge branch (Issue) to **"master"**.
 
 
 ## Features, bugs status:
