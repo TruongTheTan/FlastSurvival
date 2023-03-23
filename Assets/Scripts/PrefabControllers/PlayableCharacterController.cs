@@ -417,6 +417,8 @@ public class PlayableCharacterController : MonoBehaviour
         _level = data.Level;
         DataPreserve.gunLevel = data.WeaponLevel;
 
+        _levelText.text = $"Lv: {_level}";
+
         switch (data.WeaponType)
         {
             case 0:
