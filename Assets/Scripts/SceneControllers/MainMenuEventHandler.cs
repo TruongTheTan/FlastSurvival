@@ -28,6 +28,7 @@ public class MainMenuEventHandler : MonoBehaviour
     public void NewGameButtonClick()
     {
         DataPreserve.isNewGame = true;
+        DataPreserve.characterSelectedNumber = 1;
         File.Delete(_saveFile);
         SceneManager.LoadScene("SceneChooseCharacter");
     }
