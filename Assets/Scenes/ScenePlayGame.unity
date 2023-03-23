@@ -609,7 +609,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &200854450
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4334,7 +4334,7 @@ GameObject:
   - component: {fileID: 1630531000}
   - component: {fileID: 1630530999}
   m_Layer: 5
-  m_Name: Title
+  m_Name: PanelTitle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

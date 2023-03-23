@@ -43,7 +43,7 @@ public class PlayableCharacterController : MonoBehaviour
 
     private int _maxHealthPoint = 100;
     private int _maxExp = 100;
-    private int _level = 1;
+    private int _level = 4;
 
     private TextMeshProUGUI _changeWeaponText;
 
@@ -356,15 +356,24 @@ public class PlayableCharacterController : MonoBehaviour
 
     public void UpgradePlayerLevel()
     {
-        float currentExp = _expBarReference.GetComponent<ExpBarController>().GetCurrentExp();
-        if (currentExp >= _maxExp)
+        if (_level <= 15)
         {
-            _level += 1;
-            _maxExp += 50;
-            _levelText.text = $"Lv: {_level}";
+            float currentExp = _expBarReference.GetComponent<ExpBarController>().GetCurrentExp();
 
-            _expBarReference.GetComponent<ExpBarController>().SetData(_maxExp);
-            GameObject.Find("PlayGameSceneEventHandler").GetComponent<UpgradeEventHandler>().OpenUpgradePanel();
+            // Increase player level when XP is full filled
+            if (currentExp >= _maxExp)
+            {
+                _level += 1;
+                _maxExp += 50;
+
+                if (_level % 5 == 0)
+                    DataPreserve.numberOfUpgrades++;
+
+                _levelText.text = $"Lv: {_level}";
+
+                _expBarReference.GetComponent<ExpBarController>().SetData(_maxExp);
+                GameObject.Find("PlayGameSceneEventHandler").GetComponent<UpgradeEventHandler>().OpenUpgradePanel();
+            }
         }
     }
 

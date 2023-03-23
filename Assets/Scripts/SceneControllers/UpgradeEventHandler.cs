@@ -20,6 +20,7 @@ public class UpgradeEventHandler : MonoBehaviour
 
 	private TextMeshProUGUI _currentMaxHP;
 	private TextMeshProUGUI _currentMaxSpeed;
+	private TextMeshProUGUI _upgradePanelTitle;
 
 
 	private GameObject _player;
@@ -52,17 +53,12 @@ public class UpgradeEventHandler : MonoBehaviour
 		}
 
 
-		//Get player current max HP and set here
 		_currentMaxHP = GameObject.Find("HealthCurrent").GetComponent<TextMeshProUGUI>();
-
-
-		//Get player current max speed and set here
 		_currentMaxSpeed = GameObject.Find("SpeedCurrent").GetComponent<TextMeshProUGUI>();
+		_upgradePanelTitle = GameObject.Find("PanelTitle").GetComponent<TextMeshProUGUI>();
 
 		_upgradePanelReference.SetActive(false);
 	}
-
-
 
 
 	private void Start()
@@ -74,11 +70,13 @@ public class UpgradeEventHandler : MonoBehaviour
 		_currentMaxSpeed.text = $"Current Speed: {_playerController.DefaultSpeed}";
 	}
 
+
 	public void OpenUpgradePanel()
 	{
 		if (_playerController.Level % 5 == 0)
 		{
 			_upgradePanelReference.SetActive(true);
+			_upgradePanelTitle.text = $"Choose a stat to upgrade:\nUpgrade available: {DataPreserve.numberOfUpgrades}";
 			Time.timeScale = 0;
 		}
 	}
