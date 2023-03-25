@@ -7,37 +7,49 @@ public class MainMenuEventHandler : MonoBehaviour
     private bool _isLoadable = false;
     private GameObject _mainMenuPanel;
     private GameObject _confirmationPanel;
-    private GameObject _loadButton;
+    private GameObject _loadGameButton;
     private string _saveFile;
+
+
 
     private void Awake()
     {
-        _saveFile = Application.persistentDataPath + "/savedata.json";
+        InstaniateData();
+    }
+
+
+
+    private void InstaniateData()
+    {
+        _saveFile = DataPreserve.saveFilePath;
+
 
         _isLoadable = File.Exists(_saveFile) && !string.IsNullOrWhiteSpace(
-            File.ReadAllText(_saveFile).Replace("{", string.Empty).Replace("}", string.Empty)
-            );
+            File.ReadAllText(_saveFile).Replace("{", string.Empty).Replace("}", string.Empty));
 
         _mainMenuPanel = GameObject.Find("MainMenuPanel");
+        _loadGameButton = GameObject.Find("LoadGameButton");
         _confirmationPanel = GameObject.Find("ConfirmationPanel");
-        _loadButton = GameObject.Find("LoadGameButton");
+
         _confirmationPanel.SetActive(false);
-        _loadButton.SetActive(_isLoadable);
+        _loadGameButton.SetActive(_isLoadable);
     }
+
 
     public void NewGameButtonClick()
     {
         DataPreserve.isNewGame = true;
         DataPreserve.characterSelectedNumber = 1;
-        File.Delete(_saveFile);
         SceneManager.LoadScene("SceneChooseCharacter");
     }
 
-    public void LoadButtonClick()
+
+    public void LoadGameButtonClick()
     {
         DataPreserve.isNewGame = false;
         SceneManager.LoadScene(2);
     }
+
 
     public void QuitButtonClick()
     {
@@ -48,11 +60,19 @@ public class MainMenuEventHandler : MonoBehaviour
         }
     }
 
+
+    /// <summary>
+    /// Quit game (app)
+    /// </summary>
     public void QuitConfirmButtonClick()
     {
         Application.Quit();
     }
 
+
+    /// <summary>
+    /// Continue staying in main menu
+    /// </summary>
     public void QuitDeclineButtonClick()
     {
         if (_mainMenuPanel != null && _confirmationPanel != null)

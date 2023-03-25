@@ -2,16 +2,16 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UpgradeEventHandler : MonoBehaviour
+public class UpgradePlayerEventHandler : MonoBehaviour
 {
 	[SerializeField]
-	private Sprite _john;
+	private Sprite _johnSprite;
 
 	[SerializeField]
-	private Sprite _ariah;
+	private Sprite _ariahSprite;
 
 	[SerializeField]
-	private Sprite _steve;
+	private Sprite _steveSprite;
 
 	private GameObject _upgradePanelReference;
 	private GameObject _displayCharacterReference;
@@ -35,27 +35,11 @@ public class UpgradeEventHandler : MonoBehaviour
 
 		_avatar = GameObject.Find("ImageAvatar").GetComponent<Image>();
 
-
-		switch (DataPreserve.characterSelectedNumber)
-		{
-			case 1:
-				_displayCharacterReference.GetComponent<Image>().sprite = _john;
-				_avatar.sprite = _john;
-				break;
-			case 2:
-				_displayCharacterReference.GetComponent<Image>().sprite = _ariah;
-				_avatar.sprite = _ariah;
-				break;
-			case 3:
-				_displayCharacterReference.GetComponent<Image>().sprite = _steve;
-				_avatar.sprite = _steve;
-				break;
-		}
-
-
 		_currentMaxHP = GameObject.Find("HealthCurrent").GetComponent<TextMeshProUGUI>();
 		_currentMaxSpeed = GameObject.Find("SpeedCurrent").GetComponent<TextMeshProUGUI>();
 		_upgradePanelTitle = GameObject.Find("PanelTitle").GetComponent<TextMeshProUGUI>();
+
+		DisplayPlayerAvatarInUpgradePanel();
 
 		_upgradePanelReference.SetActive(false);
 	}
@@ -71,12 +55,30 @@ public class UpgradeEventHandler : MonoBehaviour
 	}
 
 
+
+
+	private void DisplayPlayerAvatarInUpgradePanel()
+	{
+		Sprite currentPlayerSprite = null;
+
+		switch (DataPreserve.characterSelectedNumber)
+		{
+			case 1: currentPlayerSprite = _johnSprite; break;
+			case 2: currentPlayerSprite = _ariahSprite; break;
+			case 3: currentPlayerSprite = _steveSprite; break;
+		}
+		_avatar.sprite = _displayCharacterReference.GetComponent<Image>().sprite = currentPlayerSprite;
+	}
+
+
 	public void OpenUpgradePanel()
 	{
 		_upgradePanelReference.SetActive(true);
 		_upgradePanelTitle.text = $"Choose a stat to upgrade:\nUpgrade available: {DataPreserve.numberOfUpgrades}";
 		Time.timeScale = 0;
 	}
+
+
 
 	public void UpgradeHealthClick()
 	{
@@ -89,6 +91,8 @@ public class UpgradeEventHandler : MonoBehaviour
 		}
 	}
 
+
+
 	public void UpgradeSpeedClick()
 	{
 
@@ -100,6 +104,7 @@ public class UpgradeEventHandler : MonoBehaviour
 			_upgradePanelTitle.text = $"Choose a stat to upgrade:\nUpgrade available: {DataPreserve.numberOfUpgrades}";
 		}
 	}
+
 
 	public void UpgradeBackClick()
 	{

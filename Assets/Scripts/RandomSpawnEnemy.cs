@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-public class RandomSpawnEnermy : MonoBehaviour
+public class RandomSpawnEnemy : MonoBehaviour
 {
 	[SerializeField]
 	private Sprite[] _enemy;

@@ -3,35 +3,17 @@ using UnityEngine.SceneManagement;
 
 public class QuitEventHandler : MonoBehaviour
 {
-    // Start is called before the first frame update
-    private GameObject _pauseButton;
-
     private GameObject _pausePanel;
-
     private GameObject _confirmationPanel;
 
-    private void Awake()
+    private void Start()
     {
-        _pauseButton = GameObject.Find("PauseButton");
         _pausePanel = GameObject.Find("PausePanel");
         _confirmationPanel = GameObject.Find("ConfirmationPanel");
         _pausePanel.SetActive(false);
         _confirmationPanel.SetActive(false);
     }
 
-    public void PauseButtonClick()
-    {
-        Time.timeScale = 0;
-        _pausePanel.SetActive(true);
-        _pauseButton.SetActive(false);
-    }
-
-    public void ContinueButtonClick()
-    {
-        Time.timeScale = 1;
-        _pausePanel.SetActive(false);
-        _pauseButton.SetActive(true);
-    }
 
     public void QuitButtonClick()
     {
@@ -39,14 +21,15 @@ public class QuitEventHandler : MonoBehaviour
         _confirmationPanel.SetActive(true);
     }
 
+
+
     public void ConfirmButtonClick()
     {
-        //Save game here
-        GameObject spawner = GameObject.Find("SpawnEnemy");
         PlayableCharacterController playerController = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayableCharacterController>();
 
-        int currentSpawnLimit = spawner.GetComponent<RandomSpawnEnermy>().SpawnLimit;
         int weaponType = 0;
+        int currentSpawnLimit = GameObject.Find("SpawnEnemy").GetComponent<RandomSpawnEnemy>().SpawnLimit;
+
         switch (playerController.GunSprite.GetComponent<SpriteRenderer>().sprite.name)
         {
             case "Gun_3":
@@ -67,7 +50,7 @@ public class QuitEventHandler : MonoBehaviour
         }
         GameObject expBarReference = GameObject.Find("ExpBar");
         float currentExp = expBarReference.GetComponent<ExpBarController>().GetCurrentExp();
-        DataManager dataManager = new DataManager();
+
         SaveData saveData = new SaveData()
         {
             CharacterNumber = DataPreserve.characterSelectedNumber,
@@ -84,8 +67,11 @@ public class QuitEventHandler : MonoBehaviour
             SpawnLimit = currentSpawnLimit,
             NumberOfUpgrades = DataPreserve.numberOfUpgrades
         };
-        dataManager.SaveData(saveData);
+
+        new DataManager().SaveDataToFile(saveData);
+
         Time.timeScale = 1;
+
         DataPreserve.ResetFields();
         SceneManager.LoadScene("SceneMainMenu");
     }

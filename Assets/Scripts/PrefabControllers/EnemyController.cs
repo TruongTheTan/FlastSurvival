@@ -131,7 +131,7 @@ public class EnemyController : MonoBehaviour
             default: break;
         }
 
-        _healthBars = GameObject.Find("HealthBars");
+        _healthBars = GameObject.Find("EnemyHealthBar");
 
         GameObject healthBar = Instantiate(_healthBarPrefab, _healthBars.transform);
 

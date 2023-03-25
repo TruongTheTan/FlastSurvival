@@ -1,3 +1,4 @@
+using UnityEngine;
 /// <summary>
 /// <para>
 /// This class use for store the global data. Such as total score, survival time, character selected number,...
@@ -19,6 +20,7 @@ public class DataPreserve
     public static int gunLevel = 0;
     public static int numberOfUpgrades = 0;
     public static bool isNewGame = true;
+    public static readonly string saveFilePath = Application.persistentDataPath + "/savedata.json";
 
     public static void ResetFields()
     {

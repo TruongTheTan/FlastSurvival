@@ -108,7 +108,7 @@ public class PlayableCharacterController : MonoBehaviour
         _gun = transform.GetChild(0).gameObject;
         _gunSprite = _gun.transform.GetChild(0).gameObject;
 
-        _healthBarReference = GameObject.Find("HealthBar");
+        _healthBarReference = GameObject.Find("PlayerHealthBar");
         _healthBarReference.GetComponent<PlayerHealthBarController>().SetData(_maxHealthPoint);
 
         _expBarReference = GameObject.Find("ExpBar");
@@ -116,12 +116,12 @@ public class PlayableCharacterController : MonoBehaviour
 
         _changeWeaponText = GameObject.Find("ChangeWeaponText").GetComponent<TextMeshProUGUI>();
 
-        _changeWeaponButton = GameObject.Find("Picked").GetComponent<Button>();
+        _changeWeaponButton = GameObject.Find("PlayerPickUpGunButton").GetComponent<Button>();
         _changeWeaponButton.image.gameObject.SetActive(false);
 
-        _speedBuffTimerText = GameObject.Find("SpeedBuffTimer").GetComponent<Text>();
-        _invicibleTimerText = GameObject.Find("InvicibleTimer").GetComponent<Text>();
-        _levelText = GameObject.Find("CurrentLevel").GetComponent<Text>();
+        _speedBuffTimerText = GameObject.Find("SpeedBuffTimerText").GetComponent<Text>();
+        _invicibleTimerText = GameObject.Find("InvicibleTimerText").GetComponent<Text>();
+        _levelText = GameObject.Find("CurrentLevelText").GetComponent<Text>();
 
 
         _speedBuffTimerText.text = string.Empty;
@@ -373,7 +373,7 @@ public class PlayableCharacterController : MonoBehaviour
                 if (_level % 5 == 0)
                 {
                     DataPreserve.numberOfUpgrades++;
-                    GameObject.Find("PlayGameSceneEventHandler").GetComponent<UpgradeEventHandler>().OpenUpgradePanel();
+                    GameObject.Find("PlayGameSceneEventHandler").GetComponent<UpgradePlayerEventHandler>().OpenUpgradePanel();
                 }
             }
         }

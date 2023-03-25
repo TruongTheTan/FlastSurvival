@@ -1,3 +1,10 @@
+
+
+/// <summary>
+/// <para>
+/// This class use for specifying the what data needed to be Save and Load
+/// </para>
+/// </summary>
 [System.Serializable]
 public class SaveData
 {
