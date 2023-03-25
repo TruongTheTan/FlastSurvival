@@ -9,9 +9,21 @@ public class PlayableCharacterController : MonoBehaviour
 {
     private Joystick _joystick;
 
+    #region Player stats (HP, movement speed, level)
+
     private float _horizontalMove = 0f;
     private float _verticalMove = 0f;
     private float _moveAmount = 2.5f;
+
+    private int _currentHealthPoint = 100;
+
+    private int _maxHealthPoint = 100;
+    private int _maxExp = 100;
+    private int _level = 1;
+
+    #endregion
+
+    #region Gun's and bullet sprite
 
     [SerializeField]
     private GameObject _bulletPrefab;
@@ -28,26 +40,31 @@ public class PlayableCharacterController : MonoBehaviour
     [SerializeField]
     private Sprite _assaultRifle;
 
+    #endregion
+
     private GameObject _gun;
     private GameObject _gunSprite;
 
-    private GameObject _healthBarReference;
-    private GameObject _expBarReference;
+
+    private ExpBarController _expBarController;
+    private PlayerHealthBarController _healthBarController;
+
+
     private Collider2D _collision;
     private Button _changeWeaponButton;
+    private TextMeshProUGUI _changeWeaponText;
+
     private readonly string[] _weaponTypes = { "Sword", "Pistol", "ShotGun", "AssaultRifle" };
     private bool _isMeleeing = false;
 
-    //Default current and max health to 100
-    private int _currentHealthPoint = 100;
 
-    private int _maxHealthPoint = 100;
-    private int _maxExp = 100;
-    private int _level = 1;
 
-    private TextMeshProUGUI _changeWeaponText;
 
-    private float _defaultSpeed = 2.5f;// reset to default speed when no longer effect by Speed up item
+    private Text _levelText;
+    private float _defaultSpeed = 2.5f;// Use for resetint to default speed when no longer effected by Speed up item
+
+    #region Support Items fields
+
     private bool _pickedUpInvicibleItem = false;
 
     private float _invicibleTimer = 0;
@@ -55,16 +72,17 @@ public class PlayableCharacterController : MonoBehaviour
 
     private Text _speedBuffTimerText;
     private Text _invicibleTimerText;
-    private Text _levelText;
 
+    #endregion
 
+    #region Getter, Setter player value
     public int CurrentHealthPoint { get => _currentHealthPoint; }
     public int MaxHealthPoint { get => _maxHealthPoint; set => _maxHealthPoint = value; }
     public int MaxExp { get => _maxExp; set => _maxExp = value; }
     public int Level { get => _level; set => _level = value; }
     public GameObject GunSprite { get => _gunSprite; }
     public float DefaultSpeed { get => _defaultSpeed; }
-
+    #endregion
 
 
     private void Awake()
@@ -99,25 +117,28 @@ public class PlayableCharacterController : MonoBehaviour
     {
         if (_joystick == null)
             _joystick = FindObjectOfType<Joystick>();
-#if UNITY_ANDROID || UNITY_IOS
+
         _joystick.gameObject.SetActive(true);
-#else
-        //joystick.gameObject.SetActive(false);
-#endif
+
 
         _gun = transform.GetChild(0).gameObject;
         _gunSprite = _gun.transform.GetChild(0).gameObject;
 
-        _healthBarReference = GameObject.Find("PlayerHealthBar");
-        _healthBarReference.GetComponent<PlayerHealthBarController>().SetData(_maxHealthPoint);
 
-        _expBarReference = GameObject.Find("ExpBar");
-        _expBarReference.GetComponent<ExpBarController>().SetData(_maxExp);
+        _healthBarController = GameObject.Find("PlayerHealthBar").GetComponent<PlayerHealthBarController>();
+        _healthBarController.SetData(_maxHealthPoint);
+
+
+        _expBarController = GameObject.Find("ExpBar").GetComponent<ExpBarController>();
+        _expBarController.SetData(_maxExp);
+
 
         _changeWeaponText = GameObject.Find("ChangeWeaponText").GetComponent<TextMeshProUGUI>();
 
+
         _changeWeaponButton = GameObject.Find("PlayerPickUpGunButton").GetComponent<Button>();
         _changeWeaponButton.image.gameObject.SetActive(false);
+
 
         _speedBuffTimerText = GameObject.Find("SpeedBuffTimerText").GetComponent<Text>();
         _invicibleTimerText = GameObject.Find("InvicibleTimerText").GetComponent<Text>();
@@ -127,7 +148,6 @@ public class PlayableCharacterController : MonoBehaviour
         _speedBuffTimerText.text = string.Empty;
         _invicibleTimerText.text = string.Empty;
         _levelText.text = $"Lv: {_level}";
-
     }
 
     private void CharacterMovement()
@@ -280,14 +300,14 @@ public class PlayableCharacterController : MonoBehaviour
         }
     }
 
-    public void Damaged(int damage)
+    public void GetDamaged(int damage)
     {
         if (!_pickedUpInvicibleItem)
         {
             if (_currentHealthPoint > damage)
             {
                 _currentHealthPoint -= damage;
-                _healthBarReference.GetComponent<PlayerHealthBarController>().OnHealthChanged(_currentHealthPoint);
+                _healthBarController.OnHealthChanged(_currentHealthPoint);
             }
             else
             {
@@ -295,6 +315,9 @@ public class PlayableCharacterController : MonoBehaviour
             }
         }
     }
+
+
+    #region Support items effect
 
     public void HealthBuff(int among)
     {
@@ -306,7 +329,7 @@ public class PlayableCharacterController : MonoBehaviour
         {
             _currentHealthPoint = _maxHealthPoint;
         }
-        _healthBarReference.GetComponent<PlayerHealthBarController>().OnHealthChanged(_currentHealthPoint);
+        _healthBarController.OnHealthChanged(_currentHealthPoint);
     }
 
     public void SpeedBuff()
@@ -358,7 +381,7 @@ public class PlayableCharacterController : MonoBehaviour
     {
         if (_level <= 15)
         {
-            float currentExp = _expBarReference.GetComponent<ExpBarController>().GetCurrentExp();
+            float currentExp = _expBarController.GetCurrentExp();
 
             // Increase player level, upgrade available number when XP is full filled
             if (currentExp >= _maxExp)
@@ -367,7 +390,7 @@ public class PlayableCharacterController : MonoBehaviour
                 _maxExp += 50;
                 _levelText.text = $"Lv: {_level}";
 
-                _expBarReference.GetComponent<ExpBarController>().SetData(_maxExp);
+                _expBarController.SetData(_maxExp);
 
                 // Increase upgrade available number
                 if (_level % 5 == 0)
@@ -390,6 +413,8 @@ public class PlayableCharacterController : MonoBehaviour
     {
         _defaultSpeed = _moveAmount += 0.5f;
     }
+
+    #endregion
 
     private void InstantiatePlayerStatBySelectedNumber()
     {
@@ -419,38 +444,42 @@ public class PlayableCharacterController : MonoBehaviour
 
         _levelText.text = $"Lv: {_level}";
 
+        string weaponType = "";
+        Sprite weaponSprite = null;
+
         switch (data.WeaponType)
         {
             case 0:
-                _gunSprite.GetComponent<SpriteRenderer>().sprite = _sword;
-                GunController.UpgradeGunByLevel("Sword");
+                weaponType = "Sword";
+                weaponSprite = _sword;
                 break;
 
             case 1:
-                _gunSprite.GetComponent<SpriteRenderer>().sprite = _pistol;
-                GunController.UpgradeGunByLevel("Pistol");
+                weaponType = "Pistol";
+                weaponSprite = _pistol;
                 break;
 
             case 2:
-                _gunSprite.GetComponent<SpriteRenderer>().sprite = _shotgun;
-                GunController.UpgradeGunByLevel("ShotGun");
+                weaponType = "ShotGun";
+                weaponSprite = _shotgun;
                 break;
 
             case 3:
-                _gunSprite.GetComponent<SpriteRenderer>().sprite = _assaultRifle;
-                GunController.UpgradeGunByLevel("AssaultRifle");
+                weaponType = "AssaultRifle";
+                weaponSprite = _assaultRifle;
                 break;
         }
 
-        _healthBarReference = GameObject.Find("HealthBar");
-        _healthBarReference.GetComponent<PlayerHealthBarController>().SetData(_maxHealthPoint);
+        _gunSprite.GetComponent<SpriteRenderer>().sprite = weaponSprite;
+        GunController.UpgradeGunByLevel(weaponType);
 
-        _expBarReference = GameObject.Find("ExpBar");
-        _expBarReference.GetComponent<ExpBarController>().SetData(_maxExp);
-        _expBarReference.GetComponent<ExpBarController>().OnExpChanged(data.CurrentExp);
+        _healthBarController.SetData(_maxHealthPoint);
+
+        _expBarController.SetData(_maxExp);
+        _expBarController.OnExpChanged(data.CurrentExp);
 
         _defaultSpeed = _moveAmount = data.CurrentSpeed;
 
-        Damaged(_maxHealthPoint - data.CurrentHealth);
+        GetDamaged(_maxHealthPoint - data.CurrentHealth);
     }
 }

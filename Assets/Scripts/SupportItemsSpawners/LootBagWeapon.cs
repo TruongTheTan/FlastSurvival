@@ -15,16 +15,16 @@ public class LootBagWeapon : MonoBehaviour
 
     private LootWeapon GetLootWeapon()
     {
-        int randomize = Random.Range(1, 4);
-        LootWeapon weapon = _weapons.FirstOrDefault(x => x.DropIndicator == randomize);
-        return weapon;
+        return _weapons.FirstOrDefault(x => x.DropIndicator == Random.Range(1, 4));
     }
 
-    public void InstantiateLoot(Vector3 position)
+    public void DropGun(Vector3 position)
     {
         LootWeapon drop = GetLootWeapon();
         GameObject weaponDropped = Instantiate(_lootWeaponPrefab, position, Quaternion.identity);
         weaponDropped.GetComponent<SpriteRenderer>().sprite = drop.WeaponSprite;
         weaponDropped.tag = drop.WeaponTag;
+
+        Destroy(weaponDropped, 5);
     }
 }

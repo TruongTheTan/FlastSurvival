@@ -6,7 +6,7 @@ public class EnemyBulletController : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            collision.gameObject.GetComponent<PlayableCharacterController>().Damaged(20);
+            collision.gameObject.GetComponent<PlayableCharacterController>().GetDamaged(20);
             Destroy(gameObject);
         }
     }

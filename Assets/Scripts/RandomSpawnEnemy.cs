@@ -39,7 +39,7 @@ public class RandomSpawnEnemy : MonoBehaviour
 	{
 		Vector3 postion = GenerateRandomPosition();
 		postion += GameObject.FindGameObjectWithTag("Player").transform.position;
-		int randomSprite = UnityEngine.Random.Range(0, _enemy.Length);
+		int randomSprite = Random.Range(0, _enemy.Length);
 
 		GameObject enemyPrefab = Resources.Load<GameObject>("Prefabs/Enemy/Enemy");
 		SpriteRenderer playerSpriteRenderer = enemyPrefab.GetComponent<SpriteRenderer>();

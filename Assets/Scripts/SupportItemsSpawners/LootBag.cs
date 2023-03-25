@@ -3,13 +3,16 @@ using UnityEngine;
 
 public class LootBag : MonoBehaviour
 {
-	public GameObject dropPrabs;
-	public List<Loot> loots = new List<Loot>();
+	private GameObject dropPrabs;
+	private readonly List<Loot> loots = new List<Loot>();
+
+
 
 	Loot GetDroppedItem()
 	{
 		int randomNumber = Random.Range(1, 101);
 		List<Loot> pos = new List<Loot>();
+
 		foreach (Loot item in loots)
 		{
 			if (randomNumber <= item.dropChange)
@@ -24,7 +27,10 @@ public class LootBag : MonoBehaviour
 		}
 		return null;
 	}
-	public void InstantiateLoot(Vector3 spawn)
+
+
+
+	public void DropSupportItem(Vector3 spawn)
 	{
 		Loot droped = GetDroppedItem();
 		if (droped != null)
@@ -40,6 +46,8 @@ public class LootBag : MonoBehaviour
 			Despawn(supportItem);
 		}
 	}
+
+
 
 
 	private void Despawn(GameObject supportItem)

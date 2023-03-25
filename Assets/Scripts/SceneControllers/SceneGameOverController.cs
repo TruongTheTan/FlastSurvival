@@ -18,16 +18,16 @@ public class SceneGameOverController : MonoBehaviour
 		_survivedTimeText = GameObject.Find("SurvivedTimeText").GetComponent<TextMeshProUGUI>();
 
 		_totalScoreText.text = _totalScorePrefix + DataPreserve.totalScore.ToString();
-		_survivedTimeText.text = _survivedTimePrefix + DisplayTotalSurvivedTime();
+		DisplayTotalSurvivedTime();
 	}
 
 
 
-	private string DisplayTotalSurvivedTime()
+	private void DisplayTotalSurvivedTime()
 	{
 		int minutes = Mathf.FloorToInt(DataPreserve.survivedTime / 60f);
 		int seconds = Mathf.FloorToInt(DataPreserve.survivedTime % 60f);
-		return minutes.ToString() + ":" + seconds.ToString();
+		_survivedTimeText.text = _survivedTimePrefix + minutes.ToString() + ":" + seconds.ToString();
 	}
 
 

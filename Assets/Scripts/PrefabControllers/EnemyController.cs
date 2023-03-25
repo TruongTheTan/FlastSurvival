@@ -74,7 +74,7 @@ public class EnemyController : MonoBehaviour
 
     private void Attack()
     {
-        _player.GetComponent<PlayableCharacterController>().Damaged(_damage);
+        _player.GetComponent<PlayableCharacterController>().GetDamaged(_damage);
     }
 
     IEnumerator RangedAttack()
@@ -165,7 +165,7 @@ public class EnemyController : MonoBehaviour
         }
         else
         {
-            Drop();
+            DropGunOrItem();
 
             DataPreserve.totalEnemiesOnMap--;
             DataPreserve.enemyKilled++;
@@ -180,18 +180,17 @@ public class EnemyController : MonoBehaviour
         }
     }
 
-    private void Drop()
+    private void DropGunOrItem()
     {
         if (Random.Range(1, 10) == 5)
         {
+            // Drop items
             if (Random.Range(0, 1f) > 0.5f)
-            {
-                GetComponent<LootBag>().InstantiateLoot(transform.position);
-            }
+                GetComponent<LootBag>().DropSupportItem(transform.position);
+
+            // Drop guns
             else
-            {
-                GetComponent<LootBagWeapon>().InstantiateLoot(transform.position);
-            }
+                GetComponent<LootBagWeapon>().DropGun(transform.position);
         }
     }
 
