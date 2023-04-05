@@ -7,6 +7,18 @@
 - Open **Unity Hub**, choose cloned folder and open. Start run the program in **Unity Editor**.
 - Open project by double click on **.sln** file extension for coding.
 
+## About game play:
+- Has **3 playable characters** (Difference characteristics).
+- Has **4 types of enemies** (Difference characteristics). 2 with close combat, 1 explode when touch to player and 1 ranged combat.
+- **Spawn random** enemy types and random position on map.
+- Choose 1 of those players and survive.
+- Player pick up support items **(healing, speed, invicible time)**, items disappear after an interval.
+- Pick up new guns **(When enemies die)** on map or upgrade guns **(Pick up the same gun)**. Gun disappear after an interval.
+- Player can be upgraded **(has required XP)** by killing enemies **(upgrade Health, speed)**.
+- Calculate total score and survival time **(player die or quit game)**.
+- Can **Load** and **Save** game.
+
+
 ## About working process:
 
 - Admin (Leader) will create issues.
