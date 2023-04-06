@@ -2,7 +2,7 @@
 
 **Link Specification Document**: https://docs.google.com/document/d/1xH_3iCeVr8Zoa7HDHJ24ARz4UVyDZbvxfNVhrt9VAaw
 
-**Link game on CH-Play**: https://play.google.com/store/apps/detailsid=com.SE1615_G5.FlastSurvival&fbclid=IwAR0kHZf60jOX4TkVjD_aQkRWDdryO4d4CE57MaP1Y_LT3nqRVQkYtY1kBWY
+**Link game on CH-Play**: https://play.google.com/store/apps/details?id=com.SE1615_G5.FlastSurvival
 
 ## Installation:
 - Clone the project repository.
