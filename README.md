@@ -2,6 +2,8 @@
 
 **Link Specification Document**: https://docs.google.com/document/d/1xH_3iCeVr8Zoa7HDHJ24ARz4UVyDZbvxfNVhrt9VAaw
 
+**Link game on CH-Play**: https://play.google.com/store/apps/detailsid=com.SE1615_G5.FlastSurvival&fbclid=IwAR0kHZf60jOX4TkVjD_aQkRWDdryO4d4CE57MaP1Y_LT3nqRVQkYtY1kBWY
+
 ## Installation:
 - Clone the project repository.
 - Open **Unity Hub**, choose cloned folder and open. Start run the program in **Unity Editor**.
