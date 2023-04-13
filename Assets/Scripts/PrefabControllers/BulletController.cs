@@ -31,7 +31,7 @@ public class BulletController : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Enemy"))
         {
-            collision.gameObject.GetComponent<EnemyController>().Damaged(_damage);
+            collision.gameObject.GetComponent<EnemyController>().ReceiveDamaged(_damage);
         }
 
         if (!_isBounceable || _bounceTimes <= 0)

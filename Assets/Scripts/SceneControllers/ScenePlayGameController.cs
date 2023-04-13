@@ -15,15 +15,38 @@ public class ScenePlayGameController : MonoBehaviour
 	[SerializeField]
 	private Sprite SteveSprite;
 
+
+	[SerializeField]
+	private Sprite _sword;
+
+	[SerializeField]
+	private Sprite _pistol;
+
+	[SerializeField]
+	private Sprite _shotgun;
+
+	[SerializeField]
+	private Sprite _assaultRifle;
+
+
 	private GameObject _playableCharacter;
 
 
 
 	private void Awake()
 	{
+		DataPreserve.SWORD_SPRITE = _sword;
+		DataPreserve.PISTOL_SPRITE = _pistol;
+		DataPreserve.SHOTGUN_SPRITE = _shotgun;
+		DataPreserve.ASSAULT_RIFLE_SPRITE = _assaultRifle;
+
+
+		DataPreserve.JOHN_SPRITE = JohnSprite;
+		DataPreserve.ARIAH_SPRITE = AriahSprite;
+		DataPreserve.STEVE_SPRITE = SteveSprite;
+
 		if (DataPreserve.isNewGame)
 			NewGame();
-
 		else
 			LoadGame();
 	}
@@ -63,9 +86,6 @@ public class ScenePlayGameController : MonoBehaviour
 		playerController.LoadSaveData(saveData);
 		enemySpawnController.SetSpawnLimit(saveData.SpawnLimit);
 	}
-
-
-
 
 
 	private void SpawnCharacterBySelectionNumber()

@@ -49,7 +49,7 @@ public class QuitEventHandler : MonoBehaviour
                 break;
         }
         GameObject expBarReference = GameObject.Find("ExpBar");
-        float currentExp = expBarReference.GetComponent<ExpBarController>().GetCurrentExp();
+        float currentExp = expBarReference.GetComponent<ExpBarController>().GetCurrentExp;
 
         SaveData saveData = new SaveData()
         {

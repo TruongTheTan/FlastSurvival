@@ -4,27 +4,10 @@ using UnityEngine.UI;
 
 public class UpgradePlayerEventHandler : MonoBehaviour
 {
-	[SerializeField]
-	private Sprite _johnSprite;
-
-	[SerializeField]
-	private Sprite _ariahSprite;
-
-	[SerializeField]
-	private Sprite _steveSprite;
-
-	private GameObject _upgradePanelReference;
-	private GameObject _displayCharacterReference;
-
 	private Image _avatar;
-
-	private TextMeshProUGUI _currentMaxHP;
-	private TextMeshProUGUI _currentMaxSpeed;
-	private TextMeshProUGUI _upgradePanelTitle;
-
-
-	private GameObject _player;
 	private PlayableCharacterController _playerController;
+	private GameObject _player, _upgradePanelReference, _displayCharacterReference;
+	private TextMeshProUGUI _currentMaxHP, _currentMaxSpeed, _upgradePanelTitle;
 
 
 
@@ -63,9 +46,9 @@ public class UpgradePlayerEventHandler : MonoBehaviour
 
 		switch (DataPreserve.characterSelectedNumber)
 		{
-			case 1: currentPlayerSprite = _johnSprite; break;
-			case 2: currentPlayerSprite = _ariahSprite; break;
-			case 3: currentPlayerSprite = _steveSprite; break;
+			case 1: currentPlayerSprite = DataPreserve.JOHN_SPRITE; break;
+			case 2: currentPlayerSprite = DataPreserve.ARIAH_SPRITE; break;
+			case 3: currentPlayerSprite = DataPreserve.STEVE_SPRITE; break;
 		}
 		_avatar.sprite = _displayCharacterReference.GetComponent<Image>().sprite = currentPlayerSprite;
 	}
@@ -86,8 +69,9 @@ public class UpgradePlayerEventHandler : MonoBehaviour
 		{
 			_playerController.UpgradeHealth();
 			DataPreserve.numberOfUpgrades--;
+
 			_currentMaxHP.text = $"Current Health: {_playerController.MaxHealthPoint}";
-			_upgradePanelTitle.text = $"Choose a stat to upgrade:\nUpgrade available: {DataPreserve.numberOfUpgrades}";
+			_upgradePanelTitle.text = $"Choose a stat to upgrade:\nUpgrade {DataPreserve.numberOfUpgrades}";
 		}
 	}
 
@@ -99,9 +83,11 @@ public class UpgradePlayerEventHandler : MonoBehaviour
 		if (DataPreserve.numberOfUpgrades > 0)
 		{
 			_playerController.UpgradeSpeed();
+
 			DataPreserve.numberOfUpgrades--;
+
 			_currentMaxSpeed.text = $"Current Speed: {_playerController.DefaultSpeed}";
-			_upgradePanelTitle.text = $"Choose a stat to upgrade:\nUpgrade available: {DataPreserve.numberOfUpgrades}";
+			_upgradePanelTitle.text = $"Choose a stat to upgrade:\nUpgrade {DataPreserve.numberOfUpgrades}";
 		}
 	}
 

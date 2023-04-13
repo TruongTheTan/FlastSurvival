@@ -5,6 +5,7 @@ public class ExpBarController : MonoBehaviour
 {
 	private float _maxExp;
 	private Slider _expBarSlider;
+	public float GetCurrentExp { get => _expBarSlider.value; }
 
 	public void SetData(float maxExp)
 	{
@@ -19,8 +20,5 @@ public class ExpBarController : MonoBehaviour
 		_expBarSlider.value += enemyPoint;
 		Debug.Log($"Enemy current point: ({enemyPoint})");
 	}
-	public float GetCurrentExp()
-	{
-		return _expBarSlider.value;
-	}
+
 }

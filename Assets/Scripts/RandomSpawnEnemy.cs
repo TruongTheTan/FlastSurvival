@@ -30,6 +30,7 @@ public class RandomSpawnEnemy : MonoBehaviour
 		_mainCamera = Camera.main;
 		_cameraHeight = 2f * _mainCamera.orthographicSize;
 		_cameraWidth = _cameraHeight * _mainCamera.aspect;
+
 		StartCoroutine(nameof(SpawnEnemyByRound));
 		StartCoroutine(nameof(IncreaseEnemySpawnLimit));
 		StartCoroutine(nameof(EnemyRushEvent));

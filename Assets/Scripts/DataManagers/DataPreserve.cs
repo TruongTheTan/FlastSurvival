@@ -22,6 +22,32 @@ public class DataPreserve
     public static bool isNewGame = true;
     public static readonly string saveFilePath = Application.persistentDataPath + "/savedata.json";
 
+
+    #region Gun's tags
+    public static readonly string SWORD_TAG = "Sword";
+    public static readonly string PISTOL_TAG = "Pistol";
+    public static readonly string SHOTGUN_TAG = "ShotGun";
+    public static readonly string ASSAULT_RIFLE_TAG = "AssaultRifle";
+    #endregion
+
+
+
+    #region Gun's sprites
+    public static Sprite SWORD_SPRITE;
+    public static Sprite PISTOL_SPRITE;
+    public static Sprite SHOTGUN_SPRITE;
+    public static Sprite ASSAULT_RIFLE_SPRITE;
+    #endregion
+
+
+
+
+    #region Playable character's sprites
+    public static Sprite JOHN_SPRITE;
+    public static Sprite ARIAH_SPRITE;
+    public static Sprite STEVE_SPRITE;
+    #endregion
+
     public static void ResetFields()
     {
         characterSelectedNumber = 1;
@@ -35,4 +61,6 @@ public class DataPreserve
         isNewGame = true;
         numberOfUpgrades = 0;
     }
+
+
 }

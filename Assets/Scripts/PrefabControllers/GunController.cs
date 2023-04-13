@@ -2,72 +2,109 @@ using UnityEngine;
 
 public class GunController : MonoBehaviour
 {
-    [SerializeField]
-    private Sprite _swordSprite;
 
-    [SerializeField]
-    private Sprite _pistolSprite;
-
-    [SerializeField]
-    private Sprite _shotGunSprite;
-
-    [SerializeField]
-    private Sprite _assaultRifleSprite;
+    private GameObject _bulletPrefab;
+    private PlayableCharacterController _playableCharacterController;
 
     private static int _currentGunLevel = 0;
     private static int _newGunDamage = 0;
     private int _currentDamgeMelee = 0;
 
-    // Start is called before the first frame update
-    void Awake()
+
+    private void Start()
     {
-        if (DataPreserve.isNewGame)
-        {
-            RandomGunType();
-        }
+        RandomGunType();
+        _bulletPrefab = Resources.Load<GameObject>("Prefabs/Bullet/Bullet_4");
     }
+
+
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Enemy") && gameObject.GetComponent<SpriteRenderer>().sprite.name == "Gun_3")
+
+        GameObject enemy = collision.gameObject;
+        bool isCollideToEnemy = enemy.CompareTag("Enemy");
+
+        // Player close combat (melee)
+        if (isCollideToEnemy && GetComponent<SpriteRenderer>().sprite.name == DataPreserve.SWORD_SPRITE.name)
+            enemy.GetComponent<EnemyController>().ReceiveDamaged(_currentDamgeMelee);
+
+        /*
+        else if (!isCollideToEnemy && DataPreserve.gunLevel == 3)
         {
-            collision.gameObject.GetComponent<EnemyController>().Damaged(_currentDamgeMelee);
+            Destroy(enemy);
+        }*/
+    }
+
+
+
+
+
+    public void Shoot()
+    {
+        string currentGunSpriteName = GetComponent<SpriteRenderer>().sprite.name;
+
+        if (currentGunSpriteName != DataPreserve.SWORD_SPRITE.name)
+        {
+            GameObject bullet = Instantiate(_bulletPrefab, transform.position, transform.rotation);
+
+            switch (currentGunSpriteName)
+            {
+                case "Gun_10":
+                    bullet.tag = DataPreserve.PISTOL_TAG;
+                    break;
+
+                case "Gun_5":
+                    bullet.tag = DataPreserve.ASSAULT_RIFLE_TAG;
+                    break;
+
+                case "Gun_11":
+                    bullet.tag = DataPreserve.SHOTGUN_TAG;
+                    break;
+            }
         }
-        else if (!collision.gameObject.CompareTag("Enemy") && DataPreserve.gunLevel == 3)
+        else if (currentGunSpriteName == DataPreserve.SWORD_SPRITE.name && !_playableCharacterController.IsMeleeing)
         {
-            Destroy(collision.gameObject);
+            StartCoroutine(nameof(_playableCharacterController.Melee));
         }
     }
 
+
+
     private void RandomGunType()
     {
-        string weaponTagName = "";
-        Sprite weaponSprite = null;
-        switch (Random.Range(1, 4))
+        if (DataPreserve.isNewGame)
         {
-            case 1:
-                weaponTagName = "Pistol";
-                weaponSprite = _pistolSprite;
-                break;
+            string weaponTagName = "";
+            Sprite weaponSprite = null;
 
-            case 2:
-                weaponTagName = "AssaultRifle";
-                weaponSprite = _assaultRifleSprite;
-                break;
 
-            case 3:
-                weaponTagName = "ShotGun";
-                weaponSprite = _shotGunSprite;
-                break;
+            switch (Random.Range(1, 4))
+            {
+                case 1:
+                    weaponTagName = DataPreserve.PISTOL_TAG;
+                    weaponSprite = DataPreserve.PISTOL_SPRITE;
+                    break;
 
-            case 4:
-                weaponTagName = "Sword";
-                weaponSprite = _swordSprite;
-                _currentDamgeMelee = 70;
-                break;
+                case 2:
+                    weaponTagName = DataPreserve.ASSAULT_RIFLE_TAG;
+                    weaponSprite = DataPreserve.ASSAULT_RIFLE_SPRITE;
+                    break;
+
+                case 3:
+                    weaponTagName = DataPreserve.SHOTGUN_TAG;
+                    weaponSprite = DataPreserve.SHOTGUN_SPRITE;
+                    break;
+
+                case 4:
+                    weaponTagName = DataPreserve.SWORD_TAG;
+                    weaponSprite = DataPreserve.SWORD_SPRITE;
+                    _currentDamgeMelee = 70;
+                    break;
+            }
+            transform.tag = weaponTagName;
+            transform.GetComponent<SpriteRenderer>().sprite = weaponSprite;
         }
-        transform.tag = weaponTagName;
-        transform.GetComponent<SpriteRenderer>().sprite = weaponSprite;
     }
 
     public static void UpgradeGunByLevel(string weaponTagName)
@@ -88,6 +125,8 @@ public class GunController : MonoBehaviour
         }
     }
 
+
+    #region Upgrade guns
     private static void UpgradeSword()
     {
         switch (_currentGunLevel)
@@ -97,6 +136,8 @@ public class GunController : MonoBehaviour
             case 3: _newGunDamage = 100; break;
         }
     }
+
+
 
     private static void UpgradePistol()
     {
@@ -108,6 +149,8 @@ public class GunController : MonoBehaviour
         }
     }
 
+
+
     private static void UpgradeAssaultRifle()
     {
         switch (_currentGunLevel)
@@ -117,6 +160,8 @@ public class GunController : MonoBehaviour
             case 3: _newGunDamage = 80; break;
         }
     }
+
+
 
     private static void UpgradeShotGun()
     {
@@ -128,4 +173,5 @@ public class GunController : MonoBehaviour
             case 3: _newGunDamage = 105; break;
         }
     }
+    #endregion
 }
