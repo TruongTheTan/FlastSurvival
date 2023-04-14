@@ -15,7 +15,8 @@ public class RandomSpawnEnemy : MonoBehaviour
 	private int _gameRoundSeconds;
 	private int _gameRound;
 
-	public int SpawnLimit { get => _spawnLimit; }
+	public int SpawnLimit { get => _spawnLimit; set => _spawnLimit = value; }
+
 
 	private void Awake()
 	{
@@ -82,11 +83,6 @@ public class RandomSpawnEnemy : MonoBehaviour
 		}
 	}
 
-	public void SetSpawnLimit(int spawnLimit)
-	{
-		_spawnLimit = spawnLimit;
-	}
-
 	private Vector3 GenerateRandomPosition()
 	{
 		Vector3 cameraPosition = _mainCamera.transform.position;
@@ -115,4 +111,5 @@ public class RandomSpawnEnemy : MonoBehaviour
 		}
 		return positon;
 	}
+
 }

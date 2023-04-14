@@ -1,17 +1,21 @@
 using System.Collections;
+using Assets.Scripts.FactoryMenthod;
+using Assets.Scripts.Models;
 using UnityEngine;
 
-public class EnemyController : MonoBehaviour, ICombatable
+
+public class EnemyController : AbstractCharacter, ICharacter
 {
 	#region Game Objects reference
 
-	[SerializeField]
 	private GameObject _bullet;
 	private GameObject _player;
 	private GameObject _healthBars;
+
+	[SerializeField]
 	private GameObject _healthBarPrefab;
+
 	private GameObject _currentHealthBar;
-	private GameObject _expBarController;
 
 	#endregion
 
@@ -22,8 +26,6 @@ public class EnemyController : MonoBehaviour, ICombatable
 	private int _point = 0;
 	private bool _isRanged;
 	private int _damage = 0;
-	private float _speed = 0;
-	private float _health = 100f;
 
 	#endregion
 
@@ -38,23 +40,13 @@ public class EnemyController : MonoBehaviour, ICombatable
 
 
 
-	private const string FODDER_JOE_SPRITE_NAME = "Fodder Joe";
-	private const string BLITZ_JOK_SPRITE_NAME = "Blitz Jok";
-	private const string BIG_DADDY_SPRITE_NAME = "Big Daddy";
-	private const string EXPLOSIVE_DAVE_SPRITE_NAME = "Explosive Dave";
-
-
-
-	// Start is called before the first frame update
-	private void Awake()
-	{
-		_isRanged = false;
-		_player = GameObject.FindGameObjectWithTag("Player");
-		_expBarController = GameObject.Find("ExpBar");
-	}
 
 	void Start()
 	{
+		_isRanged = false;
+		_player = GameObject.FindGameObjectWithTag("Player");
+		_expBarController = GameObject.Find("ExpBar").GetComponent<ExpBarController>();
+
 		InstantiateData();
 		if (_isRanged) { StartCoroutine(nameof(RangedAttack)); }
 	}
@@ -69,7 +61,7 @@ public class EnemyController : MonoBehaviour, ICombatable
 	private void FixedUpdate()
 	{
 		Vector3 direction = (_player.transform.position - transform.position).normalized;
-		gameObject.transform.Translate(_speed * Time.deltaTime * direction, Space.Self);
+		gameObject.transform.Translate(_speedAmount * Time.deltaTime * direction, Space.Self);
 		_timer += 1;
 	}
 
@@ -113,52 +105,40 @@ public class EnemyController : MonoBehaviour, ICombatable
 
 
 
-
 	private void InstantiateData()
 	{
-		//IEnemyFactory enemyFactory = null;
-		string enemySpriteName = string.Empty;
-
 		Sprite currentSprite = gameObject.GetComponent<SpriteRenderer>().sprite;
 
 		switch (currentSprite.name)
 		{
-			case FODDER_JOE_SPRITE_NAME:
-				enemySpriteName = FODDER_JOE_SPRITE_NAME;
-				//enemyFactory = new CloseCombatEnemyFactory();
-				_health = 100f;
-				_speed = 2;
+			case DataPreserve.FODDER_JOE_SPRITE_NAME:
+				_health = 100;
+				_speedAmount = 2;
 				_damage = 20;
 				_point = 10;
+
 				break;
 
-			case BLITZ_JOK_SPRITE_NAME:
-				enemySpriteName = BLITZ_JOK_SPRITE_NAME;
+			case DataPreserve.BLITZ_JOK_SPRITE_NAME:
 
-				_health = 75f;
-				_speed = 2.5f;
+				_health = 75;
+				_speedAmount = 2.5f;
 				_damage = 20;
 				_point = 20;
 				_isRanged = true;
-				//enemyFactory = new RangedEnemyFactory();
 				break;
 
-			case BIG_DADDY_SPRITE_NAME:
-				enemySpriteName = BIG_DADDY_SPRITE_NAME;
+			case DataPreserve.BIG_DADDY_SPRITE_NAME:
 
-				//enemyFactory = new CloseCombatEnemyFactory();
-				_health = 200f;
-				_speed = 1f;
+				_health = 200;
+				_speedAmount = 1f;
 				_damage = 50;
 				_point = 30;
 				break;
 
-			case EXPLOSIVE_DAVE_SPRITE_NAME:
-				enemySpriteName = EXPLOSIVE_DAVE_SPRITE_NAME;
-
-				//enemyFactory = new CloseCombatEnemyFactory();
-				_health = 50f;
-				_speed = 3;
+			case DataPreserve.EXPLOSIVE_DAVE_SPRITE_NAME:
+				_health = 50;
+				_speedAmount = 3;
 				_damage = 100;
 				_point = 5;
 				break;
@@ -187,7 +167,7 @@ public class EnemyController : MonoBehaviour, ICombatable
 
 
 
-	public IEnumerator Melee()
+	public override IEnumerator Melee()
 	{
 		// Attack player every second
 		while (_isCollidingPlayer)
@@ -198,7 +178,7 @@ public class EnemyController : MonoBehaviour, ICombatable
 	}
 
 
-	public void ReceiveDamaged(int damage)
+	public override void ReceiveDamaged(int damage)
 	{
 		if (_health > damage)
 		{
@@ -214,7 +194,7 @@ public class EnemyController : MonoBehaviour, ICombatable
 			DataPreserve.totalScore += (_point * DataPreserve.enemyKilled) + (DataPreserve.gameRound * 100);
 
 			// Add XP to player
-			_expBarController.GetComponent<ExpBarController>().OnExpChanged(_point);
+			_expBarController.OnExpChanged(_point);
 			_player.GetComponent<PlayableCharacterController>().UpgradePlayerLevel();
 
 			Destroy(_currentHealthBar);

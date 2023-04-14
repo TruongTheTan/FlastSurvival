@@ -48,6 +48,15 @@ public class DataPreserve
     public static Sprite STEVE_SPRITE;
     #endregion
 
+
+
+
+    public const string FODDER_JOE_SPRITE_NAME = "Fodder Joe";
+    public const string BLITZ_JOK_SPRITE_NAME = "Blitz Jok";
+    public const string BIG_DADDY_SPRITE_NAME = "Big Daddy";
+    public const string EXPLOSIVE_DAVE_SPRITE_NAME = "Explosive Dave";
+
+
     public static void ResetFields()
     {
         characterSelectedNumber = 1;

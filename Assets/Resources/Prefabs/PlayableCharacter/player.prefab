@@ -130,10 +130,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 72b0a701e95d9444c93111d5cca93bbd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _swordSprite: {fileID: -175038746, guid: 5db19cb3d094a614ca767925dd25c2ef, type: 3}
-  _pistolSprite: {fileID: -656580334, guid: 5db19cb3d094a614ca767925dd25c2ef, type: 3}
-  _shotGunSprite: {fileID: -1046595183, guid: 5db19cb3d094a614ca767925dd25c2ef, type: 3}
-  _assaultRifleSprite: {fileID: 546575571, guid: 5db19cb3d094a614ca767925dd25c2ef, type: 3}
 --- !u!1 &112920631977259805
 GameObject:
   m_ObjectHideFlags: 0
@@ -175,11 +171,11 @@ GameObject:
   m_Component:
   - component: {fileID: 253011606423441597}
   - component: {fileID: 115276007685770541}
-  - component: {fileID: -3404942182480524883}
   - component: {fileID: 9161976539573321140}
   - component: {fileID: -6774685643383674732}
+  - component: {fileID: 6152464598589774308}
   m_Layer: 0
-  m_Name: player
+  m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -253,23 +249,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &-3404942182480524883
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8474394109558213255}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 57248153124f03141bbcf9d9d384fe4b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _bulletPrefab: {fileID: 1478471017295240097, guid: ef036884d6f575242848857832772e6b, type: 3}
-  _sword: {fileID: -175038746, guid: 5db19cb3d094a614ca767925dd25c2ef, type: 3}
-  _pistol: {fileID: -656580334, guid: 5db19cb3d094a614ca767925dd25c2ef, type: 3}
-  _shotgun: {fileID: -1046595183, guid: 5db19cb3d094a614ca767925dd25c2ef, type: 3}
-  _assaultRifle: {fileID: 546575571, guid: 5db19cb3d094a614ca767925dd25c2ef, type: 3}
 --- !u!61 &9161976539573321140
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -317,3 +296,15 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
+--- !u!114 &6152464598589774308
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8474394109558213255}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57248153124f03141bbcf9d9d384fe4b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

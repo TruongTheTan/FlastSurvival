@@ -1,50 +1,56 @@
 ﻿using System.Collections;
 using System.Linq;
+using Assets.Scripts.Models;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class PlayableCharacterController : MonoBehaviour, ICombatable
+public class PlayableCharacterController : AbstractCharacter
 {
-	private Joystick _joystick;
-
-	private float _horizontalMove = 0f;
-	private float _verticalMove = 0f;
-	private float _moveAmount = 2.5f;
-
-
 	private GameObject _gun;
 	private GameObject _gunSprite;
-
-	private GameObject _healthBarReference;
-	private GameObject _expBarReference;
 	private Collider2D _collision;
-	private Button _changeWeaponButton;
-	private bool _isMeleeing = false;
 
-	//Default current and max health to 100
-	private int _currentHealthPoint = 100;
+	#region Player's stats
 
-	private int _maxHealthPoint = 100;
-	private int _maxExp = 100;
 	private int _level = 1;
-
-	private TextMeshProUGUI _changeWeaponText;
-
+	private int _maxExp = 100;
+	private float _verticalMove = 0;
+	private bool _isMeleeing = false;
+	private int _maxHealthPoint = 100;
+	private float _horizontalMove = 0;
 	private float _defaultSpeed = 2.5f;// reset to default speed when no longer effect by Speed up item
-	private bool _pickedUpInvicibleItem = false;
+
+	#endregion
+
+
+	#region Effect items
 
 	private float _invicibleTimer = 0;
 	private float _speedBuffTimer = 0;
+	private bool _pickedUpInvicibleItem = false;
 
+	#endregion
+
+	#region GUI Objects
+
+	private Joystick _joystick;
+
+	private Text _levelText;
 	private Text _speedBuffTimerText;
 	private Text _invicibleTimerText;
-	private Text _levelText;
+	private Button _changeWeaponButton;
+	private TextMeshProUGUI _changeWeaponText;
+
+	#endregion
+
+	private PlayerHealthBarController _playerHealthBarController;
+
 
 	#region Gets, Sets
 
-	public int CurrentHealthPoint { get => _currentHealthPoint; }
+	public int CurrentHealthPoint { get => _health; }
 	public int MaxHealthPoint { get => _maxHealthPoint; set => _maxHealthPoint = value; }
 	public int MaxExp { get => _maxExp; set => _maxExp = value; }
 	public int Level { get => _level; set => _level = value; }
@@ -79,38 +85,37 @@ public class PlayableCharacterController : MonoBehaviour, ICombatable
 
 	private void OnTriggerExit2D(Collider2D collision)
 	{
-		_changeWeaponButton.image.gameObject.SetActive(false);
-		DataPreserve.allowPickUpWeapon = false;
 		_changeWeaponText.text = "Change";
+		DataPreserve.allowPickUpWeapon = false;
+		_changeWeaponButton.image.gameObject.SetActive(false);
 	}
 
 	private void InstantiateData()
 	{
 		if (_joystick == null)
 			_joystick = FindObjectOfType<Joystick>();
-#if UNITY_ANDROID || UNITY_IOS
+
 		_joystick.gameObject.SetActive(true);
-#else
-        //joystick.gameObject.SetActive(false);
-#endif
 
 		_gun = transform.GetChild(0).gameObject;
 		_gunSprite = _gun.transform.GetChild(0).gameObject;
 
-		_healthBarReference = GameObject.Find("HealthBar");
-		_healthBarReference.GetComponent<PlayerHealthBarController>().SetHealthPoint(_maxHealthPoint);
 
-		_expBarReference = GameObject.Find("ExpBar");
-		_expBarReference.GetComponent<ExpBarController>().SetData(_maxExp);
+		_playerHealthBarController = GameObject.Find("PlayerHealthBar").GetComponent<PlayerHealthBarController>();
+		_playerHealthBarController.SetHealthPoint(_maxHealthPoint);
+
+		_expBarController = GameObject.Find("ExpBar").GetComponent<ExpBarController>();
+		_expBarController.SetData(_maxExp);
+
 
 		_changeWeaponText = GameObject.Find("ChangeWeaponText").GetComponent<TextMeshProUGUI>();
 
-		_changeWeaponButton = GameObject.Find("Picked").GetComponent<Button>();
+		_changeWeaponButton = GameObject.Find("PlayerPickUpGunButton").GetComponent<Button>();
 		_changeWeaponButton.image.gameObject.SetActive(false);
 
-		_speedBuffTimerText = GameObject.Find("SpeedBuffTimer").GetComponent<Text>();
-		_invicibleTimerText = GameObject.Find("InvicibleTimer").GetComponent<Text>();
-		_levelText = GameObject.Find("CurrentLevel").GetComponent<Text>();
+		_speedBuffTimerText = GameObject.Find("SpeedBuffTimerText").GetComponent<Text>();
+		_invicibleTimerText = GameObject.Find("InvicibleTimerText").GetComponent<Text>();
+		_levelText = GameObject.Find("CurrentLevelText").GetComponent<Text>();
 
 
 		_speedBuffTimerText.text = string.Empty;
@@ -124,8 +129,9 @@ public class PlayableCharacterController : MonoBehaviour, ICombatable
 		_horizontalMove = _joystick.Horizontal;
 		_verticalMove = _joystick.Vertical;
 
+
 		Vector3 movement = new Vector3(_horizontalMove, _verticalMove);
-		transform.Translate(_moveAmount * Time.deltaTime * movement.normalized);
+		transform.Translate(_speedAmount * Time.deltaTime * movement.normalized);
 	}
 
 	private void AimToClosestEnemy()
@@ -164,34 +170,39 @@ public class PlayableCharacterController : MonoBehaviour, ICombatable
 		}
 	}
 
-	public void Shoot()
+	public override void Shoot()
 	{
 		_gunSprite.GetComponent<GunController>().Shoot();
 	}
 
-	public IEnumerator Melee()
+	public override IEnumerator Melee()
 	{
 		_isMeleeing = true;
 		BoxCollider2D collider = _gunSprite.AddComponent<BoxCollider2D>();
+
 		collider.size = new Vector2(0.6761025f, 0.235665f);
 		collider.isTrigger = true;
+
 		Vector3 currentAngle = _gun.transform.eulerAngles;
 		Vector3 up = new Vector3(currentAngle.x, currentAngle.y, currentAngle.z + 90);
 		Vector3 down = new Vector3(currentAngle.x, currentAngle.y, currentAngle.z - 90);
 
-		float elapsedTime = 0;
 		float duration = 1;
+		float elapsedTime = 0;
 
 		while (elapsedTime < duration)
 		{
 			elapsedTime += Time.deltaTime;
+
 			float t = Mathf.Clamp01(elapsedTime / duration);
 			_gun.transform.eulerAngles = Vector3.Lerp(up, down, t * 5);
+
 			yield return null;
 		}
 
-		_gun.transform.eulerAngles = currentAngle;
 		_isMeleeing = false;
+		_gun.transform.eulerAngles = currentAngle;
+
 		Destroy(collider);
 		StopCoroutine(nameof(Melee));
 	}
@@ -246,14 +257,14 @@ public class PlayableCharacterController : MonoBehaviour, ICombatable
 		}
 	}
 
-	public void ReceiveDamaged(int damage)
+	public override void ReceiveDamaged(int damage)
 	{
 		if (!_pickedUpInvicibleItem)
 		{
-			if (_currentHealthPoint > damage)
+			if (_health > damage)
 			{
-				_currentHealthPoint -= damage;
-				_healthBarReference.GetComponent<PlayerHealthBarController>().OnHealthChanged(_currentHealthPoint);
+				_health -= damage;
+				_playerHealthBarController.OnHealthChanged(_health);
 			}
 			else
 			{
@@ -264,20 +275,17 @@ public class PlayableCharacterController : MonoBehaviour, ICombatable
 
 	public void HealthBuff(int among)
 	{
-		if (_maxHealthPoint > _currentHealthPoint)
-		{
-			_currentHealthPoint += among;
-		}
+		if (_maxHealthPoint > _health)
+			_health += among;
 		else
-		{
-			_currentHealthPoint = _maxHealthPoint;
-		}
-		_healthBarReference.GetComponent<PlayerHealthBarController>().OnHealthChanged(_currentHealthPoint);
+			_health = _maxHealthPoint;
+
+		_playerHealthBarController.OnHealthChanged(_health);
 	}
 
 	public void SpeedBuff()
 	{
-		_moveAmount += _moveAmount / 100 * 20;
+		_speedAmount += _speedAmount / 100 * 20;
 		_speedBuffTimer = 10;
 	}
 
@@ -292,7 +300,7 @@ public class PlayableCharacterController : MonoBehaviour, ICombatable
 		// Reset speed to deafault
 		else
 		{
-			_moveAmount = _defaultSpeed;
+			_speedAmount = _defaultSpeed;
 			_speedBuffTimerText.text = string.Empty;
 		}
 	}
@@ -324,7 +332,7 @@ public class PlayableCharacterController : MonoBehaviour, ICombatable
 	{
 		if (_level <= 15)
 		{
-			float currentExp = _expBarReference.GetComponent<ExpBarController>().GetCurrentExp;
+			float currentExp = _expBarController.GetCurrentExp;
 
 			// Increase player level, upgrade available number when XP is full filled
 			if (currentExp >= _maxExp)
@@ -333,7 +341,7 @@ public class PlayableCharacterController : MonoBehaviour, ICombatable
 				_maxExp += 50;
 				_levelText.text = $"Lv: {_level}";
 
-				_expBarReference.GetComponent<ExpBarController>().SetData(_maxExp);
+				_expBarController.SetData(_maxExp);
 
 				// Increase upgrade available number
 				if (_level % 5 == 0)
@@ -354,26 +362,29 @@ public class PlayableCharacterController : MonoBehaviour, ICombatable
 
 	public void UpgradeSpeed()
 	{
-		_defaultSpeed = _moveAmount += 0.5f;
+		_defaultSpeed = _speedAmount += 0.5f;
 	}
 
 	private void InstantiatePlayerStatBySelectedNumber()
 	{
 		int selectedNumber = DataPreserve.characterSelectedNumber;
 
+		_health = 100;
+		_speedAmount = 2.5f;
+
 		if (selectedNumber == 2)
 		{
-			_moveAmount = 3;
+			_speedAmount = 3;
 			_maxHealthPoint = 75;
-			_currentHealthPoint = 75;
+			_health = 75;
 		}
 		else if (selectedNumber == 3)
 		{
-			_moveAmount = 2;
+			_speedAmount = 2;
 			_maxHealthPoint = 125;
-			_currentHealthPoint = 125;
+			_health = 125;
 		}
-		_defaultSpeed = _moveAmount;
+		_defaultSpeed = _speedAmount;
 	}
 
 	public void LoadSaveData(SaveData data)
@@ -409,14 +420,12 @@ public class PlayableCharacterController : MonoBehaviour, ICombatable
 				break;
 		}
 
-		_healthBarReference = GameObject.Find("HealthBar");
-		_healthBarReference.GetComponent<PlayerHealthBarController>().SetHealthPoint(_maxHealthPoint);
+		_playerHealthBarController.SetHealthPoint(_maxHealthPoint);
 
-		_expBarReference = GameObject.Find("ExpBar");
-		_expBarReference.GetComponent<ExpBarController>().SetData(_maxExp);
-		_expBarReference.GetComponent<ExpBarController>().OnExpChanged(data.CurrentExp);
+		_expBarController.SetData(_maxExp);
+		_expBarController.OnExpChanged(data.CurrentExp);
 
-		_defaultSpeed = _moveAmount = data.CurrentSpeed;
+		_defaultSpeed = _speedAmount = data.CurrentSpeed;
 
 		ReceiveDamaged(_maxHealthPoint - data.CurrentHealth);
 	}

@@ -116,6 +116,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ff516839c2c5e3459df0597f53f129e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _bullet: {fileID: 1288185619382509625, guid: 6958aaca75162bd4c8a1f18b85198c4d, type: 3}
   _healthBarPrefab: {fileID: 6151046435492452311, guid: 682adfb7bf833fa439385ea69c5e6ba1, type: 3}
 --- !u!114 &-9185722066525296768
 MonoBehaviour:
@@ -129,11 +130,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f01b228ac12e85f47902e56a67919a8f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dropPrabs: {fileID: 5130528221489908828, guid: f1bf46acee43de746af3677946ee2561, type: 3}
-  loots:
-  - {fileID: 11400000, guid: a73fcd6262813e840a640e7160628fcd, type: 2}
-  - {fileID: 11400000, guid: d1babcc856ca81b4ca67b88403a9ffda, type: 2}
-  - {fileID: 11400000, guid: 1456972e1379b2b4f93a829811971015, type: 2}
 --- !u!114 &-5510498416068189260
 MonoBehaviour:
   m_ObjectHideFlags: 0

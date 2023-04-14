@@ -84,7 +84,7 @@ public class ScenePlayGameController : MonoBehaviour
 
 
 		playerController.LoadSaveData(saveData);
-		enemySpawnController.SetSpawnLimit(saveData.SpawnLimit);
+		enemySpawnController.SpawnLimit = saveData.SpawnLimit;
 	}
 
 
