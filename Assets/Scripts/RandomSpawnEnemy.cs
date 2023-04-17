@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using Assets.Scripts.FactoryMethod;
 using UnityEngine;
 
 public class RandomSpawnEnemy : MonoBehaviour
@@ -6,16 +7,22 @@ public class RandomSpawnEnemy : MonoBehaviour
 	[SerializeField]
 	private Sprite[] _enemy;
 
+	GameObject _rangedEnemyPrefab;
+	GameObject _closeCombatEnemyPrefab;
+
 	private float _cameraHeight;
 	private float _cameraWidth;
 	private float _enermySpawnOffset = 1f;
 	private Camera _mainCamera;
-	private GameObject _newEnermy;
 	private int _spawnLimit;
 	private int _gameRoundSeconds;
 	private int _gameRound;
 
+	private AbstractEnemyFactory _enemyFactory;
+
 	public int SpawnLimit { get => _spawnLimit; set => _spawnLimit = value; }
+
+
 
 
 	private void Awake()
@@ -23,19 +30,28 @@ public class RandomSpawnEnemy : MonoBehaviour
 		_gameRound = 0;
 		_gameRoundSeconds = 60;
 		_spawnLimit = 60;
-	}
 
-	// Start is called before the first frame update
-	void Start()
-	{
 		_mainCamera = Camera.main;
 		_cameraHeight = 2f * _mainCamera.orthographicSize;
 		_cameraWidth = _cameraHeight * _mainCamera.aspect;
 
-		StartCoroutine(nameof(SpawnEnemyByRound));
-		StartCoroutine(nameof(IncreaseEnemySpawnLimit));
-		StartCoroutine(nameof(EnemyRushEvent));
+		_rangedEnemyPrefab = Resources.Load<GameObject>("Prefabs/Enemy/RangedEnemy");
+		_closeCombatEnemyPrefab = Resources.Load<GameObject>("Prefabs/Enemy/CloseCombatEnemy");
+
 	}
+
+
+
+	// Start is called before the first frame update
+	void Start()
+	{
+		StartCoroutine(SpawnEnemyByRound());
+		StartCoroutine(IncreaseEnemySpawnLimit());
+		StartCoroutine(EnemyRushEvent());
+	}
+
+
+
 
 	private void SpawnEnemy()
 	{
@@ -43,13 +59,34 @@ public class RandomSpawnEnemy : MonoBehaviour
 		postion += GameObject.FindGameObjectWithTag("Player").transform.position;
 		int randomSprite = Random.Range(0, _enemy.Length);
 
-		GameObject enemyPrefab = Resources.Load<GameObject>("Prefabs/Enemy/Enemy");
-		SpriteRenderer playerSpriteRenderer = enemyPrefab.GetComponent<SpriteRenderer>();
+
+
+		SpriteRenderer playerSpriteRenderer = _closeCombatEnemyPrefab.GetComponent<SpriteRenderer>();
 		playerSpriteRenderer.sprite = _enemy[randomSprite];
 
-		_newEnermy = Instantiate(enemyPrefab, postion, Quaternion.identity);
-		_newEnermy.transform.parent = transform;
+
+		GameObject enemyPrefab;
+		switch (playerSpriteRenderer.sprite.name)
+		{
+			case DataPreserve.FODDER_JOE_SPRITE_NAME:
+			case DataPreserve.BIG_DADDY_SPRITE_NAME:
+			case DataPreserve.EXPLOSIVE_DAVE_SPRITE_NAME:
+
+				enemyPrefab = _closeCombatEnemyPrefab;
+				_enemyFactory = GetComponent<CloseCombatEnemyFactory>();
+				break;
+
+
+			default:
+				enemyPrefab = _rangedEnemyPrefab;
+				_enemyFactory = GetComponent<RangedCombatEnemyFactory>();
+				break;
+
+		}
+		_enemyFactory.CreateEnemy(enemyPrefab, postion).transform.parent = transform;
 	}
+
+
 
 	IEnumerator SpawnEnemyByRound()
 	{
@@ -61,6 +98,8 @@ public class RandomSpawnEnemy : MonoBehaviour
 		}
 	}
 
+
+
 	IEnumerator IncreaseEnemySpawnLimit()
 	{
 		while (_spawnLimit < 150)
@@ -70,6 +109,8 @@ public class RandomSpawnEnemy : MonoBehaviour
 			_spawnLimit += 10;
 		}
 	}
+
+
 
 	IEnumerator EnemyRushEvent()
 	{
@@ -82,6 +123,9 @@ public class RandomSpawnEnemy : MonoBehaviour
 			}
 		}
 	}
+
+
+
 
 	private Vector3 GenerateRandomPosition()
 	{

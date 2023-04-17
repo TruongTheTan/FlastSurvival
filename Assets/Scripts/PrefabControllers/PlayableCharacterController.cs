@@ -1,12 +1,11 @@
 ﻿using System.Collections;
 using System.Linq;
-using Assets.Scripts.Models;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class PlayableCharacterController : AbstractCharacter
+public class PlayableCharacterController : MonoBehaviour
 {
 	private GameObject _gun;
 	private GameObject _gunSprite;
@@ -16,9 +15,11 @@ public class PlayableCharacterController : AbstractCharacter
 
 	private int _level = 1;
 	private int _maxExp = 100;
+	private int _health = 100;
+	private float _speedAmount = 0;
 	private float _verticalMove = 0;
 	private bool _isMeleeing = false;
-	private int _maxHealthPoint = 100;
+	private int _maxHealthPoint = 500;
 	private float _horizontalMove = 0;
 	private float _defaultSpeed = 2.5f;// reset to default speed when no longer effect by Speed up item
 
@@ -45,6 +46,7 @@ public class PlayableCharacterController : AbstractCharacter
 
 	#endregion
 
+	private ExpBarController _expBarController;
 	private PlayerHealthBarController _playerHealthBarController;
 
 
@@ -170,12 +172,12 @@ public class PlayableCharacterController : AbstractCharacter
 		}
 	}
 
-	public override void Shoot()
+	public void Shoot()
 	{
 		_gunSprite.GetComponent<GunController>().Shoot();
 	}
 
-	public override IEnumerator Melee()
+	public IEnumerator Melee()
 	{
 		_isMeleeing = true;
 		BoxCollider2D collider = _gunSprite.AddComponent<BoxCollider2D>();
@@ -257,7 +259,7 @@ public class PlayableCharacterController : AbstractCharacter
 		}
 	}
 
-	public override void ReceiveDamaged(int damage)
+	public void ReceiveDamaged(int damage)
 	{
 		if (!_pickedUpInvicibleItem)
 		{
@@ -369,20 +371,20 @@ public class PlayableCharacterController : AbstractCharacter
 	{
 		int selectedNumber = DataPreserve.characterSelectedNumber;
 
-		_health = 100;
+		_health = 500;
 		_speedAmount = 2.5f;
 
 		if (selectedNumber == 2)
 		{
 			_speedAmount = 3;
-			_maxHealthPoint = 75;
-			_health = 75;
+			_maxHealthPoint = 500;
+			_health = 500;
 		}
 		else if (selectedNumber == 3)
 		{
 			_speedAmount = 2;
-			_maxHealthPoint = 125;
-			_health = 125;
+			_maxHealthPoint = 500;
+			_health = 500;
 		}
 		_defaultSpeed = _speedAmount;
 	}

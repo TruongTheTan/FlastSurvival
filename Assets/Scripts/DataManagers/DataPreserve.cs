@@ -24,10 +24,10 @@ public class DataPreserve
 
 
     #region Gun's tags
-    public static readonly string SWORD_TAG = "Sword";
-    public static readonly string PISTOL_TAG = "Pistol";
-    public static readonly string SHOTGUN_TAG = "ShotGun";
-    public static readonly string ASSAULT_RIFLE_TAG = "AssaultRifle";
+    public const string SWORD_TAG = "Sword";
+    public const string PISTOL_TAG = "Pistol";
+    public const string SHOTGUN_TAG = "ShotGun";
+    public const string ASSAULT_RIFLE_TAG = "AssaultRifle";
     #endregion
 
 

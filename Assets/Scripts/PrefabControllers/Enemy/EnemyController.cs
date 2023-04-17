@@ -1,52 +1,41 @@
 using System.Collections;
-using Assets.Scripts.FactoryMenthod;
-using Assets.Scripts.Models;
 using UnityEngine;
 
-
-public class EnemyController : AbstractCharacter, ICharacter
+public class EnemyController : MonoBehaviour
 {
-	#region Game Objects reference
-
-	private GameObject _bullet;
+	private float _speed;
 	private GameObject _player;
-	private GameObject _healthBars;
 
 	[SerializeField]
 	private GameObject _healthBarPrefab;
 
+	private GameObject _healthBars;
 	private GameObject _currentHealthBar;
 
-	#endregion
-
-
-
-	#region Enemy stats
-
-	private int _point = 0;
-	private bool _isRanged;
+	private float _health = 100f;
 	private int _damage = 0;
-
-	#endregion
-
-
-
+	private bool _isCollidingPlayer = false;
 
 	private float _timer;
-	private float _distance;
+	private int _point;
 	private Vector3 _directionToPlayer;
-	private bool _isCollidingPlayer = false;
+
+	private GameObject _bullet;
+	private bool _isRanged;
+	private float _distance;
 	private HealthBarController _healthBarController;
+	private GameObject _expBarController;
 
-
-
-
-	void Start()
+	// Start is called before the first frame update
+	private void Awake()
 	{
 		_isRanged = false;
 		_player = GameObject.FindGameObjectWithTag("Player");
-		_expBarController = GameObject.Find("ExpBar").GetComponent<ExpBarController>();
+		_expBarController = GameObject.Find("ExpBar");
+	}
 
+	void Start()
+	{
 		InstantiateData();
 		if (_isRanged) { StartCoroutine(nameof(RangedAttack)); }
 	}
@@ -61,7 +50,7 @@ public class EnemyController : AbstractCharacter, ICharacter
 	private void FixedUpdate()
 	{
 		Vector3 direction = (_player.transform.position - transform.position).normalized;
-		gameObject.transform.Translate(_speedAmount * Time.deltaTime * direction, Space.Self);
+		gameObject.transform.Translate(_speed * Time.deltaTime * direction, Space.Self);
 		_timer += 1;
 	}
 
@@ -70,7 +59,7 @@ public class EnemyController : AbstractCharacter, ICharacter
 		if (collision.gameObject == _player)
 		{
 			_isCollidingPlayer = true;
-			StartCoroutine(Melee());
+			StartCoroutine(DealDamageEverySecond());
 			ExplodeWhenCollideToPlayer();
 		}
 	}
@@ -83,7 +72,10 @@ public class EnemyController : AbstractCharacter, ICharacter
 		}
 	}
 
-
+	private void Attack()
+	{
+		_player.GetComponent<PlayableCharacterController>().ReceiveDamaged(_damage);
+	}
 
 	IEnumerator RangedAttack()
 	{
@@ -101,44 +93,37 @@ public class EnemyController : AbstractCharacter, ICharacter
 		}
 	}
 
-
-
-
-
 	private void InstantiateData()
 	{
 		Sprite currentSprite = gameObject.GetComponent<SpriteRenderer>().sprite;
 
 		switch (currentSprite.name)
 		{
-			case DataPreserve.FODDER_JOE_SPRITE_NAME:
-				_health = 100;
-				_speedAmount = 2;
+			case "Fodder Joe":
+				_health = 100f;
+				_speed = 2;
 				_damage = 20;
 				_point = 10;
-
 				break;
 
-			case DataPreserve.BLITZ_JOK_SPRITE_NAME:
-
-				_health = 75;
-				_speedAmount = 2.5f;
+			case "Blitz Jok":
+				_health = 75f;
+				_speed = 2.5f;
 				_damage = 20;
 				_point = 20;
 				_isRanged = true;
 				break;
 
-			case DataPreserve.BIG_DADDY_SPRITE_NAME:
-
-				_health = 200;
-				_speedAmount = 1f;
+			case "Big Daddy":
+				_health = 200f;
+				_speed = 1f;
 				_damage = 50;
 				_point = 30;
 				break;
 
-			case DataPreserve.EXPLOSIVE_DAVE_SPRITE_NAME:
-				_health = 50;
-				_speedAmount = 3;
+			case "Explosive Dave":
+				_health = 50f;
+				_speed = 3;
 				_damage = 100;
 				_point = 5;
 				break;
@@ -146,8 +131,7 @@ public class EnemyController : AbstractCharacter, ICharacter
 			default: break;
 		}
 
-
-		_healthBars = GameObject.Find("EnemyHealthBar");
+		_healthBars = GameObject.Find("HealthBars");
 
 		GameObject healthBar = Instantiate(_healthBarPrefab, _healthBars.transform);
 
@@ -163,22 +147,16 @@ public class EnemyController : AbstractCharacter, ICharacter
 		DataPreserve.totalEnemiesOnMap++;
 	}
 
-
-
-
-
-	public override IEnumerator Melee()
+	IEnumerator DealDamageEverySecond()
 	{
-		// Attack player every second
 		while (_isCollidingPlayer)
 		{
-			_player.GetComponent<PlayableCharacterController>().ReceiveDamaged(_damage);
+			Attack();
 			yield return new WaitForSeconds(1f);
 		}
 	}
 
-
-	public override void ReceiveDamaged(int damage)
+	public void Damaged(int damage)
 	{
 		if (_health > damage)
 		{
@@ -187,14 +165,14 @@ public class EnemyController : AbstractCharacter, ICharacter
 		}
 		else
 		{
-			DropGunOrItem();
+			Drop();
 
 			DataPreserve.totalEnemiesOnMap--;
 			DataPreserve.enemyKilled++;
 			DataPreserve.totalScore += (_point * DataPreserve.enemyKilled) + (DataPreserve.gameRound * 100);
 
 			// Add XP to player
-			_expBarController.OnExpChanged(_point);
+			_expBarController.GetComponent<ExpBarController>().OnExpChanged(_point);
 			_player.GetComponent<PlayableCharacterController>().UpgradePlayerLevel();
 
 			Destroy(_currentHealthBar);
@@ -202,17 +180,18 @@ public class EnemyController : AbstractCharacter, ICharacter
 		}
 	}
 
-	private void DropGunOrItem()
+	private void Drop()
 	{
 		if (Random.Range(1, 10) == 5)
 		{
-			// Drop items
 			if (Random.Range(0, 1f) > 0.5f)
+			{
 				GetComponent<LootBag>().DropSupportItem(transform.position);
-
-			// Drop guns
+			}
 			else
+			{
 				GetComponent<LootBagWeapon>().DropGun(transform.position);
+			}
 		}
 	}
 

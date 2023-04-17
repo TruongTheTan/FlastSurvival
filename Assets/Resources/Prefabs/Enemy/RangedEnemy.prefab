@@ -11,11 +11,11 @@ GameObject:
   - component: {fileID: 8537557913161991338}
   - component: {fileID: 3135622706511573344}
   - component: {fileID: -196622493752990490}
-  - component: {fileID: -3645543647558739815}
   - component: {fileID: -9185722066525296768}
   - component: {fileID: -5510498416068189260}
+  - component: {fileID: -6311364581228860354}
   m_Layer: 0
-  m_Name: Enemy
+  m_Name: RangedEnemy
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -77,7 +77,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 1769872218, guid: 2249d3b5cfd37e24f9368fa91f157e35, type: 3}
+  m_Sprite: {fileID: 1600729081, guid: 2249d3b5cfd37e24f9368fa91f157e35, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -104,20 +104,6 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0.024577571}
   serializedVersion: 2
   m_Radius: 0.36888257
---- !u!114 &-3645543647558739815
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5001590243908655695}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3ff516839c2c5e3459df0597f53f129e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _bullet: {fileID: 1288185619382509625, guid: 6958aaca75162bd4c8a1f18b85198c4d, type: 3}
-  _healthBarPrefab: {fileID: 6151046435492452311, guid: 682adfb7bf833fa439385ea69c5e6ba1, type: 3}
 --- !u!114 &-9185722066525296768
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -143,3 +129,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lootWeaponPrefab: {fileID: 7988573687397995301, guid: a4cb2a938c613fd4991f0cffdd84db01, type: 3}
+--- !u!114 &-6311364581228860354
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5001590243908655695}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6fff0545eeb0e3243b880fdd8a090b25, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _sprite: {fileID: 1600729081, guid: 2249d3b5cfd37e24f9368fa91f157e35, type: 3}

@@ -20,15 +20,18 @@ public class HealthBarController : MonoBehaviour
     {
         Vector2 newPosition = new Vector2(_objectToFollow.transform.position.x, _objectToFollow.transform.position.y + 1);
         transform.position = newPosition;
+
     }
 
 
 
-    public void SetData(GameObject follow, float maxHP)
+    public void SetData(GameObject enemyTofollow, float maxHP)
     {
+        _objectToFollow = enemyTofollow;
         _healthBar = GetComponent<Slider>();
-        _objectToFollow = follow;
+
         FollowObject();
+
         _maxHealth = maxHP;
 
         _healthBar.maxValue = _maxHealth;
