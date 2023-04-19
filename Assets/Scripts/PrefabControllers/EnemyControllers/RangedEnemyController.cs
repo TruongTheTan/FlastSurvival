@@ -26,7 +26,7 @@ public class RangedEnemyController : AbstractEnemy
 	protected override void Update()
 	{
 		base.Update();
-		_distance = Vector2.Distance(_player.transform.position, gameObject.transform.position);
+		_distance = Vector2.Distance(this._player.transform.position, this.gameObject.transform.position);
 	}
 
 
@@ -38,11 +38,11 @@ public class RangedEnemyController : AbstractEnemy
 	{
 		while (_distance <= 10)
 		{
-			Vector3 currentEnemyPosition = transform.position;
+			Vector3 currentEnemyPosition = this.transform.position;
 
-			_directionToPlayer = (_player.transform.position - currentEnemyPosition).normalized;
+			_directionToPlayer = (this._player.transform.position - currentEnemyPosition).normalized;
 
-			float angle = Mathf.Atan2(_directionToPlayer.y, _directionToPlayer.x) * Mathf.Rad2Deg;
+			float angle = Mathf.Atan2(this._directionToPlayer.y, this._directionToPlayer.x) * Mathf.Rad2Deg;
 
 
 			Quaternion enemyRotation = Quaternion.Euler(currentEnemyPosition.x, currentEnemyPosition.y, angle);

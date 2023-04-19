@@ -81,7 +81,7 @@ public class BulletController : MonoBehaviour
 
 				break;
 
-			case DataPreserve.SWORD_TAG:
+			case DataPreserve.SHOTGUN_TAG:
 
 				if (DataPreserve.gunLevel == 0)
 					SetDamage(70);

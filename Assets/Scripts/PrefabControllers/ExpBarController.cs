@@ -18,7 +18,6 @@ public class ExpBarController : MonoBehaviour
 	public void OnExpChanged(float enemyPoint)
 	{
 		_expBarSlider.value += enemyPoint;
-		Debug.Log($"Enemy current point: ({enemyPoint})");
 	}
 
 }

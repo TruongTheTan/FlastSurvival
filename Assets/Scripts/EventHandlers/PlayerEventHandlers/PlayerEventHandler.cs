@@ -4,21 +4,32 @@ using UnityEngine;
 /// </summary>
 public class PlayerEventHandler : MonoBehaviour
 {
-
+	private GameObject _player;
+	private GameObject _gunSprite;
+	private GameObject _swordSprite;
 	private PlayableCharacterController _playerController;
 
 
 	// Start is called before the first frame update
 	void Start()
 	{
-		_playerController = FindObjectOfType<PlayableCharacterController>();
+		this._player = GameObject.FindGameObjectWithTag("Player");
+		GameObject weapon = _player.transform.GetChild(0).gameObject;
+
+		this._gunSprite = weapon.transform.GetChild(0).gameObject;
+		this._swordSprite = weapon.transform.GetChild(1).gameObject;
+
+		this._playerController = _player.GetComponent<PlayableCharacterController>();
 	}
 
 
 
 	public void PlayerShootButtonClick()
 	{
-		_playerController.Shoot();
+		if (this._gunSprite.activeSelf)
+			this._playerController.Shoot();
+		else
+			this._playerController.Melee();
 	}
 
 
@@ -26,6 +37,6 @@ public class PlayerEventHandler : MonoBehaviour
 	public void PickupWeaponButtonClick()
 	{
 		DataPreserve.allowPickUpWeapon = true;
-		_playerController.PickUpGun();
+		this._playerController.PickUpGun();
 	}
 }

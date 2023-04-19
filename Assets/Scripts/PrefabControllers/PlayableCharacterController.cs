@@ -1,5 +1,5 @@
-﻿using System.Collections;
-using System.Linq;
+﻿using System.Linq;
+using Assets.Scripts.PrefabControllers.WeaponControllers;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -10,6 +10,7 @@ public class PlayableCharacterController : MonoBehaviour
 	private GameObject _gun;
 	private GameObject _gunSprite;
 	private Collider2D _collision;
+	private GameObject _swordSprite;
 
 	#region Player's stats
 
@@ -18,7 +19,6 @@ public class PlayableCharacterController : MonoBehaviour
 	private int _health = 100;
 	private float _speedAmount = 0;
 	private float _verticalMove = 0;
-	private bool _isMeleeing = false;
 	private int _maxHealthPoint = 500;
 	private float _horizontalMove = 0;
 	private float _defaultSpeed = 2.5f;// reset to default speed when no longer effect by Speed up item
@@ -46,19 +46,28 @@ public class PlayableCharacterController : MonoBehaviour
 
 	#endregion
 
+
+	#region Controllers
+
 	private ExpBarController _expBarController;
+	private RangedWeaponController _rangedWeaponController;
+	private CloseRangeWeaponController _closeWeaponController;
 	private PlayerHealthBarController _playerHealthBarController;
+
+	#endregion
 
 
 	#region Gets, Sets
 
-	public int CurrentHealthPoint { get => _health; }
-	public int MaxHealthPoint { get => _maxHealthPoint; set => _maxHealthPoint = value; }
-	public int MaxExp { get => _maxExp; set => _maxExp = value; }
-	public int Level { get => _level; set => _level = value; }
-	public GameObject GunSprite { get => _gunSprite; }
-	public float DefaultSpeed { get => _defaultSpeed; }
-	public bool IsMeleeing { get => _isMeleeing; }
+	public GameObject Gun { get => this._gun; }
+	public int CurrentHealthPoint { get => this._health; }
+	public GameObject GunSprite { get => this._gunSprite; }
+	public float DefaultSpeed { get => this._defaultSpeed; }
+	public GameObject SwordSprite { get => this._swordSprite; }
+	public int Level { get => this._level; set => this._level = value; }
+	public int MaxExp { get => this._maxExp; set => this._maxExp = value; }
+	public int MaxHealthPoint { get => this._maxHealthPoint; set => this._maxHealthPoint = value; }
+
 
 	#endregion
 
@@ -81,7 +90,7 @@ public class PlayableCharacterController : MonoBehaviour
 
 	private void OnTriggerEnter2D(Collider2D collision)
 	{
-		_collision = collision;
+		this._collision = collision;
 		PickUpGun();
 	}
 
@@ -95,46 +104,58 @@ public class PlayableCharacterController : MonoBehaviour
 	private void InstantiateData()
 	{
 		if (_joystick == null)
-			_joystick = FindObjectOfType<Joystick>();
+			this._joystick = FindObjectOfType<Joystick>();
 
 		_joystick.gameObject.SetActive(true);
 
-		_gun = transform.GetChild(0).gameObject;
-		_gunSprite = _gun.transform.GetChild(0).gameObject;
+
+		this._gun = transform.GetChild(0).gameObject;
+		this._gunSprite = _gun.transform.GetChild(0).gameObject;
+		this._swordSprite = _gun.transform.GetChild(1).gameObject;
 
 
-		_playerHealthBarController = GameObject.Find("PlayerHealthBar").GetComponent<PlayerHealthBarController>();
-		_playerHealthBarController.SetHealthPoint(_maxHealthPoint);
 
-		_expBarController = GameObject.Find("ExpBar").GetComponent<ExpBarController>();
-		_expBarController.SetData(_maxExp);
+		this._rangedWeaponController = _gunSprite.GetComponent<RangedWeaponController>();
+		this._closeWeaponController = _swordSprite.GetComponent<CloseRangeWeaponController>();
 
 
-		_changeWeaponText = GameObject.Find("ChangeWeaponText").GetComponent<TextMeshProUGUI>();
 
-		_changeWeaponButton = GameObject.Find("PlayerPickUpGunButton").GetComponent<Button>();
-		_changeWeaponButton.image.gameObject.SetActive(false);
+		this._playerHealthBarController = GameObject.Find("PlayerHealthBar").GetComponent<PlayerHealthBarController>();
+		this._playerHealthBarController.SetHealthPoint(_maxHealthPoint);
 
-		_speedBuffTimerText = GameObject.Find("SpeedBuffTimerText").GetComponent<Text>();
-		_invicibleTimerText = GameObject.Find("InvicibleTimerText").GetComponent<Text>();
-		_levelText = GameObject.Find("CurrentLevelText").GetComponent<Text>();
+		this._expBarController = GameObject.Find("ExpBar").GetComponent<ExpBarController>();
+		this._expBarController.SetData(_maxExp);
 
 
-		_speedBuffTimerText.text = string.Empty;
-		_invicibleTimerText.text = string.Empty;
-		_levelText.text = $"Lv: {_level}";
+		this._changeWeaponText = GameObject.Find("ChangeWeaponText").GetComponent<TextMeshProUGUI>();
+
+		this._changeWeaponButton = GameObject.Find("PlayerPickUpGunButton").GetComponent<Button>();
+		this._changeWeaponButton.image.gameObject.SetActive(false);
+
+		this._speedBuffTimerText = GameObject.Find("SpeedBuffTimerText").GetComponent<Text>();
+		this._invicibleTimerText = GameObject.Find("InvicibleTimerText").GetComponent<Text>();
+		this._levelText = GameObject.Find("CurrentLevelText").GetComponent<Text>();
+
+
+		this._speedBuffTimerText.text = string.Empty;
+		this._invicibleTimerText.text = string.Empty;
+		this._levelText.text = $"Lv: {_level}";
 
 	}
 
+
+
 	private void CharacterMovement()
 	{
-		_horizontalMove = _joystick.Horizontal;
-		_verticalMove = _joystick.Vertical;
+		this._horizontalMove = _joystick.Horizontal;
+		this._verticalMove = _joystick.Vertical;
 
 
 		Vector3 movement = new Vector3(_horizontalMove, _verticalMove);
 		transform.Translate(_speedAmount * Time.deltaTime * movement.normalized);
 	}
+
+
 
 	private void AimToClosestEnemy()
 	{
@@ -172,42 +193,24 @@ public class PlayableCharacterController : MonoBehaviour
 		}
 	}
 
+
+
 	public void Shoot()
 	{
-		_gunSprite.GetComponent<GunController>().Shoot();
+		if (_gunSprite.activeSelf)
+			this._rangedWeaponController.Shoot();
 	}
 
-	public IEnumerator Melee()
+
+
+	public void Melee()
 	{
-		_isMeleeing = true;
-		BoxCollider2D collider = _gunSprite.AddComponent<BoxCollider2D>();
-
-		collider.size = new Vector2(0.6761025f, 0.235665f);
-		collider.isTrigger = true;
-
-		Vector3 currentAngle = _gun.transform.eulerAngles;
-		Vector3 up = new Vector3(currentAngle.x, currentAngle.y, currentAngle.z + 90);
-		Vector3 down = new Vector3(currentAngle.x, currentAngle.y, currentAngle.z - 90);
-
-		float duration = 1;
-		float elapsedTime = 0;
-
-		while (elapsedTime < duration)
-		{
-			elapsedTime += Time.deltaTime;
-
-			float t = Mathf.Clamp01(elapsedTime / duration);
-			_gun.transform.eulerAngles = Vector3.Lerp(up, down, t * 5);
-
-			yield return null;
-		}
-
-		_isMeleeing = false;
-		_gun.transform.eulerAngles = currentAngle;
-
-		Destroy(collider);
-		StopCoroutine(nameof(Melee));
+		if (this._swordSprite.activeSelf && this._closeWeaponController.IsMeleeing == false)
+			StartCoroutine(this._closeWeaponController.Melee());
 	}
+
+
+
 
 	public void PickUpGun()
 	{
@@ -235,6 +238,18 @@ public class PlayableCharacterController : MonoBehaviour
 			// Change new or pick up the same gun (Include Upgrade)
 			if (DataPreserve.allowPickUpWeapon)
 			{
+
+
+				if (_swordSprite.activeSelf == false)
+				{
+					if (gunGameObject.CompareTag(DataPreserve.SWORD_TAG))
+					{
+						_swordSprite.SetActive(true);
+						_gunSprite.SetActive(false);
+					}
+				}
+
+
 				// Upgrade gun if pick the same gun
 				if (isTheSameGun)
 				{
@@ -244,7 +259,12 @@ public class PlayableCharacterController : MonoBehaviour
 					if (currentGunLevel >= 0 && currentGunLevel <= 3)
 					{
 						DataPreserve.gunLevel++;
-						GunController.UpgradeGunByLevel(gunGameObject.tag);
+
+						if (gunGameObject.CompareTag("Sword"))
+							_gunSprite.GetComponent<CloseRangeWeaponController>().UpgradeWeapon(gunGameObject.tag);
+
+						else
+							_gunSprite.GetComponent<RangedWeaponController>().UpgradeWeapon(gunGameObject.tag);
 					}
 				}
 				// Pick up new gun
@@ -269,9 +289,7 @@ public class PlayableCharacterController : MonoBehaviour
 				_playerHealthBarController.OnHealthChanged(_health);
 			}
 			else
-			{
 				SceneManager.LoadScene("SceneGameOver");
-			}
 		}
 	}
 
@@ -280,15 +298,15 @@ public class PlayableCharacterController : MonoBehaviour
 		if (_maxHealthPoint > _health)
 			_health += among;
 		else
-			_health = _maxHealthPoint;
+			this._health = _maxHealthPoint;
 
 		_playerHealthBarController.OnHealthChanged(_health);
 	}
 
 	public void SpeedBuff()
 	{
+		this._speedBuffTimer = 10;
 		_speedAmount += _speedAmount / 100 * 20;
-		_speedBuffTimer = 10;
 	}
 
 	private void UpdateSpeedBuffTime()
@@ -302,15 +320,15 @@ public class PlayableCharacterController : MonoBehaviour
 		// Reset speed to deafault
 		else
 		{
-			_speedAmount = _defaultSpeed;
+			this._speedAmount = _defaultSpeed;
 			_speedBuffTimerText.text = string.Empty;
 		}
 	}
 
 	public void SetInvicibleTime()
 	{
-		_pickedUpInvicibleItem = true;
-		_invicibleTimer = 10f;
+		this._pickedUpInvicibleItem = true;
+		this._invicibleTimer = 10f;
 	}
 
 	private void UpdateInvicibleTime()
@@ -324,7 +342,7 @@ public class PlayableCharacterController : MonoBehaviour
 			// Invicible time no longer effected
 			if (_invicibleTimer <= 0)
 			{
-				_pickedUpInvicibleItem = false;
+				this._pickedUpInvicibleItem = false;
 				_invicibleTimerText.text = string.Empty;
 			}
 		}
@@ -356,44 +374,51 @@ public class PlayableCharacterController : MonoBehaviour
 	}
 
 
+
 	public void UpgradeHealth()
 	{
-		_maxHealthPoint += 10;
+		this._health += 10;
+		this._maxHealthPoint += 10;
 	}
+
 
 
 	public void UpgradeSpeed()
 	{
-		_defaultSpeed = _speedAmount += 0.5f;
+		this._defaultSpeed = _speedAmount += 0.5f;
 	}
+
+
 
 	private void InstantiatePlayerStatBySelectedNumber()
 	{
 		int selectedNumber = DataPreserve.characterSelectedNumber;
 
-		_health = 500;
-		_speedAmount = 2.5f;
+		this._health = 500;
+		this._speedAmount = 2.5f;
 
 		if (selectedNumber == 2)
 		{
-			_speedAmount = 3;
-			_maxHealthPoint = 500;
-			_health = 500;
+			this._health = 500;
+			this._speedAmount = 3;
+			this._maxHealthPoint = 500;
 		}
 		else if (selectedNumber == 3)
 		{
-			_speedAmount = 2;
-			_maxHealthPoint = 500;
-			_health = 500;
+			this._health = 500;
+			this._speedAmount = 2;
+			this._maxHealthPoint = 500;
 		}
-		_defaultSpeed = _speedAmount;
+		this._defaultSpeed = _speedAmount;
 	}
+
+
 
 	public void LoadSaveData(SaveData data)
 	{
-		_maxHealthPoint = data.MaxHealth;
-		_maxExp = data.RequiredExp;
-		_level = data.Level;
+		this._maxHealthPoint = data.MaxHealth;
+		this._maxExp = data.RequiredExp;
+		this._level = data.Level;
 		DataPreserve.gunLevel = data.WeaponLevel;
 
 		_levelText.text = $"Lv: {_level}";
@@ -402,23 +427,23 @@ public class PlayableCharacterController : MonoBehaviour
 		switch (data.WeaponType)
 		{
 			case 0:
-				_gunSprite.GetComponent<SpriteRenderer>().sprite = DataPreserve.SWORD_SPRITE;
-				GunController.UpgradeGunByLevel(DataPreserve.ASSAULT_RIFLE_TAG);
+				_closeWeaponController.UpgradeWeapon(DataPreserve.SWORD_TAG);
+				_swordSprite.GetComponent<SpriteRenderer>().sprite = DataPreserve.SWORD_SPRITE;
 				break;
 
 			case 1:
+				_rangedWeaponController.UpgradeWeapon(DataPreserve.PISTOL_TAG);
 				_gunSprite.GetComponent<SpriteRenderer>().sprite = DataPreserve.PISTOL_SPRITE;
-				GunController.UpgradeGunByLevel(DataPreserve.ASSAULT_RIFLE_TAG);
 				break;
 
 			case 2:
+				_rangedWeaponController.UpgradeWeapon(DataPreserve.SHOTGUN_TAG);
 				_gunSprite.GetComponent<SpriteRenderer>().sprite = DataPreserve.SHOTGUN_SPRITE;
-				GunController.UpgradeGunByLevel(DataPreserve.ASSAULT_RIFLE_TAG);
 				break;
 
 			case 3:
+				_rangedWeaponController.UpgradeWeapon(DataPreserve.ASSAULT_RIFLE_TAG);
 				_gunSprite.GetComponent<SpriteRenderer>().sprite = DataPreserve.ASSAULT_RIFLE_SPRITE;
-				GunController.UpgradeGunByLevel(DataPreserve.ASSAULT_RIFLE_TAG);
 				break;
 		}
 
@@ -427,7 +452,7 @@ public class PlayableCharacterController : MonoBehaviour
 		_expBarController.SetData(_maxExp);
 		_expBarController.OnExpChanged(data.CurrentExp);
 
-		_defaultSpeed = _speedAmount = data.CurrentSpeed;
+		this._defaultSpeed = this._speedAmount = data.CurrentSpeed;
 
 		ReceiveDamaged(_maxHealthPoint - data.CurrentHealth);
 	}

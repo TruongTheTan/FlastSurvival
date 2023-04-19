@@ -80,10 +80,11 @@ public class GunController : MonoBehaviour
 					break;
 			}
 		}
+		/*
 		else if (currentGunSpriteName == DataPreserve.SWORD_SPRITE.name && !_playableCharacterController.IsMeleeing)
 		{
 			StartCoroutine(nameof(_playableCharacterController.Melee));
-		}
+		}*/
 	}
 
 
