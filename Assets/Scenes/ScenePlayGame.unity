@@ -226,11 +226,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11cb006af7cadfb4fb5f5aabb04d6ebd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _enemy:
-  - {fileID: 873240673, guid: 2249d3b5cfd37e24f9368fa91f157e35, type: 3}
-  - {fileID: 1769872218, guid: 2249d3b5cfd37e24f9368fa91f157e35, type: 3}
-  - {fileID: 1600729081, guid: 2249d3b5cfd37e24f9368fa91f157e35, type: 3}
-  - {fileID: -1784498269, guid: 2249d3b5cfd37e24f9368fa91f157e35, type: 3}
+  _fodderJoePrefab: {fileID: 5001590243908655695, guid: 40a5c8eb8d6cb9945ac8a369b255857c, type: 3}
+  _bigDaddyPrefab: {fileID: 5001590243908655695, guid: d439c1cce5811ca49982a57274797763, type: 3}
+  _blitzJokPrefab: {fileID: 5001590243908655695, guid: df007d1927afbec49a4361b5d39f2e72, type: 3}
+  _explosiveDavePrefab: {fileID: 5001590243908655695, guid: 9b4434a2fde500241bef616a4322f929, type: 3}
+  _enemyBulletPrefab: {fileID: 1288185619382509625, guid: 6958aaca75162bd4c8a1f18b85198c4d, type: 3}
 --- !u!114 &69548034
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3678,6 +3678,7 @@ GameObject:
   - component: {fileID: 1435115775}
   - component: {fileID: 1435115774}
   - component: {fileID: 1435115773}
+  - component: {fileID: 1435115776}
   m_Layer: 5
   m_Name: PlayerShootButton
   m_TagString: Untagged
@@ -3800,6 +3801,51 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1435115771}
   m_CullTransparentMesh: 1
+--- !u!114 &1435115776
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1435115771}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 2
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 990317552}
+          m_TargetAssemblyTypeName: PlayerEventHandler, Assembly-CSharp
+          m_MethodName: OnShootButtonPress
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - eventID: 3
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 990317552}
+          m_TargetAssemblyTypeName: PlayerEventHandler, Assembly-CSharp
+          m_MethodName: OnShootButtonUp
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &1435787333
 GameObject:
   m_ObjectHideFlags: 0

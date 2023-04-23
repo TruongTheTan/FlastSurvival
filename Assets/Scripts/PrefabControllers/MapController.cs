@@ -8,12 +8,11 @@ public class MapController : MonoBehaviour
     private GameObject[] _mapPrefabs;
     private GameObject _playerReference;
 
-    //Half the width and height of the map block
-    private float _blockHalfWidth = 60;
-
-    private float _blockHalfHeight = 60;
-
     private int _playerCurrentBlock;
+    //Half the width and height of the map block
+    private readonly float _blockHalfWidth = 60;
+    private readonly float _blockHalfHeight = 60;
+
 
     public int PlayerCurrentBlock
     {
@@ -35,12 +34,9 @@ public class MapController : MonoBehaviour
 
         InitializeMap();
         PlayerCurrentBlock = _blocks[4].GridPosition;
-    }
-
-    private void Start()
-    {
         _playerReference = GameObject.FindGameObjectWithTag("Player");
     }
+
 
     // Update is called once per frame
     private void Update()

@@ -57,6 +57,9 @@ public class DataPreserve
     public const string EXPLOSIVE_DAVE_SPRITE_NAME = "Explosive Dave";
 
 
+
+    public static GameObject player;
+
     public static void ResetFields()
     {
         characterSelectedNumber = 1;

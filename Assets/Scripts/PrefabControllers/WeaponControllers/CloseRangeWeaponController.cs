@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using Assets.Scripts.Models;
-using Assets.Scripts.PrefabControllers.Enemy;
 using UnityEngine;
 
 namespace Assets.Scripts.PrefabControllers.WeaponControllers
@@ -27,6 +26,8 @@ namespace Assets.Scripts.PrefabControllers.WeaponControllers
 
 		private void OnTriggerEnter2D(Collider2D collision)
 		{
+
+			/*
 			GameObject enemy = collision.gameObject;
 
 			// Player close combat (melee)
@@ -40,7 +41,7 @@ namespace Assets.Scripts.PrefabControllers.WeaponControllers
 
 				if (rangedEnemyController != null)
 					rangedEnemyController.ReceiveDamage(_currentDamgeMelee);
-			}
+			}*/
 
 			/*
 			else if (!isCollideToEnemy && DataPreserve.gunLevel == 3)

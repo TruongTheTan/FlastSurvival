@@ -1,14 +1,27 @@
 ﻿using System.Collections;
+using Assets.Scripts.DesignPatterns.StrategyPattern;
+using Assets.Scripts.DesignPatterns.StrategyPattern.Concreates;
 using Assets.Scripts.FactoryMethod;
+using Assets.Scripts.PrefabControllers.EnemyControllers;
 using UnityEngine;
 
 public class RandomSpawnEnemy : MonoBehaviour
 {
 	[SerializeField]
-	private Sprite[] _enemy;
+	private GameObject _fodderJoePrefab;
 
-	GameObject _rangedEnemyPrefab;
-	GameObject _closeCombatEnemyPrefab;
+	[SerializeField]
+	private GameObject _bigDaddyPrefab;
+
+	[SerializeField]
+	private GameObject _blitzJokPrefab;
+
+	[SerializeField]
+	private GameObject _explosiveDavePrefab;
+
+	[SerializeField]
+	private GameObject _enemyBulletPrefab;
+
 
 	private float _cameraHeight;
 	private float _cameraWidth;
@@ -18,6 +31,8 @@ public class RandomSpawnEnemy : MonoBehaviour
 	private int _gameRoundSeconds;
 	private int _gameRound;
 
+
+	private ICloseCombatBehavior _combatBehavior;
 	private AbstractEnemyFactory _enemyFactory;
 
 	public int SpawnLimit { get => _spawnLimit; set => _spawnLimit = value; }
@@ -35,9 +50,6 @@ public class RandomSpawnEnemy : MonoBehaviour
 		_cameraHeight = 2f * _mainCamera.orthographicSize;
 		_cameraWidth = _cameraHeight * _mainCamera.aspect;
 
-		_rangedEnemyPrefab = Resources.Load<GameObject>("Prefabs/Enemy/RangedEnemy");
-		_closeCombatEnemyPrefab = Resources.Load<GameObject>("Prefabs/Enemy/CloseCombatEnemy");
-
 	}
 
 
@@ -48,6 +60,7 @@ public class RandomSpawnEnemy : MonoBehaviour
 		StartCoroutine(SpawnEnemyByRound());
 		StartCoroutine(IncreaseEnemySpawnLimit());
 		StartCoroutine(EnemyRushEvent());
+
 	}
 
 
@@ -56,34 +69,46 @@ public class RandomSpawnEnemy : MonoBehaviour
 	private void SpawnEnemy()
 	{
 		Vector3 postion = GenerateRandomPosition();
-		postion += GameObject.FindGameObjectWithTag("Player").transform.position;
-		int randomSprite = Random.Range(0, _enemy.Length);
+		postion += DataPreserve.player.transform.position;
+
+		//Random.Range(1, 4)
+		GameObject enemySpawned;
 
 
-
-		SpriteRenderer playerSpriteRenderer = _closeCombatEnemyPrefab.GetComponent<SpriteRenderer>();
-		playerSpriteRenderer.sprite = _enemy[randomSprite];
-
-
-		GameObject enemyPrefab;
-		switch (playerSpriteRenderer.sprite.name)
+		switch (3)
 		{
-			case DataPreserve.FODDER_JOE_SPRITE_NAME:
-			case DataPreserve.BIG_DADDY_SPRITE_NAME:
-			case DataPreserve.EXPLOSIVE_DAVE_SPRITE_NAME:
+			case 1:
+				enemySpawned = Instantiate(_fodderJoePrefab, postion, Quaternion.identity);
 
-				enemyPrefab = _closeCombatEnemyPrefab;
-				_enemyFactory = GetComponent<CloseCombatEnemyFactory>();
+				FodderJoeController fodderJoeController = enemySpawned.GetComponent<FodderJoeController>();
+				fodderJoeController.CloseCombatBehavior = new MeleeCombat(fodderJoeController.EnemyDamage);
 				break;
 
 
-			default:
-				enemyPrefab = _rangedEnemyPrefab;
-				_enemyFactory = GetComponent<RangedCombatEnemyFactory>();
+
+			case 2:
+				enemySpawned = Instantiate(_bigDaddyPrefab, postion, Quaternion.identity);
+
+				BigDaddyController bigDaddyJoeController = enemySpawned.GetComponent<BigDaddyController>();
+				bigDaddyJoeController.CloseCombatBehavior = new MeleeCombat(bigDaddyJoeController.EnemyDamage);
 				break;
 
+
+			case 3:
+				enemySpawned = Instantiate(_blitzJokPrefab, postion, Quaternion.identity);
+
+				BlitzJokController blitzJokController = enemySpawned.GetComponent<BlitzJokController>();
+				blitzJokController.RangedCombatBehavior = new ShootBulletCombat(_enemyBulletPrefab, enemySpawned);
+				break;
+
+
+			case 4:
+				enemySpawned = Instantiate(_explosiveDavePrefab, postion, Quaternion.identity);
+
+				ExplosiveDaveController explosiveDaveController = enemySpawned.GetComponent<ExplosiveDaveController>();
+				explosiveDaveController.CloseCombatBehavior = new SuicideCombat(explosiveDaveController.EnemyDamage, enemySpawned, explosiveDaveController.EnemyHealthBar);
+				break;
 		}
-		_enemyFactory.CreateEnemy(enemyPrefab, postion).transform.parent = transform;
 	}
 
 

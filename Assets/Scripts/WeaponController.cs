@@ -26,7 +26,7 @@ public class WeaponController : MonoBehaviour
 			Sprite weaponSprite = null;
 
 
-			switch (4)
+			switch (Random.Range(1, 4))
 			{
 				case 1:
 					weaponTagName = DataPreserve.PISTOL_TAG;

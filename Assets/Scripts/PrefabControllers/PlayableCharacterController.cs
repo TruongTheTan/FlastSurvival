@@ -75,6 +75,7 @@ public class PlayableCharacterController : MonoBehaviour
 
 	private void Awake()
 	{
+		DataPreserve.player = gameObject;
 		InstantiateData();
 		InstantiatePlayerStatBySelectedNumber();
 	}

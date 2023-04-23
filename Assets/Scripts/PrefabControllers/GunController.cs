@@ -1,4 +1,3 @@
-using Assets.Scripts.PrefabControllers.Enemy;
 using UnityEngine;
 
 public class GunController : MonoBehaviour
@@ -22,7 +21,7 @@ public class GunController : MonoBehaviour
 
 	private void OnTriggerEnter2D(Collider2D collision)
 	{
-
+		/*
 		GameObject enemy = collision.gameObject;
 		bool isCollideToEnemy = enemy.CompareTag("Enemy");
 
@@ -44,7 +43,7 @@ public class GunController : MonoBehaviour
 
 			else if (rangedCombatScriptIsEnabled)
 				rangedEnemyController.ReceiveDamage(_currentDamgeMelee);
-		}
+		}*/
 
 		/*
         else if (!isCollideToEnemy && DataPreserve.gunLevel == 3)

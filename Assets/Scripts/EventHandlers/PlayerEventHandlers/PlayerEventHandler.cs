@@ -24,6 +24,22 @@ public class PlayerEventHandler : MonoBehaviour
 
 
 
+
+	public void OnShootButtonPress()
+	{
+		// Use for automatic guns (Assault rifle, shotGun) except pistol
+		if (this._gunSprite.GetComponent<SpriteRenderer>().sprite.name != DataPreserve.PISTOL_SPRITE.name)
+			InvokeRepeating(nameof(PlayerShootButtonClick), 0, 0.28f);
+	}
+
+
+	// Stop shooting automatically
+	public void OnShootButtonUp()
+	{
+		CancelInvoke(nameof(PlayerShootButtonClick));
+	}
+
+
 	public void PlayerShootButtonClick()
 	{
 		if (this._gunSprite.activeSelf)

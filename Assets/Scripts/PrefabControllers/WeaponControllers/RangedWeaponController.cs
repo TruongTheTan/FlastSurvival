@@ -7,7 +7,7 @@ namespace Assets.Scripts.PrefabControllers.WeaponControllers
 
 	public class RangedWeaponController : AbstractWeapon
 	{
-		private GameObject _bulletPrefab;
+		protected GameObject _bulletPrefab;
 
 
 

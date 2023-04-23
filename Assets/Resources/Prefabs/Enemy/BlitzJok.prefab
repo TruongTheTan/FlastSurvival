@@ -13,9 +13,9 @@ GameObject:
   - component: {fileID: -196622493752990490}
   - component: {fileID: -9185722066525296768}
   - component: {fileID: -5510498416068189260}
-  - component: {fileID: -6311364581228860354}
+  - component: {fileID: -3017092999208166744}
   m_Layer: 0
-  m_Name: RangedEnemy
+  m_Name: BlitzJok
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -129,7 +129,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lootWeaponPrefab: {fileID: 7988573687397995301, guid: a4cb2a938c613fd4991f0cffdd84db01, type: 3}
---- !u!114 &-6311364581228860354
+--- !u!114 &-3017092999208166744
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -138,7 +138,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 5001590243908655695}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6fff0545eeb0e3243b880fdd8a090b25, type: 3}
+  m_Script: {fileID: 11500000, guid: d6df8e4f4bfe0c54694a2a1ef3fefbfb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _sprite: {fileID: 1600729081, guid: 2249d3b5cfd37e24f9368fa91f157e35, type: 3}
