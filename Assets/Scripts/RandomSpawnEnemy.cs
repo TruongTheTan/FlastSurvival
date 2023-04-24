@@ -1,12 +1,13 @@
 ﻿using System.Collections;
 using Assets.Scripts.DesignPatterns.StrategyPattern;
 using Assets.Scripts.DesignPatterns.StrategyPattern.Concreates;
-using Assets.Scripts.FactoryMethod;
 using Assets.Scripts.PrefabControllers.EnemyControllers;
 using UnityEngine;
 
 public class RandomSpawnEnemy : MonoBehaviour
 {
+
+	#region Enemies prefab
 	[SerializeField]
 	private GameObject _fodderJoePrefab;
 
@@ -21,7 +22,7 @@ public class RandomSpawnEnemy : MonoBehaviour
 
 	[SerializeField]
 	private GameObject _enemyBulletPrefab;
-
+	#endregion
 
 	private float _cameraHeight;
 	private float _cameraWidth;
@@ -31,9 +32,6 @@ public class RandomSpawnEnemy : MonoBehaviour
 	private int _gameRoundSeconds;
 	private int _gameRound;
 
-
-	private ICloseCombatBehavior _combatBehavior;
-	private AbstractEnemyFactory _enemyFactory;
 
 	public int SpawnLimit { get => _spawnLimit; set => _spawnLimit = value; }
 
@@ -60,7 +58,6 @@ public class RandomSpawnEnemy : MonoBehaviour
 		StartCoroutine(SpawnEnemyByRound());
 		StartCoroutine(IncreaseEnemySpawnLimit());
 		StartCoroutine(EnemyRushEvent());
-
 	}
 
 
@@ -75,9 +72,9 @@ public class RandomSpawnEnemy : MonoBehaviour
 		GameObject enemySpawned;
 
 
-		switch (3)
+		switch (Random.Range(1, 4))
 		{
-			case 1:
+			case (int)EnemyEnum.FodderJoe:
 				enemySpawned = Instantiate(_fodderJoePrefab, postion, Quaternion.identity);
 
 				FodderJoeController fodderJoeController = enemySpawned.GetComponent<FodderJoeController>();
@@ -86,7 +83,7 @@ public class RandomSpawnEnemy : MonoBehaviour
 
 
 
-			case 2:
+			case (int)EnemyEnum.BigDaddy:
 				enemySpawned = Instantiate(_bigDaddyPrefab, postion, Quaternion.identity);
 
 				BigDaddyController bigDaddyJoeController = enemySpawned.GetComponent<BigDaddyController>();
@@ -94,7 +91,7 @@ public class RandomSpawnEnemy : MonoBehaviour
 				break;
 
 
-			case 3:
+			case (int)EnemyEnum.BlitzJok:
 				enemySpawned = Instantiate(_blitzJokPrefab, postion, Quaternion.identity);
 
 				BlitzJokController blitzJokController = enemySpawned.GetComponent<BlitzJokController>();
@@ -102,7 +99,7 @@ public class RandomSpawnEnemy : MonoBehaviour
 				break;
 
 
-			case 4:
+			case (int)EnemyEnum.ExplosiveDave:
 				enemySpawned = Instantiate(_explosiveDavePrefab, postion, Quaternion.identity);
 
 				ExplosiveDaveController explosiveDaveController = enemySpawned.GetComponent<ExplosiveDaveController>();

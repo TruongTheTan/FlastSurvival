@@ -6,7 +6,7 @@ namespace Assets.Scripts.DesignPatterns.StrategyPattern.Concreates
 	public class SuicideCombat : ICloseCombatBehavior
 	{
 
-		private readonly int _damge;
+		private readonly int _enemyDamge;
 		private readonly GameObject _currentEnemy;
 		private readonly GameObject _enemyHealthBar;
 
@@ -14,7 +14,7 @@ namespace Assets.Scripts.DesignPatterns.StrategyPattern.Concreates
 
 		public SuicideCombat(int damge, GameObject currentEnemy, GameObject enemyHealthBar)
 		{
-			_damge = damge;
+			_enemyDamge = damge;
 			_currentEnemy = currentEnemy;
 			_enemyHealthBar = enemyHealthBar;
 		}
@@ -30,7 +30,7 @@ namespace Assets.Scripts.DesignPatterns.StrategyPattern.Concreates
 			MonoBehaviour.Instantiate(explosionPrefab, _currentEnemy.transform.position, Quaternion.identity);
 
 
-			DataPreserve.player.GetComponent<PlayableCharacterController>().ReceiveDamaged(_damge);
+			DataPreserve.player.GetComponent<PlayableCharacterController>().ReceiveDamaged(_enemyDamge);
 
 			MonoBehaviour.Destroy(_enemyHealthBar);
 			MonoBehaviour.Destroy(_currentEnemy);

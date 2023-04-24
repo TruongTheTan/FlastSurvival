@@ -1,8 +1,8 @@
-﻿using Assets.Scripts.DesignPatterns.StrategyPattern;
+﻿using Assets.Scripts.Models.Enemies;
 
 namespace Assets.Scripts.PrefabControllers.EnemyControllers
 {
-	public class ExplosiveDaveController : Enemy
+	public class ExplosiveDaveController : CloseCombatEnemy
 	{
 		protected override void Awake()
 		{

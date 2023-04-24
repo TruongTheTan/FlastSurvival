@@ -1,6 +1,6 @@
-using Assets.Scripts.DesignPatterns.StrategyPattern;
+using Assets.Scripts.Models.Enemies;
 
-public class BigDaddyController : Enemy
+public class BigDaddyController : CloseCombatEnemy
 {
 
 

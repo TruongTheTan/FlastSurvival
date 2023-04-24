@@ -5,15 +5,16 @@ namespace Assets.Scripts.DesignPatterns.StrategyPattern
 {
 	public class MeleeCombat : ICloseCombatBehavior
 	{
+		private readonly int _enemyDamage;
 		public static bool IsCollidingPlayer { get; set; }
 
 
-		private int _enemyDamage;
 
-		public MeleeCombat(int _enemyDamage)
+		public MeleeCombat(int enemyDamage)
 		{
-			this._enemyDamage = _enemyDamage;
+			this._enemyDamage = enemyDamage;
 		}
+
 
 		public IEnumerator CloseCombat()
 		{

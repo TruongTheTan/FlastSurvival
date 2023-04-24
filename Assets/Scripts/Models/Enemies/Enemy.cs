@@ -9,8 +9,6 @@ namespace Assets.Scripts.DesignPatterns.StrategyPattern
 		protected int _damage;
 		protected int _health;
 		protected float _speedAmount;
-
-		private float _distanceFromPlayer;
 		#endregion
 
 
@@ -34,8 +32,6 @@ namespace Assets.Scripts.DesignPatterns.StrategyPattern
 
 
 
-		public ICloseCombatBehavior CloseCombatBehavior { get; set; }
-		public IRangedCombatBehavior RangedCombatBehavior { get; set; }
 
 
 
@@ -46,43 +42,18 @@ namespace Assets.Scripts.DesignPatterns.StrategyPattern
 		}
 
 
-		protected virtual void Start()
-		{
-			if (RangedCombatBehavior != null)
-				StartCoroutine(RangedCombatBehavior.RangedCombat(_distanceFromPlayer));
-		}
-
-
 
 
 		protected virtual void Update()
 		{
 			MoveToPlayer();
 			DestroyWhenTooFarFromPlayer();
-			this._distanceFromPlayer = Vector2.Distance(_playerReference.transform.position, gameObject.transform.position);
 		}
 
 
 
 
-		private void OnCollisionEnter2D(Collision2D collision)
-		{
-			if (collision.gameObject.Equals(_playerReference))
-			{
-				MeleeCombat.IsCollidingPlayer = true;
 
-				if (CloseCombatBehavior != null)
-					StartCoroutine(CloseCombatBehavior.CloseCombat());
-			}
-		}
-
-
-
-		private void OnCollisionExit2D(Collision2D collision)
-		{
-			if (collision.gameObject.Equals(_playerReference))
-				MeleeCombat.IsCollidingPlayer = false;
-		}
 
 
 

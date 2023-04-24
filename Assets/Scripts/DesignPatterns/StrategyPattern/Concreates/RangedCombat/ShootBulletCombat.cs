@@ -4,16 +4,13 @@ using UnityEngine;
 
 public class ShootBulletCombat : IRangedCombatBehavior
 {
-
-
-	private readonly GameObject _bullet;
+	private readonly GameObject _bulletPrefab;
 	private readonly GameObject _currentEnemy;
 
-	//public static float Distance { get; set; }
 
 	public ShootBulletCombat(GameObject bullet, GameObject currentEnemy)
 	{
-		_bullet = bullet;
+		_bulletPrefab = bullet;
 		_currentEnemy = currentEnemy;
 	}
 
@@ -25,8 +22,6 @@ public class ShootBulletCombat : IRangedCombatBehavior
 		Vector3 directionToPlayer;
 		GameObject player = DataPreserve.player;
 
-		Debug.Log(distanceFromPlayer);
-
 		while (distanceFromPlayer <= 10)
 		{
 			directionToPlayer = (player.transform.position - _currentEnemy.transform.position).normalized;
@@ -37,7 +32,7 @@ public class ShootBulletCombat : IRangedCombatBehavior
 			Quaternion rotation = Quaternion.Euler(_currentEnemy.transform.position.x, _currentEnemy.transform.position.y, angle);
 
 
-			GameObject bullet = MonoBehaviour.Instantiate(_bullet, _currentEnemy.transform.position, rotation);
+			GameObject bullet = MonoBehaviour.Instantiate(_bulletPrefab, _currentEnemy.transform.position, rotation);
 
 
 			bullet.GetComponent<Rigidbody2D>().velocity = directionToPlayer * 5f;

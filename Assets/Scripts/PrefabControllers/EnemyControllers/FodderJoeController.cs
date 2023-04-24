@@ -1,6 +1,8 @@
-﻿namespace Assets.Scripts.DesignPatterns.StrategyPattern
+﻿using Assets.Scripts.Models.Enemies;
+
+namespace Assets.Scripts.DesignPatterns.StrategyPattern
 {
-	public class FodderJoeController : Enemy
+	public class FodderJoeController : CloseCombatEnemy
 	{
 
 
