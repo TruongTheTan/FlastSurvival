@@ -5,24 +5,30 @@ namespace Assets.Scripts.DesignPatterns.StrategyPattern
 	public abstract class Enemy : MonoBehaviour
 	{
 		#region Enemy's properties
+
 		protected int _point;
 		protected int _damage;
 		protected int _health;
 		protected float _speedAmount;
+
 		#endregion
 
 
 
 		#region Get, set
+
 		public int EnemyDamage { get => _damage; set { _damage = value; } }
 		public GameObject EnemyHealthBar { get => _enemyHealthBar; }
+
 		#endregion
 
 		#region Game Objects reference
+
 		protected GameObject _healthBars;
 		protected GameObject _currentEnemy;
 		protected GameObject _enemyHealthBar;
 		protected GameObject _playerReference;
+
 		#endregion
 
 
@@ -49,10 +55,6 @@ namespace Assets.Scripts.DesignPatterns.StrategyPattern
 			MoveToPlayer();
 			DestroyWhenTooFarFromPlayer();
 		}
-
-
-
-
 
 
 
@@ -146,7 +148,5 @@ namespace Assets.Scripts.DesignPatterns.StrategyPattern
 
 
 		#endregion
-
-
 	}
 }

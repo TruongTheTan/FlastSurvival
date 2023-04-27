@@ -5,6 +5,7 @@ namespace Assets.Scripts.DesignPatterns.StrategyPattern
 {
 	public class MeleeCombat : ICloseCombatBehavior
 	{
+		private const float _attackPeriod = 1f;
 		private readonly int _enemyDamage;
 		public static bool IsCollidingPlayer { get; set; }
 
@@ -16,12 +17,15 @@ namespace Assets.Scripts.DesignPatterns.StrategyPattern
 		}
 
 
+
+
+
 		public IEnumerator CloseCombat()
 		{
 			while (IsCollidingPlayer)
 			{
 				DataPreserve.player.GetComponent<PlayableCharacterController>().ReceiveDamaged(_enemyDamage);
-				yield return new WaitForSeconds(1f);
+				yield return new WaitForSeconds(_attackPeriod);
 			}
 		}
 	}

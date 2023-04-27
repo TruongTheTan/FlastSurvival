@@ -24,15 +24,19 @@ public class RandomSpawnEnemy : MonoBehaviour
 	private GameObject _enemyBulletPrefab;
 	#endregion
 
+
+	#region Properties
+
 	private float _cameraHeight;
 	private float _cameraWidth;
 	private float _enermySpawnOffset = 1f;
-	private Camera _mainCamera;
 	private int _spawnLimit;
 	private int _gameRoundSeconds;
 	private int _gameRound;
 
+	#endregion
 
+	private Camera _mainCamera;
 	public int SpawnLimit { get => _spawnLimit; set => _spawnLimit = value; }
 
 
@@ -65,17 +69,18 @@ public class RandomSpawnEnemy : MonoBehaviour
 
 	private void SpawnEnemy()
 	{
-		Vector3 postion = GenerateRandomPosition();
-		postion += DataPreserve.player.transform.position;
+		Vector3 spawnPostion = GenerateRandomPosition();
+		spawnPostion += DataPreserve.player.transform.position;
 
 		//Random.Range(1, 4)
 		GameObject enemySpawned;
 
 
+
 		switch (Random.Range(1, 4))
 		{
 			case (int)EnemyEnum.FodderJoe:
-				enemySpawned = Instantiate(_fodderJoePrefab, postion, Quaternion.identity);
+				enemySpawned = Instantiate(_fodderJoePrefab, spawnPostion, Quaternion.identity);
 
 				FodderJoeController fodderJoeController = enemySpawned.GetComponent<FodderJoeController>();
 				fodderJoeController.CloseCombatBehavior = new MeleeCombat(fodderJoeController.EnemyDamage);
@@ -84,23 +89,25 @@ public class RandomSpawnEnemy : MonoBehaviour
 
 
 			case (int)EnemyEnum.BigDaddy:
-				enemySpawned = Instantiate(_bigDaddyPrefab, postion, Quaternion.identity);
+				enemySpawned = Instantiate(_bigDaddyPrefab, spawnPostion, Quaternion.identity);
 
 				BigDaddyController bigDaddyJoeController = enemySpawned.GetComponent<BigDaddyController>();
 				bigDaddyJoeController.CloseCombatBehavior = new MeleeCombat(bigDaddyJoeController.EnemyDamage);
 				break;
 
 
+
 			case (int)EnemyEnum.BlitzJok:
-				enemySpawned = Instantiate(_blitzJokPrefab, postion, Quaternion.identity);
+				enemySpawned = Instantiate(_blitzJokPrefab, spawnPostion, Quaternion.identity);
 
 				BlitzJokController blitzJokController = enemySpawned.GetComponent<BlitzJokController>();
 				blitzJokController.RangedCombatBehavior = new ShootBulletCombat(_enemyBulletPrefab, enemySpawned);
 				break;
 
 
+
 			case (int)EnemyEnum.ExplosiveDave:
-				enemySpawned = Instantiate(_explosiveDavePrefab, postion, Quaternion.identity);
+				enemySpawned = Instantiate(_explosiveDavePrefab, spawnPostion, Quaternion.identity);
 
 				ExplosiveDaveController explosiveDaveController = enemySpawned.GetComponent<ExplosiveDaveController>();
 				explosiveDaveController.CloseCombatBehavior = new SuicideCombat(explosiveDaveController.EnemyDamage, enemySpawned, explosiveDaveController.EnemyHealthBar);
