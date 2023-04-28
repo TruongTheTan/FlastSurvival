@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts.DesignPatterns.StrategyPattern;
+using Assets.Scripts.DesignPatterns.StrategyPattern.Concreates;
 using UnityEngine;
 
 namespace Assets.Scripts.Models.Enemies

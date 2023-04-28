@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Assets.Scripts.DesignPatterns.StrategyPattern
+namespace Assets.Scripts.Models.Enemies
 {
 	public abstract class Enemy : MonoBehaviour
 	{

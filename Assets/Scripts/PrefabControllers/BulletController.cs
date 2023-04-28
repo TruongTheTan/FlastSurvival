@@ -1,5 +1,3 @@
-using Assets.Scripts.DesignPatterns.StrategyPattern;
-using Assets.Scripts.PrefabControllers.EnemyControllers;
 using UnityEngine;
 
 public class BulletController : MonoBehaviour
@@ -59,7 +57,7 @@ public class BulletController : MonoBehaviour
 
 
 				case DataPreserve.BLITZ_JOK_SPRITE_NAME:
-
+					enemy.GetComponent<BlitzJokController>().ReceiveDamage(_damage);
 					break;
 
 

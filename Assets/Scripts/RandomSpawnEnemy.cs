@@ -1,42 +1,26 @@
 ﻿using System.Collections;
-using Assets.Scripts.DesignPatterns.StrategyPattern;
-using Assets.Scripts.DesignPatterns.StrategyPattern.Concreates;
-using Assets.Scripts.PrefabControllers.EnemyControllers;
+using Assets.Scripts.DesignPatterns.FactoryMethod;
 using UnityEngine;
 
 public class RandomSpawnEnemy : MonoBehaviour
 {
-
-	#region Enemies prefab
-	[SerializeField]
-	private GameObject _fodderJoePrefab;
-
-	[SerializeField]
-	private GameObject _bigDaddyPrefab;
-
-	[SerializeField]
-	private GameObject _blitzJokPrefab;
-
-	[SerializeField]
-	private GameObject _explosiveDavePrefab;
-
-	[SerializeField]
-	private GameObject _enemyBulletPrefab;
-	#endregion
-
-
 	#region Properties
 
-	private float _cameraHeight;
-	private float _cameraWidth;
-	private float _enermySpawnOffset = 1f;
-	private int _spawnLimit;
-	private int _gameRoundSeconds;
 	private int _gameRound;
+	private int _spawnLimit;
+	private float _cameraWidth;
+	private float _cameraHeight;
+	private int _gameRoundSeconds;
+	private const float _enemySpawnOffset = 1f;
 
 	#endregion
 
+
+
 	private Camera _mainCamera;
+	private CloseCombatEnemyFactory _closeCombatEnemyFactory;
+	private RangedCombatEnemyFactory _rangedCombatEnemyFactory;
+
 	public int SpawnLimit { get => _spawnLimit; set => _spawnLimit = value; }
 
 
@@ -45,13 +29,16 @@ public class RandomSpawnEnemy : MonoBehaviour
 	private void Awake()
 	{
 		_gameRound = 0;
-		_gameRoundSeconds = 60;
 		_spawnLimit = 60;
+		_gameRoundSeconds = 60;
 
 		_mainCamera = Camera.main;
 		_cameraHeight = 2f * _mainCamera.orthographicSize;
 		_cameraWidth = _cameraHeight * _mainCamera.aspect;
 
+		/* Singleton */
+		_closeCombatEnemyFactory = CloseCombatEnemyFactory.GetInstance();
+		_rangedCombatEnemyFactory = RangedCombatEnemyFactory.GetInstance();
 	}
 
 
@@ -69,48 +56,22 @@ public class RandomSpawnEnemy : MonoBehaviour
 
 	private void SpawnEnemy()
 	{
-		Vector3 spawnPostion = GenerateRandomPosition();
-		spawnPostion += DataPreserve.player.transform.position;
-
-		//Random.Range(1, 4)
-		GameObject enemySpawned;
+		Vector3 spawnPosition = GenerateRandomPosition();
+		spawnPosition += DataPreserve.player.transform.position;
 
 
-
-		switch (Random.Range(1, 4))
+		int randomSpawnNumber = Random.Range(1, 4);
+		switch (randomSpawnNumber)
 		{
 			case (int)EnemyEnum.FodderJoe:
-				enemySpawned = Instantiate(_fodderJoePrefab, spawnPostion, Quaternion.identity);
-
-				FodderJoeController fodderJoeController = enemySpawned.GetComponent<FodderJoeController>();
-				fodderJoeController.CloseCombatBehavior = new MeleeCombat(fodderJoeController.EnemyDamage);
-				break;
-
-
-
 			case (int)EnemyEnum.BigDaddy:
-				enemySpawned = Instantiate(_bigDaddyPrefab, spawnPostion, Quaternion.identity);
-
-				BigDaddyController bigDaddyJoeController = enemySpawned.GetComponent<BigDaddyController>();
-				bigDaddyJoeController.CloseCombatBehavior = new MeleeCombat(bigDaddyJoeController.EnemyDamage);
+			case (int)EnemyEnum.ExplosiveDave:
+				_closeCombatEnemyFactory.CreateEnemy(randomSpawnNumber, spawnPosition);
 				break;
-
 
 
 			case (int)EnemyEnum.BlitzJok:
-				enemySpawned = Instantiate(_blitzJokPrefab, spawnPostion, Quaternion.identity);
-
-				BlitzJokController blitzJokController = enemySpawned.GetComponent<BlitzJokController>();
-				blitzJokController.RangedCombatBehavior = new ShootBulletCombat(_enemyBulletPrefab, enemySpawned);
-				break;
-
-
-
-			case (int)EnemyEnum.ExplosiveDave:
-				enemySpawned = Instantiate(_explosiveDavePrefab, spawnPostion, Quaternion.identity);
-
-				ExplosiveDaveController explosiveDaveController = enemySpawned.GetComponent<ExplosiveDaveController>();
-				explosiveDaveController.CloseCombatBehavior = new SuicideCombat(explosiveDaveController.EnemyDamage, enemySpawned, explosiveDaveController.EnemyHealthBar);
+				_rangedCombatEnemyFactory.CreateEnemy(randomSpawnNumber, spawnPosition);
 				break;
 		}
 	}
@@ -159,30 +120,31 @@ public class RandomSpawnEnemy : MonoBehaviour
 	private Vector3 GenerateRandomPosition()
 	{
 		Vector3 cameraPosition = _mainCamera.transform.position;
+
 		float leftBound = cameraPosition.x - _cameraWidth / 2f;
 		float rightBound = cameraPosition.x + _cameraWidth / 2f;
 		float bottomBound = cameraPosition.y - _mainCamera.orthographicSize;
 		float topBound = cameraPosition.y + _mainCamera.orthographicSize;
 
 		Vector3 positon;
-		float randomDirection = UnityEngine.Random.Range(0f, 1f);
-		if (randomDirection < 0.25f) // Spawn phía trên camera
-		{
-			positon = new Vector3(UnityEngine.Random.Range(leftBound, rightBound), topBound + _enermySpawnOffset, 0f);
-		}
-		else if (randomDirection < 0.5f) // Spawn phía bên phải camera
-		{
-			positon = new Vector3(rightBound + _enermySpawnOffset, UnityEngine.Random.Range(bottomBound, topBound), 0f);
-		}
-		else if (randomDirection < 0.75f) // Spawn phía dưới camera
-		{
-			positon = new Vector3(UnityEngine.Random.Range(leftBound, rightBound), bottomBound - _enermySpawnOffset, 0f);
-		}
-		else // Spawn phía bên trái camera
-		{
-			positon = new Vector3(leftBound - _enermySpawnOffset, UnityEngine.Random.Range(bottomBound, topBound), 0f);
-		}
+		float randomDirection = Random.Range(0f, 1f);
+
+		// Spawn phía trên camera
+		if (randomDirection < 0.25f)
+			positon = new Vector3(Random.Range(leftBound, rightBound), topBound + _enemySpawnOffset, 0f);
+
+		// Spawn phía bên phải camera
+		else if (randomDirection < 0.5f)
+			positon = new Vector3(rightBound + _enemySpawnOffset, Random.Range(bottomBound, topBound), 0f);
+
+		// Spawn phía dưới camera
+		else if (randomDirection < 0.75f)
+			positon = new Vector3(Random.Range(leftBound, rightBound), bottomBound - _enemySpawnOffset, 0f);
+
+		// Spawn phía bên trái camera
+		else
+			positon = new Vector3(leftBound - _enemySpawnOffset, Random.Range(bottomBound, topBound), 0f);
+
 		return positon;
 	}
-
 }

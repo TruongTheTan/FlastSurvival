@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-namespace Assets.Scripts.DesignPatterns.StrategyPattern
+namespace Assets.Scripts.DesignPatterns.StrategyPattern.Concreates
 {
 	public class MeleeCombat : ICloseCombatBehavior
 	{
