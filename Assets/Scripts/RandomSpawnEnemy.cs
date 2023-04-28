@@ -18,8 +18,7 @@ public class RandomSpawnEnemy : MonoBehaviour
 
 
 	private Camera _mainCamera;
-	private CloseCombatEnemyFactory _closeCombatEnemyFactory;
-	private RangedCombatEnemyFactory _rangedCombatEnemyFactory;
+	private IEnemyFactory _enemyFactory;
 
 	public int SpawnLimit { get => _spawnLimit; set => _spawnLimit = value; }
 
@@ -35,10 +34,6 @@ public class RandomSpawnEnemy : MonoBehaviour
 		_mainCamera = Camera.main;
 		_cameraHeight = 2f * _mainCamera.orthographicSize;
 		_cameraWidth = _cameraHeight * _mainCamera.aspect;
-
-		/* Singleton */
-		_closeCombatEnemyFactory = CloseCombatEnemyFactory.GetInstance();
-		_rangedCombatEnemyFactory = RangedCombatEnemyFactory.GetInstance();
 	}
 
 
@@ -66,14 +61,15 @@ public class RandomSpawnEnemy : MonoBehaviour
 			case (int)EnemyEnum.FodderJoe:
 			case (int)EnemyEnum.BigDaddy:
 			case (int)EnemyEnum.ExplosiveDave:
-				_closeCombatEnemyFactory.CreateEnemy(randomSpawnNumber, spawnPosition);
+				_enemyFactory = CloseCombatEnemyFactory.GetInstance();
 				break;
 
 
 			case (int)EnemyEnum.BlitzJok:
-				_rangedCombatEnemyFactory.CreateEnemy(randomSpawnNumber, spawnPosition);
+				_enemyFactory = RangedCombatEnemyFactory.GetInstance();
 				break;
 		}
+		_enemyFactory.CreateEnemy(randomSpawnNumber, spawnPosition);
 	}
 
 
